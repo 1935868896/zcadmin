@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+
+
+    <!-- 1.此处需要添加自己的jar包安装位置-->
+    <classPathEntry location="C:\Users\zhang\.m2\repository\mysql\mysql-connector-java\8.0.16\mysql-connector-java-8.0.16.jar" />
+    <context id="context1" >
+
+        <!-- optional，旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!-- 2.此处为连接数据库,自己填写数据库的地址,用户名和密码-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/zcadmin?serverTimezone=UTC&amp;characterEncoding=utf8&amp;useUnicode=true&amp;useSSL=true" userId="root" password="123456" >
+            <property name="nullCatalogMeansCurrent" value="true" />
+        </jdbcConnection>
+        <!-- 此处为8.0以上版本的连接方式<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/recruit?serverTimezone=UTC" userId="root" password="123456" /> -->       <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 3.生成实体类的地方
+        targetPackage     指定生成的实体类所在的包名
+        targetProject     指定在该项目下所在的路径
+        -->
+        <javaModelGenerator targetPackage="com.zc.zcadminsystem.modules.test.entity"
+                            targetProject="src/main/java">
+
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 是否对model添加 构造函数 -->
+            <property name="constructorBased" value="false"/>
+            <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+            <property name="trimStrings" value="true"/>
+            <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
+            <property name="immutable" value="false"/>
+        </javaModelGenerator>
+
+        <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
+        <!-- 4.生成mapper.xml的地方
+        targetPackage     指定生成的实体类所在的包名
+        targetProject     指定在该项目下所在的路径
+        -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+        type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
+        type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
+        type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
+        -->
+        <!-- 5.生成mapper接口的地方
+        targetPackage     指定生成的实体类所在的包名
+        targetProject     指定在该项目下所在的路径
+        -->
+        <javaClientGenerator targetPackage="com.zc.zcadminsystem.modules.test.mapper"
+                             targetProject="src/main/java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <!--数据库表反向映射到项目中-->
+        <!-- 6.配置表名的地方
+        schema 库名 因为如果mysql存在多个相同的表名(分布在不同数据库中) 会出现xml代码重复的问题:
+          解决1: 前面连接的时候 加入             <property name="nullCatalogMeansCurrent" value="true" />
+          步骤2: 此处加schema  网上还有其他办法,此种办法是我实践有效的方法
+          参考网址: https://www.codeleading.com/article/61572734868/
+        tableName 表名
+        domainObjectName 生成的名 比如xx.java,xxMapper.java,xxMapper.xml
+        -->
+
+        <table schema="zcadmin" tableName="book" domainObjectName="Book"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+    </context>
+</generatorConfiguration>
