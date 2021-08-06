@@ -46,6 +46,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ApiError> handleException(Throwable e){
         // 打印堆栈信息
+        e.printStackTrace();
+
         return buildResponseEntity(ApiError.error(e.getMessage()));
     }
 
@@ -92,6 +94,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        e.printStackTrace();
         // 打印堆栈信息
         String[] str = Objects.requireNonNull(e.getBindingResult().getAllErrors().get(0).getCodes())[1].split("\\.");
         String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();

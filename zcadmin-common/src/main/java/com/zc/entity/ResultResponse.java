@@ -31,7 +31,10 @@ public class ResultResponse {
     }
     public static ResultResponse success(Object data){
         return new ResultResponse(ResultCode.SUCCESS,data);
+    }
 
+    public static ResultResponse error(){
+        return new ResultResponse(ResultCode.ERROR,null);
     }
 
 }
