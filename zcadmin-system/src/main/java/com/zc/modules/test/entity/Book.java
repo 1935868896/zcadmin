@@ -1,12 +1,16 @@
 package com.zc.modules.test.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
 @Data
 public class Book {
+    @TableId(type = IdType.AUTO)
     private Integer id;
-
+    @ApiModelProperty(value = "图书名称")
     private String name;
 
     private String author;
