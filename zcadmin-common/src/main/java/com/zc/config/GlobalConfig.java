@@ -15,7 +15,7 @@ import java.util.Map;
  * @author ruoyi
  */
 @Slf4j
-public class Global {
+public class GlobalConfig {
 
     private static final String NAME = "application.yml" ;
 
@@ -24,29 +24,29 @@ public class Global {
     /**
      * 当前对象实例
      */
-    private static Global global = null;
+    private static GlobalConfig globalConfig = null;
 
     /**
      * 保存全局属性值
      */
     private static Map<String, String> map = new HashMap<>();
 
-    private Global() {
+    private GlobalConfig() {
     }
 
     /**
      * 静态工厂方法 获取当前对象实例 多线程安全单例模式(使用双重同步锁)
      */
 
-    public static synchronized Global getInstance() {
-        if (global == null) {
-            synchronized (Global.class) {
-                if (global == null) {
-                    global = new Global();
+    public static synchronized GlobalConfig getInstance() {
+        if (globalConfig == null) {
+            synchronized (GlobalConfig.class) {
+                if (globalConfig == null) {
+                    globalConfig = new GlobalConfig();
                 }
             }
         }
-        return global;
+        return globalConfig;
     }
 
     /**
@@ -142,7 +142,7 @@ public class Global {
      * 生成包路径
      */
     public static String getPackageName() {
-        return Convert.toStr(getConfig("gen.packageName"), "com.ruoyi.project.module");
+        return Convert.toStr(getConfig("gen.packageName"), "com.zc.modules.project");
     }
 
     /**

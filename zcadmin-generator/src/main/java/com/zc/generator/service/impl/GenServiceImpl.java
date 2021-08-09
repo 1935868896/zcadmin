@@ -1,7 +1,7 @@
 package com.zc.generator.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.zc.config.Global;
+import com.zc.config.GlobalConfig;
 import com.zc.generator.domain.ColumnInfo;
 import com.zc.generator.domain.TableInfo;
 import com.zc.generator.mapper.GenMapper;
@@ -61,10 +61,16 @@ public class GenServiceImpl implements IGenService {
     @Override
     public byte[] generatorCode(String tableName) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        ZipOutputStream zip= new ZipOutputStream(outputStream);
+
         // 生成代码
         generatorCode(zip, tableName);
-        IOUtils.closeQuietly(zip);
+//        IOUtils.closeQuietly(zip);
+        try {
+            zip.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return outputStream.toByteArray();
     }
 
@@ -93,7 +99,7 @@ public class GenServiceImpl implements IGenService {
      * @param tableName 表名
      */
     private void generatorCode(ZipOutputStream zip, String tableName) {
-        // 查询表信息
+        // 查询表信息 : 表必须包含注释信息,否则sql语句为null
         TableInfo table = genMapper.selectTableByName(tableName);
         // 查询列信息
         List<ColumnInfo> columns = genMapper.selectTableColumnsByName(tableName);
@@ -108,9 +114,14 @@ public class GenServiceImpl implements IGenService {
 
         VelocityInitializer.initVelocity();
 
-        String packageName = Global.getPackageName();
-        String moduleName = GenUtils.getModuleName(packageName);
+        /**
+         *  获取包名 : 此处 ruoyi 没有在yml文件配置,因此直接使用的默认
+         *       本程序使用三种方式来获得 packageName : 传输请求,配置,默认
+         */
 
+        String packageName = GlobalConfig.getPackageName();
+
+        String moduleName = GenUtils.getModuleName(packageName);
         VelocityContext context = GenUtils.getVelocityContext(table);
 
         // 获取模板列表

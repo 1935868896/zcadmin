@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.modules.test.entity.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+
 
 import java.util.List;
 
@@ -35,17 +35,29 @@ public interface BookMapper extends BaseMapper<Book> {
 
     int updateByPrimaryKey(Book record);
 
-    List<Book> selectBySelective(Book book);
+    /**
+     *
+     * @param book
+     * @return
+     */
+    List<Book> selectListBySelective(Book book);
     //分页查询
+
+    /**
+     *
+     * @param record
+     * @param page
+     * @return
+     */
     IPage<Book> selectPageBySelective(Book record, Page page);
     //查询数量
-    Long selectCountBySelective(Book book);
+    int selectCountBySelective(Book book);
     //根据id批量查询
     List<Book> selectByPrimaryKeys(List<Integer> ids);
     //根据id批量查询
-    Long deleteByPrimaryKeys(List<Integer> id);
+    int deleteByPrimaryKeys(List<Integer> id);
     //批量插入
-    Long insertBatch(@Param("recordList") List<Book> recordList);
+    int insertBatch(List<Book> recordList);
 
     /**
      * 批量修改分为两种 :
@@ -53,9 +65,9 @@ public interface BookMapper extends BaseMapper<Book> {
      *  2.只修改传过来不为null的数据
      */
     //批量修改
-    Long updateBatch(List<Book> bookList);
+    int updateBatch(List<Book> bookList);
 
-    Long updateBatchSelective(List<Book> bookList);
+    int updateBatchSelective(List<Book> bookList);
 
 
 

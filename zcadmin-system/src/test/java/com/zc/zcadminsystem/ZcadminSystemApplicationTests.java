@@ -62,7 +62,7 @@ class ZcadminSystemApplicationTests {
         Book query=new Book();
         query.setPress("人民出版社");
 
-        List<Book> books2 = bookService.selectBySelective(query);
+        List<Book> books2 = bookService.selectListBySelective(query);
         Page page=new Page();
         page.setSize(10);
         page.setCurrent(1);

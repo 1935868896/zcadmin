@@ -53,8 +53,8 @@ public class BookServceiImpl extends ServiceImpl<BookMapper, Book> implements Bo
     }
 
     @Override
-    public List<Book> selectBySelective(Book book) {
-        return bookMapper.selectBySelective(book);
+    public List<Book> selectListBySelective(Book book) {
+        return bookMapper.selectListBySelective(book);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class BookServceiImpl extends ServiceImpl<BookMapper, Book> implements Bo
     }
 
     @Override
-    public Long selectCountBySelective(Book book) {
+    public int selectCountBySelective(Book book) {
         return bookMapper.selectCountBySelective(book);
     }
 
@@ -76,23 +76,23 @@ public class BookServceiImpl extends ServiceImpl<BookMapper, Book> implements Bo
     }
 
     @Override
-    public Long deleteByPrimaryKeys(List<Integer> ids) {
+    public int deleteByPrimaryKeys(List<Integer> ids) {
         if (ids==null||ids.size()<=0){
-            return null;
+            return 0;
         }
         return bookMapper.deleteByPrimaryKeys(ids);
     }
 
     @Override
     @Transactional
-    public Long insertBatch(List<Book> recordList) {
-        Long result=0l;
+    public int insertBatch(List<Book> recordList) {
+        int result=0;
         if (recordList==null||recordList.size()<=0){
             return result;
         }
         List<List<Book>> list = SqlListHandleUtils.splitList(recordList, 50);
         for (List<Book> books : list) {
-            Long count = bookMapper.insertBatch(books);
+            int count = bookMapper.insertBatch(books);
             result=result+count;
         }
         return result;
@@ -100,14 +100,14 @@ public class BookServceiImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     @Override
     @Transactional
-    public Long updateBatch(List<Book> recordList) {
-        Long result=0l;
+    public int updateBatch(List<Book> recordList) {
+        int result=0;
         if (recordList==null||recordList.size()<=0){
             return result;
         }
         List<List<Book>> list = SqlListHandleUtils.splitList(recordList, 50);
         for (List<Book> books : list) {
-            Long count = bookMapper.updateBatch(books);
+            int count = bookMapper.updateBatch(books);
             result=result+count;
         }
         return result;
@@ -115,14 +115,14 @@ public class BookServceiImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     @Override
     @Transactional
-    public Long updateBatchSelective(List<Book> recordList) {
-        Long result=0l;
+    public int updateBatchSelective(List<Book> recordList) {
+        int result=0;
         if (recordList==null||recordList.size()<=0){
             return result;
         }
         List<List<Book>> listLists = SqlListHandleUtils.splitList(recordList, 50);
         for (List<Book> books : listLists) {
-            Long count = bookMapper.updateBatchSelective(books);
+            int count = bookMapper.updateBatchSelective(books);
             result=result+count;
         }
         return result;

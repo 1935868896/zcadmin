@@ -52,7 +52,9 @@ public class GenController {
 
     @GetMapping("/genCode/{tableName}")
     public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        //代码生成的主要实现
         byte[] data = genService.generatorCode(tableName);
+        //提供网页下载
         this.genCode(response, data);
     }
 

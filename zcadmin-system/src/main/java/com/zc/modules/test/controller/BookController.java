@@ -1,17 +1,17 @@
+
 package com.zc.modules.test.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
-import com.zc.modules.test.entity.Book;
-import com.zc.modules.test.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import com.zc.modules.test.entity.Book;
+import com.zc.modules.test.service.BookService;
 
 /**
  * @author ZhangC
@@ -28,7 +28,7 @@ public class BookController {
     @GetMapping("count")
     @Log
     public ResultResponse count(Book record) {
-        Long result = bookService.selectCountBySelective(record);
+        int result = bookService.selectCountBySelective(record);
         return ResultResponse.success(result);
     }
 
@@ -36,7 +36,7 @@ public class BookController {
     @GetMapping
     @Log
     public ResultResponse get(Book record) {
-        List<Book> result = bookService.selectBySelective(record);
+        List<Book> result = bookService.selectListBySelective(record);
         if (result != null && result.size() > 0) {
             return ResultResponse.success(result);
         }
@@ -83,7 +83,7 @@ public class BookController {
     @ApiOperation("批量插入数据")
     @PostMapping("batch")
     public ResultResponse insertBatch(@RequestBody List<Book> records) {
-        long result = bookService.insertBatch(records);
+        int result = bookService.insertBatch(records);
         if (result > 0) {
             return ResultResponse.success(records);
         }
@@ -113,7 +113,7 @@ public class BookController {
     @ApiOperation("批量修改数据")
     @PutMapping("batch")
     public ResultResponse updateBatch(List<Book> records) {
-        long result = bookService.updateBatch(records);
+        int result = bookService.updateBatch(records);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -123,7 +123,7 @@ public class BookController {
     @ApiOperation("批量修改数据,仅修改不为null的数据")
     @PutMapping("batch/selective")
     public ResultResponse updateBatchSelective(List<Book> records) {
-        long result = bookService.updateBatchSelective(records);
+        int result = bookService.updateBatchSelective(records);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -143,7 +143,7 @@ public class BookController {
     @ApiOperation("根据id集合批量删除数据")
     @DeleteMapping("ids")
     public ResultResponse deleteBatch(List<Integer> ids) {
-        Long result = bookService.deleteByPrimaryKeys(ids);
+        int result = bookService.deleteByPrimaryKeys(ids);
         if (result > 0) {
             return ResultResponse.success();
         }

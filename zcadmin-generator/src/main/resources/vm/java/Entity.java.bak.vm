@@ -1,12 +1,10 @@
-package ${package}.entity;
+package ${package}.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.zc.entity.BaseEntity;
+import com.ruoyi.common.base.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.util.Date;
 
 #foreach ($column in $columns)
 #if($column.attrType == 'Date' && $column.attrname == "createTime" && $column.attrname == "updateTime")

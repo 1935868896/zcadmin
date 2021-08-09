@@ -34,9 +34,13 @@ public class ColumnInfo {
     private ColumnConfigInfo configInfo;
 
     /**
-     * Java属性类型
+     * Java属性类型 如:Integer
      */
     private String attrType;
+    /**
+     * sql属性类型: 如INTEGER ,VARCHAR
+     */
+    private String sqlType;
 
     /**
      * Java属性名称(第一个字母大写)，如：user_name => UserName

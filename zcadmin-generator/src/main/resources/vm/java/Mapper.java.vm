@@ -1,7 +1,11 @@
 package ${package}.mapper;
 
-import ${package}.domain.${className};
+import ${package}.entity.${className};
 import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * ${tableComment} 数据层
@@ -9,53 +13,115 @@ import java.util.List;
  * @author ${author}
  * @date ${datetime}
  */
-public interface ${className}Mapper {
+@Mapper
+public interface ${className}Mapper extends BaseMapper<${className}> {
+
     /**
      * 查询${tableComment}信息
      *
      * @param ${primaryKey.attrname} ${tableComment}ID
      * @return ${tableComment}信息
      */
-    public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname});
+    ${className} selectByPrimaryKey(${primaryKey.attrType} ${primaryKey.attrName});
+
 
     /**
-     * 查询${tableComment}列表
+     * 根据条件,查询${tableComment}列表
      *
      * @param ${classname} ${tableComment}信息
      * @return ${tableComment}集合
      */
-    public List<${className}> select${className}List(${className} ${classname});
+    List<${className}> selectListBySelective(${className} record);
 
     /**
-     * 新增${tableComment}
+     * 根据条件,分页查询${tableComment}列表
      *
      * @param ${classname} ${tableComment}信息
-     * @return 结果
+     * @param page mybatis-plus 分页对象
+     * @return ${tableComment}集合
      */
-    public int insert${className}(${className} ${classname});
+    IPage<${className}> selectPageBySelective(${className} record, Page page);
+    /**
+     * 根据主键集合,批量查询${tableComment}列表
+     *
+     * @param ids ${tableComment}主键List集合
+     * @return ${tableComment}集合
+     */
+    List<${className}> selectByPrimaryKeys(List<${primaryKey.attrType}> ids);
 
     /**
-     * 修改${tableComment}
+     * 查询符合条件的语句数量
      *
-     * @param ${classname} ${tableComment}信息
-     * @return 结果
+     * @param record ${tableComment} 信息
+     * @return 查询结果数量
      */
-    public int update${className}(${className} ${classname});
+    int selectCountBySelective(${className} record);
+
 
     /**
-     * 删除${tableComment}
+     * 插入单条数据
      *
-     * @param ${primaryKey.attrname} ${tableComment}ID
-     * @return 结果
+     * @param record ${tableComment} 信息
+     * @return 插入数量
      */
-    public int delete${className}ById(${primaryKey.attrType} ${primaryKey.attrname});
+    int insert(${className} record);
+    /**
+     * 条件插入单条数据
+     *
+     * @param record ${tableComment} 信息
+     * @return 插入数量
+     */
+    int insertSelective(${className} record);
+    /**
+     * 批量插入多条数据
+     *
+     * @param recordList ${tableComment}集合
+     * @return 插入数量
+     */
+    int insertBatch(List<${className}> recordList);
+    /**
+     * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
+     *
+     * @param record ${tableComment} 信息
+     * @return 修改数量
+     */
+    int updateByPrimaryKey(${className} record);
+    /**
+     * 修改单条数据,仅修改存在数值的属性
+     *
+     * @param record ${tableComment} 信息
+     * @return 修改数量
+     */
+    int updateByPrimaryKeySelective(${className} record);
+
 
     /**
-     * 批量删除${tableComment}
+     * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
-     * @param ${primaryKey.attrname}s 需要删除的数据ID
-     * @return 结果
+     * @param recordList ${tableComment} 集合
+     * @return 修改数量
      */
-    public int delete${className}ByIds(String[] ${primaryKey.attrname}s);
+    int updateBatch(List<${className}> recordList);
+    /**
+     * 修改多条数据,仅修改存在数值的属性
+     *
+     * @param recordList ${tableComment} 集合
+     * @return 修改数量
+     */
+    int updateBatchSelective(List<${className}> recordList);
+    /**
+     * 根据主键删除数据
+     *
+     * @param id ${tableComment} 主键
+     * @return 删除数量
+     */
+    int deleteByPrimaryKey(${primaryKey.attrType} id);
+    /**
+     * 根据主键集合删除数据
+     *
+     * @param id ${tableComment} 主键集合
+     * @return 删除数量
+     */
+    int deleteByPrimaryKeys(List<${primaryKey.attrType}> ids);
 
 }

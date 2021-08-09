@@ -2,12 +2,17 @@ package com.zc.modules.test.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.zc.entity.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 @Data
-public class Book {
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "图书")
+public class Book extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Integer id;
     @ApiModelProperty(value = "图书名称")

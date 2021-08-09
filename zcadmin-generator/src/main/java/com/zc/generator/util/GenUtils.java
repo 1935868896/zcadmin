@@ -3,16 +3,13 @@ package com.zc.generator.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
-import com.zc.config.Global;
+import com.zc.config.GlobalConfig;
 import com.zc.constant.Constants;
 import com.zc.generator.domain.ColumnInfo;
 import com.zc.generator.domain.TableInfo;
 import org.apache.velocity.VelocityContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 代码生成器 工具类
@@ -59,6 +56,8 @@ public class GenUtils {
             // 列的数据类型，转换成Java类型
             String attrType = javaTypeMap.get(column.getDataType());
             column.setAttrType(attrType);
+            //将dateType转为大写
+            column.setSqlType(column.getDataType().toUpperCase());
 
             columsList.add(column);
         }
@@ -73,7 +72,7 @@ public class GenUtils {
     public static VelocityContext getVelocityContext(TableInfo table) {
         // java对象数据传递到模板文件vm
         VelocityContext velocityContext = new VelocityContext();
-        String packageName = Global.getPackageName();
+        String packageName = GlobalConfig.getPackageName();
         velocityContext.put("tableName" , table.getTableName());
         velocityContext.put("tableComment" , replaceKeyword(table.getTableComment()));
         velocityContext.put("primaryKey" , table.getPrimaryKey());
@@ -83,7 +82,7 @@ public class GenUtils {
         velocityContext.put("columns" , table.getColumns());
         velocityContext.put("basePackage" , getBasePackage(packageName));
         velocityContext.put("package" , packageName);
-        velocityContext.put("author" , Global.getAuthor());
+        velocityContext.put("author" , GlobalConfig.getAuthor());
         velocityContext.put("datetime" , DateUtil.today());
         return velocityContext;
     }
@@ -112,11 +111,11 @@ public class GenUtils {
      * 表名转换成Java类名
      */
     public static String tableToJava(String tableName) {
-        if (Constants.AUTO_REOMVE_PRE.equals(Global.getAutoRemovePre())) {
+        if (Constants.AUTO_REOMVE_PRE.equals(GlobalConfig.getAutoRemovePre())) {
             tableName = tableName.substring(tableName.indexOf('_') + 1);
         }
-        if (StrUtil.isNotEmpty(Global.getTablePrefix())) {
-            tableName = tableName.replace(Global.getTablePrefix(), "");
+        if (StrUtil.isNotEmpty(GlobalConfig.getTablePrefix())) {
+            tableName = tableName.replace(GlobalConfig.getTablePrefix(), "");
         }
         return StrUtil.upperFirst(StrUtil.toUnderlineCase(tableName));
     }
@@ -191,7 +190,7 @@ public class GenUtils {
     }
 
     private static String getProjectPath() {
-        String packageName = Global.getPackageName();
+        String packageName = GlobalConfig.getPackageName();
         StringBuilder projectPath = new StringBuilder();
         projectPath.append("main/java/");
         projectPath.append(packageName.replace("." , "/"));

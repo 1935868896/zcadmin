@@ -4,9 +4,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import ${package}.mapper.${className}Mapper;
-import ${package}.domain.${className};
-import ${package}.service.I${className}Service;
+import ${package}.entity.${className};
+import ${package}.service.${className}Service;
+import com.zc.utils.SqlListHandleUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ${tableComment} 服务层实现
@@ -15,9 +22,10 @@ import ${package}.service.I${className}Service;
  * @date ${datetime}
  */
 @Service
-public class ${className}ServiceImpl implements I${className}Service {
-    @Autowired
-    private ${className}Mapper ${classname}Mapper;
+@RequiredArgsConstructor
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements ${className}Service {
+
+    private final ${className}Mapper ${classname}Mapper;
 
     /**
      * 查询${tableComment}信息
@@ -72,6 +80,196 @@ public class ${className}ServiceImpl implements I${className}Service {
     @Override
     public int delete${className}ByIds(String ids) {
         return ${classname}Mapper.delete${className}ByIds(Convert.toStrArray(ids));
+    }
+
+    // 本人编写
+
+    /**
+     * 查询${tableComment}信息
+     *
+     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @return ${tableComment}信息
+     */
+    @Override
+    public ${className} selectByPrimaryKey(${primaryKey.attrType} id) {
+        return ${classname}Mapper.selectByPrimaryKey(id)
+    }
+
+
+    /**
+     * 根据条件,查询${tableComment}列表
+     *
+     * @param ${classname} ${tableComment}信息
+     * @return ${tableComment}集合
+     */
+    @Override
+    public List<${className}> selectListBySelective(${className} record) {
+        return ${classname}Mapper.selectListBySelective(record);
+    }
+
+    /**
+     * 根据条件,分页查询${tableComment}列表
+     *
+     * @param ${classname} ${tableComment}信息
+     * @param page mybatis-plus 分页对象
+     * @return ${tableComment}集合
+     */
+    @Override
+    public IPage<${className}> selectPageBySelective(${className} record, Page page) {
+        return ${classname}Mapper.selectPageBySelective(record, page);
+    }
+
+    /**
+     * 根据主键集合,批量查询${tableComment}列表
+     *
+     * @param ids ${tableComment}主键List集合
+     * @return ${tableComment}集合
+     */
+    @Override
+    public List<${className}> selectByPrimaryKeys(List<${primaryKey.attrType}> ids) {
+        if (ids == null || ids.size() <= 0) {
+            return null;
+        }
+        return ${classname}Mapper.selectByPrimaryKeys(ids)
+    }
+
+
+    /**
+     * 查询符合条件的语句数量
+     *
+     * @param record ${tableComment} 信息
+     * @return 查询结果数量
+     */
+    @Override
+    public int selectCountBySelective(${className} record) {
+        return ${classname}Mapper.selectCountBySelective(record);
+    }
+
+    /**
+     * 插入单条数据
+     *
+     * @param record ${tableComment} 信息
+     * @return 插入数量
+     */
+    @Override
+    public int insert(${className} record) {
+        return ${classname}Mapper.insert(record)};
+    }
+
+    /**
+     * 条件插入单条数据
+     *
+     * @param record ${tableComment} 信息
+     * @return 插入数量
+     */
+    @Override
+    public int insertSelective(${className} record) {
+        return ${classname}Mapper.insertSelective(record);
+    }
+
+    /**
+     * 批量插入多条数据
+     *
+     * @param recordList ${tableComment}集合
+     * @return 插入数量
+     */
+    @Override
+    @Transactional
+    public int insertBatch(List<${className}> recordList) {
+        int result = 0;
+        if (recordList == null || recordList.size() <= 0) {
+            return result;
+        }
+        List<List<${className}>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<${className}> records : list) {
+            int count = ${classname}Mapper.insertBatch(records);
+            result = result + count;
+        }
+        return result;
+    }
+
+    /**
+     * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
+     *
+     * @param record ${tableComment} 信息
+     * @return 修改数量
+     */
+    @Override
+    public int updateByPrimaryKey(${className} record) {
+        return ${classname}Mapper.updateByPrimaryKey(record);
+    }
+    /**
+     * 修改单条数据,仅修改存在数值的属性
+     *
+     * @param record ${tableComment} 信息
+     * @return 修改数量
+     */
+    @Override
+    public int updateByPrimaryKeySelective(${className} record) {
+        return ${classname}Mapper.updateByPrimaryKeySelective(record);
+    }
+    /**
+     * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
+     *
+     * @param recordList ${tableComment} 集合
+     * @return 修改数量
+     */
+    @Override
+    @Transactional
+    public int updateBatch(List<${className}> recordList) {
+        int result = 0;
+        if (recordList == null || recordList.size() <= 0) {
+            return result;
+        }
+        List<List<${className}>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<${className}> records : list) {
+            int count = ${classname}Mapper.updateBatch(records);
+            result = result + count;
+        }
+        return result;
+    }
+    /**
+     * 修改多条数据,仅修改存在数值的属性
+     *
+     * @param recordList ${tableComment} 集合
+     * @return 修改数量
+     */
+    @Override
+    @Transactional
+    public int updateBatchSelective(List<${className}> recordList) {
+        int result = 0;
+        if (recordList == null || recordList.size() <= 0) {
+            return result;
+        }
+        List<List<${className}>> listLists = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<${className}> records : listLists) {
+            int count = ${classname}Mapper.updateBatchSelective(records);
+            result = result + count;
+        }
+        return result;
+    }
+    /**
+     * 根据主键删除数据
+     *
+     * @param id ${tableComment} 主键
+     * @return 删除数量
+     */
+    @Override
+    public int deleteByPrimaryKey(Integer id) {
+        return ${classname}Mapper.deleteByPrimaryKey(id);
+    }
+    /**
+     * 根据主键集合删除数据
+     *
+     * @param id ${tableComment} 主键集合
+     * @return 删除数量
+     */
+    @Override
+    public int deleteByPrimaryKeys(List<Integer> ids) {
+        if (ids == null || ids.size() <= 0) {
+            return 0;
+        }
+        return ${classname}Mapper.deleteByPrimaryKeys(ids);
     }
 
 }

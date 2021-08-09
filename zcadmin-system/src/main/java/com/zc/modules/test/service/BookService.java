@@ -25,19 +25,19 @@ public interface BookService extends IService<Book> {
 
     int updateByPrimaryKey(Book record);
 
-    List<Book> selectBySelective(Book book);
+    List<Book> selectListBySelective(Book book);
 
     IPage<Book> selectPageBySelective(Book book, Page page);
 
-    Long selectCountBySelective(Book book);
+    int selectCountBySelective(Book book);
 
     List<Book> selectByPrimaryKeys(List<Integer> ids);
 
-    Long deleteByPrimaryKeys(List<Integer> id);
+    int deleteByPrimaryKeys(List<Integer> id);
 
-    Long insertBatch(List<Book> recordList);
+    int insertBatch(List<Book> recordList);
 
-    Long updateBatch(List<Book> bookList);
+    int updateBatch(List<Book> bookList);
 
-    Long updateBatchSelective(List<Book> bookList);
+    int updateBatchSelective(List<Book> bookList);
 }

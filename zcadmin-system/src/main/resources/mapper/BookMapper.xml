@@ -33,7 +33,7 @@
         </foreach>
     </select>
 
-    <select id="selectBySelective" resultMap="BaseResultMap">
+    <select id="selectListBySelective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from book
@@ -46,7 +46,7 @@
     </select>
 
 
-    <select id="selectCountBySelective" resultType="java.lang.Long">
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
         select
         count(1)
         from book
