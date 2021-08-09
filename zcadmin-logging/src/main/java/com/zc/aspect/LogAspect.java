@@ -65,7 +65,7 @@ public class LogAspect {
      */
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.error("执行环绕通知");
+        log.info("执行环绕通知");
         Object result;
         currentTime.set(System.currentTimeMillis());
         result = joinPoint.proceed();

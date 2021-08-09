@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.modules.test.entity.Book;
-import com.zc.modules.test.entity.Bookinfo;
 import com.zc.modules.test.mapper.BookMapper;
 import com.zc.modules.test.service.BookService;
-import com.zc.modules.test.service.IBookinfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,16 +18,16 @@ import java.util.List;
 class ZcadminSystemApplicationTests {
     @Autowired
     BookMapper bookMapper;
-    @Autowired
-    IBookinfoService bookinfoService;
+//    @Autowired
+//    IBookinfoService bookinfoService;
     @Autowired
     BookService bookService;
 
     @Test
     void contextLoads() {
 //        Book book = bookMapper.selectByPrimaryKey(1);
-        Bookinfo book = bookinfoService.getById(3);
-        System.out.println(book.toString());
+//        Bookinfo book = bookinfoService.getById(3);
+//        System.out.println(book.toString());
     }
 
     @Test

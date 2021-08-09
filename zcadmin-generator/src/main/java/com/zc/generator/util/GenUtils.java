@@ -112,6 +112,9 @@ public class GenUtils {
         if ("int".equals(dataType)){
             return "INTEGER";
         }
+        if ("datetime".equals(dataType)){
+            return "TIMESTAMP";
+        }
         return dataType.toUpperCase();
 
     }

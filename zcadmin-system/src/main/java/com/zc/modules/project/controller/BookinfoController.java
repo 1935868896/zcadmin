@@ -1,6 +1,4 @@
-##修改package 名字
-package ${package}.controller;
-## 此处固定的三方jar包
+package com.zc.modules.project.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -8,53 +6,50 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-##此处引用自己编写的jar包
 import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
-##此处引用实体类
-import ${package}.entity.${className};
-import ${package}.service.${className}Service;
+import com.zc.modules.project.entity.Bookinfo;
+import com.zc.modules.project.service.BookinfoService;
 /**
- * ${tableComment} 信息操作处理
+ * 图书 信息操作处理
  *
- * @author ${author}
- * @date ${datetime}
+ * @author ruoyi
+ * @date 2021-08-09
  */
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/${moduleName}/${classname}")
-@Api(tags = "${tableComment}信息管理")
-public class ${className}Controller {
-    private final ${className}Service ${classname}Service;
+@RequestMapping("/project/bookinfo")
+@Api(tags = "图书信息管理")
+public class BookinfoController {
+    private final BookinfoService bookinfoService;
 
 
 
     @Log
     @GetMapping("count")
-    @ApiOperation("根据条件查询符合数据的数量")
-    public ResultResponse count(${className} record) {
-        int result = ${classname}Service.selectCountBySelective(record);
+    @ApiOperation("根据条件查询数量")
+    public ResultResponse count(Bookinfo record) {
+        int result = bookinfoService.selectCountBySelective(record);
         return ResultResponse.success(result);
     }
 
     @Log
     @GetMapping
-    @ApiOperation("根据条件查询得到对象集合")
-    public ResultResponse get(${className} record) {
-        List<${className}> result = ${classname}Service.selectListBySelective(record);
+    @ApiOperation("根据条件得到数据 List<Object> 集合")
+    public ResultResponse get(Bookinfo record) {
+        List<Bookinfo> result = bookinfoService.selectListBySelective(record);
         if (result != null && result.size() > 0) {
             return ResultResponse.success(result);
         }
         return ResultResponse.error();
     }
 
-    ## 这里需要修改
-    @Log
+        @Log
     @GetMapping("/id")
     @ApiOperation("根据id获得对象数据")
-    public ResultResponse getById(${primaryKey.attrType} id) {
-        ${className} result = ${classname}Service.selectByPrimaryKey(id);
+    public ResultResponse getById(Integer id) {
+        Bookinfo result = bookinfoService.selectByPrimaryKey(id);
         if (result != null) {
             return ResultResponse.success(result);
         }
@@ -63,8 +58,8 @@ public class ${className}Controller {
 
     @GetMapping("/ids")
     @ApiOperation("根据id集合获得目标数据集合")
-    public ResultResponse getByIds(@RequestParam(value = "ids" ,required=false)List<${primaryKey.attrType}> ids) {
-        List<${className}> result = ${classname}Service.selectByPrimaryKeys(ids);
+    public ResultResponse getByIds(@RequestParam(value = "ids" ,required=false)List<Integer> ids) {
+        List<Bookinfo> result = bookinfoService.selectByPrimaryKeys(ids);
         if (result != null && result.size() > 0) {
             return ResultResponse.success(result);
         }
@@ -73,15 +68,15 @@ public class ${className}Controller {
 
     @ApiOperation("分页获得目标数据集合")
     @GetMapping("page")
-    public ResultResponse getPageResults(${className} record, Page page) {
-        IPage<${className}> recordIPage = ${classname}Service.selectPageBySelective(record, page);
+    public ResultResponse getPageResults(Bookinfo record, Page page) {
+        IPage<Bookinfo> recordIPage = bookinfoService.selectPageBySelective(record, page);
         return ResultResponse.success(recordIPage);
     }
 
     @ApiOperation("插入单条数据")
     @PostMapping
-    public ResultResponse insert(@RequestBody ${className} record) {
-        int result = ${classname}Service.insert(record);
+    public ResultResponse insert(@RequestBody Bookinfo record) {
+        int result = bookinfoService.insert(record);
         if (result > 0) {
             return ResultResponse.success(record);
         }
@@ -90,8 +85,8 @@ public class ${className}Controller {
 
     @ApiOperation("批量插入数据")
     @PostMapping("batch")
-    public ResultResponse insertBatch(@RequestBody List<${className}> records) {
-        int result = ${classname}Service.insertBatch(records);
+    public ResultResponse insertBatch(@RequestBody List<Bookinfo> records) {
+        int result = bookinfoService.insertBatch(records);
         if (result > 0) {
             return ResultResponse.success(records);
         }
@@ -100,8 +95,8 @@ public class ${className}Controller {
 
     @ApiOperation("修改数据")
     @PutMapping
-    public ResultResponse update(@RequestBody ${className} record) {
-        int result = ${classname}Service.updateByPrimaryKey(record);
+    public ResultResponse update(@RequestBody Bookinfo record) {
+        int result = bookinfoService.updateByPrimaryKey(record);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -110,8 +105,8 @@ public class ${className}Controller {
 
     @ApiOperation("修改数据,仅修改不为null的数据")
     @PutMapping("/selective")
-    public ResultResponse updateByPrimaryKeySelective(@RequestBody ${className} record) {
-        int result = ${classname}Service.updateByPrimaryKeySelective(record);
+    public ResultResponse updateByPrimaryKeySelective(@RequestBody Bookinfo record) {
+        int result = bookinfoService.updateByPrimaryKeySelective(record);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -120,18 +115,18 @@ public class ${className}Controller {
 
     @ApiOperation("批量修改数据")
     @PutMapping("batch")
-    public ResultResponse updateBatch(@RequestBody List<${className}> records) {
-        int result = ${classname}Service.updateBatch(records);
+    public ResultResponse updateBatch(@RequestBody List<Bookinfo> records) {
+        int result = bookinfoService.updateBatch(records);
         if (result > 0) {
             return ResultResponse.success();
         }
         return ResultResponse.error();
     }
 
-    @ApiOperation("批量修改数据,仅修改不为null的数据,传来的对象必须全部赋值想要修改的某属性,未赋值的数值会赋值为空")
+    @ApiOperation("批量修改数据,仅修改不为null的数据")
     @PutMapping("batch/selective")
-    public ResultResponse updateBatchSelective(@RequestBody List<${className}> records) {
-        int result = ${classname}Service.updateBatchSelective(records);
+    public ResultResponse updateBatchSelective(@RequestBody List<Bookinfo> records) {
+        int result = bookinfoService.updateBatchSelective(records);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -140,8 +135,8 @@ public class ${className}Controller {
 
     @ApiOperation("删除数据")
     @DeleteMapping()
-    public ResultResponse delete(${primaryKey.attrType} id) {
-        int result = ${classname}Service.deleteByPrimaryKey(id);
+    public ResultResponse delete(Integer id) {
+        int result = bookinfoService.deleteByPrimaryKey(id);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -150,8 +145,8 @@ public class ${className}Controller {
 
     @ApiOperation("根据id集合批量删除数据")
     @DeleteMapping("ids")
-    public ResultResponse deleteBatch(@RequestBody List<${primaryKey.attrType}> ids) {
-        int result = ${classname}Service.deleteByPrimaryKeys(ids);
+    public ResultResponse deleteBatch(@RequestBody List<Integer> ids) {
+        int result = bookinfoService.deleteByPrimaryKeys(ids);
         if (result > 0) {
             return ResultResponse.success();
         }
