@@ -12,11 +12,11 @@ import java.util.List;
  * @author ${author}
  * @date ${datetime}
  */
-public interface ${className}Service extends IService<Book> {
+public interface ${className}Service extends IService<${className}> {
     /**
      * 查询${tableComment}信息
      *
-     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @param id ${tableComment}ID
      * @return ${tableComment}信息
      */
     ${className} selectByPrimaryKey(${primaryKey.attrType} id);
@@ -25,7 +25,7 @@ public interface ${className}Service extends IService<Book> {
     /**
      * 根据条件,查询${tableComment}列表
      *
-     * @param ${classname} ${tableComment}信息
+     * @param record ${tableComment}信息
      * @return ${tableComment}集合
      */
     List<${className}> selectListBySelective(${className} record);
@@ -33,7 +33,7 @@ public interface ${className}Service extends IService<Book> {
     /**
      * 根据条件,分页查询${tableComment}列表
      *
-     * @param ${classname} ${tableComment}信息
+     * @param record ${tableComment}信息
      * @param page mybatis-plus 分页对象
      * @return ${tableComment}集合
      */
@@ -116,7 +116,7 @@ public interface ${className}Service extends IService<Book> {
     /**
      * 根据主键集合删除数据
      *
-     * @param id ${tableComment} 主键集合
+     * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */
     int deleteByPrimaryKeys(List<${primaryKey.attrType}> ids);

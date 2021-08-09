@@ -46,7 +46,7 @@ public class Constants {
     /**
      * 自动去除表前缀
      */
-    public static final String AUTO_REOMVE_PRE = "true" ;
+    public static final String AUTO_REOMVE_PRE = "false" ;
 
     /**
      * 当前记录起始索引

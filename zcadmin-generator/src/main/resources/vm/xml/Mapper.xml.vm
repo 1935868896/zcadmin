@@ -11,9 +11,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-            #foreach ($column in $columns)
-              $column.columnName#if($velocityCount != $columns.size()),#end
-            #end
+            #foreach ($column in $columns) $column.columnName#if($velocityCount+1 != $columns.size()),#end#end
     </sql>
     ## 1. 主键属性名  2. 主键类型  3. 主键column名 4. 主键类型
     <select id="selectByPrimaryKey" parameterType="java.lang.${primaryKey.attrType}" resultMap="BaseResultMap">
@@ -27,30 +25,26 @@
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
-        <where>
-            #foreach($column in $columns)
-                <if test="$column.attrname != null #if($column.attrType ==
-                    'String' ) and $column.attrname.trim() != '' #end">
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        #foreach($column in $columns)
+            <if test="$column.attrname != null #if($column.attrType =='String' ) and $column.attrname.trim() != '' #end">
                 and $column.columnName = #{$column.attrname,jdbcType=${column.sqlType}}
-                </if>
-            #end
-        </where>
+            </if>
+        #end
     </select>
 
     <select id="selectPageBySelective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
-        where
-        1=1
-        <where>
-            #foreach($column in $columns)
-                <if test="record.$column.attrname != null #if($column.attrType ==
-                'String' ) and record.$column.attrname.trim() != '' #end">
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        #foreach($column in $columns)
+            <if test="record.$column.attrname != null #if($column.attrType =='String' ) and record.$column.attrname.trim() != '' #end">
                 and $column.columnName = #{record.$column.attrname,jdbcType=$column.sqlType}
-                </if>
-            #end
-        </where>
+            </if>
+        #end
     </select>
 
     <select id="selectByPrimaryKeys" parameterType="java.util.List"
@@ -68,25 +62,24 @@
         select
         count(1)
         from ${tableName}
-        <where>
-            #foreach($column in $columns)
-                <if test="record.$column.attrname != null #if($column.attrType ==
-                'String' ) and record.$column.attrname.trim() != '' #end">and $column.columnName = #{record.$column.attrname,jdbcType=$column.sqlType} </if>
-            #end
-        </where>
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+    #foreach($column in $columns)
+        <if test="record.$column.attrname != null #if($column.attrType =='String' ) and record.$column.attrname.trim() != '' #end">and $column.columnName =
+            #{record.$column.attrname,jdbcType=$column.sqlType}
+        </if>
+    #end
     </select>
 
     <insert id="insert" parameterType="${className}" #if($primaryKey.extra == 'auto_increment')
             useGeneratedKeys="true" keyProperty="$primaryKey.attrname"#end>
         insert into ${tableName} (
-            #foreach ($column in $columns)
-               $column.columnName#if($velocityCount != $columns.size()),#end
-            #end
-        )
-            values
-        (#foreach ($column in $columns)
-            #{$column.attrname,jdbcType=$column.sqlType}#if($velocityCount != $columns.size()),#end
+        #foreach ($column in $columns)
+            $column.columnName#if($velocityCount != $columns.size()),#end
         #end)
+        values
+        (#foreach ($column in $columns)
+            #{$column.attrname,jdbcType=$column.sqlType}#if($velocityCount != $columns.size()),#end#end)
     </insert>
 
     <insert id="insertSelective" parameterType="${className}"#if($primaryKey.extra == 'auto_increment')
@@ -96,7 +89,8 @@
             #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
                     <if test="$column.attrname != null #if($column.attrType ==
-                        'String' ) and $column.attrname != '' #end ">$column.columnName, </if>
+                        'String' ) and $column.attrname != '' #end ">$column.columnName,
+                    </if>
                 #end
             #end
         </trim>
@@ -123,7 +117,7 @@
         <foreach collection="recordList" item="record" index="index" separator=",">
             (
             #foreach ($column in $columns)
-            #{record.$column.attrname,jdbcType=$column.sqlType}#if($velocityCount != $columns.size()),#end
+                #{record.$column.attrname,jdbcType=$column.sqlType}#if($velocityCount != $columns.size()),#end
             #end
             )
         </foreach>
@@ -145,9 +139,9 @@
 
     <update id="updateByPrimaryKey" parameterType="${className}">
         update ${tableName} set
-        #foreach ($column in $columns)
-            $column.columnName =#{$column.attrName,jdbcType="$column.sqlType"} #if($velocityCount != $columns.size()),#end
-        #end
+            #foreach ($column in $columns)
+                $column.columnName =#{$column.attrName,jdbcType="$column.sqlType"} #if($velocityCount != $columns.size()),#end
+            #end
         where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
     </update>
 
@@ -158,7 +152,8 @@
                 #if($column.columnName != $primaryKey.columnName)
                     <trim prefix="$column.attrname = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
-                            when ${primaryKey.columnName} = #{records.${primaryKey.attrname},jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname,jdbcType=$column.sqlType}
+                            when ${primaryKey.columnName} = #{records.${primaryKey.attrname}
+                            ,jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname,jdbcType=$column.sqlType}
                         </foreach>
                     </trim>
                 #end
@@ -178,7 +173,9 @@
                     <trim prefix="$column.attrname = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
                             <if test="records.$column.attrname != null">
-                                when ${primaryKey.columnName} = #{records.${primaryKey.attrname},jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname,jdbcType=$column.sqlType}
+                                when ${primaryKey.columnName} = #{records.${primaryKey.attrname}
+                                ,jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname
+                                ,jdbcType=$column.sqlType}
                             </if>
                         </foreach>
                     </trim>

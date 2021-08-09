@@ -57,7 +57,7 @@ public class GenUtils {
             String attrType = javaTypeMap.get(column.getDataType());
             column.setAttrType(attrType);
             //将dateType转为大写
-            column.setSqlType(column.getDataType().toUpperCase());
+            column.setSqlType(dataTypeToSqlType(column.getDataType()));
 
             columsList.add(column);
         }
@@ -107,6 +107,16 @@ public class GenUtils {
         return templates;
     }
 
+    public static String dataTypeToSqlType(String dataType){
+
+        if ("int".equals(dataType)){
+            return "INTEGER";
+        }
+        return dataType.toUpperCase();
+
+    }
+
+
     /**
      * 表名转换成Java类名
      */
@@ -142,7 +152,7 @@ public class GenUtils {
         }
 
         if (template.contains("Service.java.vm")) {
-            return javaPath + "service" + "/" + "I" + className + "Service.java" ;
+            return javaPath + "service" + "/" +   className + "Service.java" ;
         }
 
         if (template.contains("ServiceImpl.java.vm")) {

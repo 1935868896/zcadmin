@@ -30,76 +30,19 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     /**
      * 查询${tableComment}信息
      *
-     * @param ${primaryKey.attrname} ${tableComment}ID
-     * @return ${tableComment}信息
-     */
-    @Override
-    public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname}) {
-        return ${classname}Mapper.select${className}ById(${primaryKey.attrname});
-    }
-
-    /**
-     * 查询${tableComment}列表
-     *
-     * @param ${classname} ${tableComment}信息
-     * @return ${tableComment}集合
-     */
-    @Override
-    public List<${className}> select${className}List(${className} ${classname}) {
-        return ${classname}Mapper.select${className}List(${classname});
-    }
-
-    /**
-     * 新增${tableComment}
-     *
-     * @param ${classname} ${tableComment}信息
-     * @return 结果
-     */
-    @Override
-    public int insert${className}(${className} ${classname}) {
-        return ${classname}Mapper.insert${className}(${classname});
-    }
-
-    /**
-     * 修改${tableComment}
-     *
-     * @param ${classname} ${tableComment}信息
-     * @return 结果
-     */
-    @Override
-    public int update${className}(${className} ${classname}) {
-        return ${classname}Mapper.update${className}(${classname});
-    }
-
-    /**
-     * 删除${tableComment}对象
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    @Override
-    public int delete${className}ByIds(String ids) {
-        return ${classname}Mapper.delete${className}ByIds(Convert.toStrArray(ids));
-    }
-
-    // 本人编写
-
-    /**
-     * 查询${tableComment}信息
-     *
-     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @param id ${tableComment}ID
      * @return ${tableComment}信息
      */
     @Override
     public ${className} selectByPrimaryKey(${primaryKey.attrType} id) {
-        return ${classname}Mapper.selectByPrimaryKey(id)
+        return ${classname}Mapper.selectByPrimaryKey(id);
     }
 
 
     /**
      * 根据条件,查询${tableComment}列表
      *
-     * @param ${classname} ${tableComment}信息
+     * @param record ${tableComment}信息
      * @return ${tableComment}集合
      */
     @Override
@@ -110,7 +53,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     /**
      * 根据条件,分页查询${tableComment}列表
      *
-     * @param ${classname} ${tableComment}信息
+     * @param record ${tableComment}信息
      * @param page mybatis-plus 分页对象
      * @return ${tableComment}集合
      */
@@ -130,7 +73,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         if (ids == null || ids.size() <= 0) {
             return null;
         }
-        return ${classname}Mapper.selectByPrimaryKeys(ids)
+        return ${classname}Mapper.selectByPrimaryKeys(ids);
     }
 
 
@@ -153,7 +96,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      */
     @Override
     public int insert(${className} record) {
-        return ${classname}Mapper.insert(record)};
+        return ${classname}Mapper.insert(record);
     }
 
     /**
@@ -261,7 +204,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     /**
      * 根据主键集合删除数据
      *
-     * @param id ${tableComment} 主键集合
+     * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */
     @Override
