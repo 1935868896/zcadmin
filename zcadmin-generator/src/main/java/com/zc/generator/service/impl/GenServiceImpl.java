@@ -115,7 +115,7 @@ public class GenServiceImpl implements IGenService {
         VelocityInitializer.initVelocity();
 
         /**
-         *  获取包名 : 此处 ruoyi 没有在yml文件配置,因此直接使用的默认
+         *
          *       本程序使用三种方式来获得 packageName : 传输请求,配置,默认
          */
 

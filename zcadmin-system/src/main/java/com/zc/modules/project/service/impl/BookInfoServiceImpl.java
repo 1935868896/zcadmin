@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zc.modules.project.mapper.BookinfoMapper;
-import com.zc.modules.project.entity.Bookinfo;
-import com.zc.modules.project.service.BookinfoService;
+import com.zc.modules.project.mapper.BookInfoMapper;
+import com.zc.modules.project.entity.BookInfo;
+import com.zc.modules.project.service.BookInfoService;
 import com.zc.utils.SqlListHandleUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
  * 图书 服务层实现
  *
  * @author ruoyi
- * @date 2021-08-09
+ * @date 2021-08-10
  */
 @Service
 @RequiredArgsConstructor
-public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> implements BookinfoService {
+public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> implements BookInfoService {
 
-    private final BookinfoMapper bookinfoMapper;
+    private final BookInfoMapper bookInfoMapper;
 
     /**
      * 查询图书信息
@@ -34,8 +34,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 图书信息
      */
     @Override
-    public Bookinfo selectByPrimaryKey(Integer id) {
-        return bookinfoMapper.selectByPrimaryKey(id);
+    public BookInfo selectByPrimaryKey(Integer id) {
+        return bookInfoMapper.selectByPrimaryKey(id);
     }
 
 
@@ -46,8 +46,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 图书集合
      */
     @Override
-    public List<Bookinfo> selectListBySelective(Bookinfo record) {
-        return bookinfoMapper.selectListBySelective(record);
+    public List<BookInfo> selectListBySelective(BookInfo record) {
+        return bookInfoMapper.selectListBySelective(record);
     }
 
     /**
@@ -58,8 +58,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 图书集合
      */
     @Override
-    public IPage<Bookinfo> selectPageBySelective(Bookinfo record, Page page) {
-        return bookinfoMapper.selectPageBySelective(record, page);
+    public IPage<BookInfo> selectPageBySelective(BookInfo record, Page page) {
+        return bookInfoMapper.selectPageBySelective(record, page);
     }
 
     /**
@@ -69,11 +69,11 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 图书集合
      */
     @Override
-    public List<Bookinfo> selectByPrimaryKeys(List<Integer> ids) {
+    public List<BookInfo> selectByPrimaryKeys(List<Integer> ids) {
         if (ids == null || ids.size() <= 0) {
             return null;
         }
-        return bookinfoMapper.selectByPrimaryKeys(ids);
+        return bookInfoMapper.selectByPrimaryKeys(ids);
     }
 
 
@@ -84,8 +84,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 查询结果数量
      */
     @Override
-    public int selectCountBySelective(Bookinfo record) {
-        return bookinfoMapper.selectCountBySelective(record);
+    public int selectCountBySelective(BookInfo record) {
+        return bookInfoMapper.selectCountBySelective(record);
     }
 
     /**
@@ -95,8 +95,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 插入数量
      */
     @Override
-    public int insert(Bookinfo record) {
-        return bookinfoMapper.insert(record);
+    public int insert(BookInfo record) {
+        return bookInfoMapper.insert(record);
     }
 
     /**
@@ -106,8 +106,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 插入数量
      */
     @Override
-    public int insertSelective(Bookinfo record) {
-        return bookinfoMapper.insertSelective(record);
+    public int insertSelective(BookInfo record) {
+        return bookInfoMapper.insertSelective(record);
     }
 
     /**
@@ -118,14 +118,14 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      */
     @Override
     @Transactional
-    public int insertBatch(List<Bookinfo> recordList) {
+    public int insertBatch(List<BookInfo> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<Bookinfo>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<Bookinfo> records : list) {
-            int count = bookinfoMapper.insertBatch(records);
+        List<List<BookInfo>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<BookInfo> records : list) {
+            int count = bookInfoMapper.insertBatch(records);
             result = result + count;
         }
         return result;
@@ -138,8 +138,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKey(Bookinfo record) {
-        return bookinfoMapper.updateByPrimaryKey(record);
+    public int updateByPrimaryKey(BookInfo record) {
+        return bookInfoMapper.updateByPrimaryKey(record);
     }
     /**
      * 修改单条数据,仅修改存在数值的属性
@@ -148,8 +148,8 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKeySelective(Bookinfo record) {
-        return bookinfoMapper.updateByPrimaryKeySelective(record);
+    public int updateByPrimaryKeySelective(BookInfo record) {
+        return bookInfoMapper.updateByPrimaryKeySelective(record);
     }
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
@@ -159,14 +159,14 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      */
     @Override
     @Transactional
-    public int updateBatch(List<Bookinfo> recordList) {
+    public int updateBatch(List<BookInfo> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<Bookinfo>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<Bookinfo> records : list) {
-            int count = bookinfoMapper.updateBatch(records);
+        List<List<BookInfo>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<BookInfo> records : list) {
+            int count = bookInfoMapper.updateBatch(records);
             result = result + count;
         }
         return result;
@@ -179,14 +179,14 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      */
     @Override
     @Transactional
-    public int updateBatchSelective(List<Bookinfo> recordList) {
+    public int updateBatchSelective(List<BookInfo> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<Bookinfo>> listLists = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<Bookinfo> records : listLists) {
-            int count = bookinfoMapper.updateBatchSelective(records);
+        List<List<BookInfo>> listLists = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<BookInfo> records : listLists) {
+            int count = bookInfoMapper.updateBatchSelective(records);
             result = result + count;
         }
         return result;
@@ -199,7 +199,7 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
      */
     @Override
     public int deleteByPrimaryKey(Integer id) {
-        return bookinfoMapper.deleteByPrimaryKey(id);
+        return bookInfoMapper.deleteByPrimaryKey(id);
     }
     /**
      * 根据主键集合删除数据
@@ -212,7 +212,7 @@ public class BookinfoServiceImpl extends ServiceImpl<BookinfoMapper, Bookinfo> i
         if (ids == null || ids.size() <= 0) {
             return 0;
         }
-        return bookinfoMapper.deleteByPrimaryKeys(ids);
+        return bookInfoMapper.deleteByPrimaryKeys(ids);
     }
 
 }

@@ -49,7 +49,7 @@ public class GenUtils {
         List<ColumnInfo> columsList = new ArrayList<>();
         for (ColumnInfo column : columns) {
             // 列名转换成Java属性名
-            String attrName = StrUtil.upperFirst(StrUtil.toUnderlineCase(column.getColumnName()));
+            String attrName = StrUtil.upperFirst(StrUtil.toCamelCase(column.getColumnName()));
             column.setAttrName(attrName);
             column.setAttrname(StrUtil.lowerFirst(attrName));
             column.setExtra(column.getExtra());
@@ -130,7 +130,8 @@ public class GenUtils {
         if (StrUtil.isNotEmpty(GlobalConfig.getTablePrefix())) {
             tableName = tableName.replace(GlobalConfig.getTablePrefix(), "");
         }
-        return StrUtil.upperFirst(StrUtil.toUnderlineCase(tableName));
+        //此处若以
+        return StrUtil.upperFirst(StrUtil.toCamelCase(tableName));
     }
 
     /**

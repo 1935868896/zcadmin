@@ -1,28 +1,25 @@
-package com.zc.modules.project.mapper;
+package com.zc.modules.project.service;
 
-import com.zc.modules.project.entity.Bookinfo;
-import java.util.List;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zc.modules.project.entity.BookInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.List;
 
 /**
- * 图书 数据层
+ * 图书 服务层
  *
  * @author ruoyi
- * @date 2021-08-09
+ * @date 2021-08-10
  */
-@Mapper
-public interface BookinfoMapper extends BaseMapper<Bookinfo> {
-
+public interface BookInfoService extends IService<BookInfo> {
     /**
      * 查询图书信息
      *
      * @param id 图书ID
      * @return 图书信息
      */
-    Bookinfo selectByPrimaryKey(Integer id);
+    BookInfo selectByPrimaryKey(Integer id);
 
 
     /**
@@ -31,7 +28,7 @@ public interface BookinfoMapper extends BaseMapper<Bookinfo> {
      * @param record 图书信息
      * @return 图书集合
      */
-    List<Bookinfo> selectListBySelective(Bookinfo record);
+    List<BookInfo> selectListBySelective(BookInfo record);
 
     /**
      * 根据条件,分页查询图书列表
@@ -40,14 +37,14 @@ public interface BookinfoMapper extends BaseMapper<Bookinfo> {
      * @param page mybatis-plus 分页对象
      * @return 图书集合
      */
-    IPage<Bookinfo> selectPageBySelective(Bookinfo record, Page page);
+    IPage<BookInfo> selectPageBySelective(BookInfo record, Page page);
     /**
      * 根据主键集合,批量查询图书列表
      *
      * @param ids 图书主键List集合
      * @return 图书集合
      */
-    List<Bookinfo> selectByPrimaryKeys(List<Integer> ids);
+    List<BookInfo> selectByPrimaryKeys(List<Integer> ids);
 
     /**
      * 查询符合条件的语句数量
@@ -55,7 +52,7 @@ public interface BookinfoMapper extends BaseMapper<Bookinfo> {
      * @param record 图书 信息
      * @return 查询结果数量
      */
-    int selectCountBySelective(Bookinfo record);
+    int selectCountBySelective(BookInfo record);
 
 
     /**
@@ -64,35 +61,35 @@ public interface BookinfoMapper extends BaseMapper<Bookinfo> {
      * @param record 图书 信息
      * @return 插入数量
      */
-    int insert(Bookinfo record);
+    int insert(BookInfo record);
     /**
      * 条件插入单条数据
      *
      * @param record 图书 信息
      * @return 插入数量
      */
-    int insertSelective(Bookinfo record);
+    int insertSelective(BookInfo record);
     /**
      * 批量插入多条数据
      *
      * @param recordList 图书集合
      * @return 插入数量
      */
-    int insertBatch(List<Bookinfo> recordList);
+    int insertBatch(List<BookInfo> recordList);
     /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
      * @param record 图书 信息
      * @return 修改数量
      */
-    int updateByPrimaryKey(Bookinfo record);
+    int updateByPrimaryKey(BookInfo record);
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
      * @param record 图书 信息
      * @return 修改数量
      */
-    int updateByPrimaryKeySelective(Bookinfo record);
+    int updateByPrimaryKeySelective(BookInfo record);
 
 
     /**
@@ -101,14 +98,14 @@ public interface BookinfoMapper extends BaseMapper<Bookinfo> {
      * @param recordList 图书 集合
      * @return 修改数量
      */
-    int updateBatch(List<Bookinfo> recordList);
+    int updateBatch(List<BookInfo> recordList);
     /**
      * 修改多条数据,仅修改存在数值的属性
      *
      * @param recordList 图书 集合
      * @return 修改数量
      */
-    int updateBatchSelective(List<Bookinfo> recordList);
+    int updateBatchSelective(List<BookInfo> recordList);
     /**
      * 根据主键删除数据
      *

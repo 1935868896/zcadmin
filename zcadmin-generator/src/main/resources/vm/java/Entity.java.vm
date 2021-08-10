@@ -1,7 +1,7 @@
 package ${package}.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
@@ -36,6 +36,12 @@ public class ${className} extends BaseEntity{
 #foreach ($column in $columns)
     #if( $column.attrname == "searchValue" ||  $column.attrname == "createBy" || $column.attrname == "createTime" ||
         $column.attrname == "updateBy" || $column.attrname == "updateTime" || $column.attrname == "remark")
+    #elseif($column.attrType=="Date")
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value="$column.columnComment",name="$column.attrname")
+    private $column.attrType $column.attrname;
     #else
 
     @ApiModelProperty(value="$column.columnComment",name="$column.attrname")
