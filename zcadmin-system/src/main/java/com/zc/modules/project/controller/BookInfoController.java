@@ -1,6 +1,7 @@
 package com.zc.modules.project.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zc.annoation.Anynomons;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class BookInfoController {
     @Log
     @GetMapping("count")
     @ApiOperation("根据条件查询符合数据的数量")
+    @Anynomons
     public ResultResponse count(BookInfo record) {
         int result = bookInfoService.selectCountBySelective(record);
         return ResultResponse.success(result);

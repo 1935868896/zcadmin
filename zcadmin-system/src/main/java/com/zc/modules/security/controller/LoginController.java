@@ -1,6 +1,7 @@
 package com.zc.modules.security.controller;
 
 import com.zc.annotation.*;
+import com.zc.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,17 +21,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginController {
     @Autowired
     AuthenticationManagerBuilder authenticationManagerBuilder;
+    @Autowired
+    JwtUtil jwtUtil;
+
     @Log("登录")
     @ResponseBody
     @GetMapping("/login")
     public String login(){
-        //下面的步骤就是验证登录的过程,为简化流程,username和password这里固定了
-        log.error("执行");
+        //第一步验证密码的正确性
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken("admin", "123456");
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "login";
+        //第二步:生成jwt字符串,并返回
+        String s = jwtUtil.JWTCreator(authentication);
+        return s;
     }
 
     @ResponseBody
