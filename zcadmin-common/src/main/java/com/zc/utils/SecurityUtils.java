@@ -47,6 +47,8 @@ public class SecurityUtils {
         return userDetailsService.loadUserByUsername(getCurrentUsername());
     }
 
+
+
     /**
      * 获取系统用户名称
      *
@@ -63,6 +65,9 @@ public class SecurityUtils {
         }
         throw new BadRequestException(HttpStatus.UNAUTHORIZED, "找不到当前登录的信息");
     }
+
+
+
 
     /**
      * 获取系统用户ID

@@ -5,6 +5,7 @@ import com.zc.annoation.Anonymous;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.zc.annotation.Log;
@@ -118,6 +119,7 @@ public class BookInfoController {
 
     @ApiOperation("批量修改数据")
     @PutMapping("batch")
+    @PreAuthorize("@el.check('bookInfo:updateBatch')")
     public ResultResponse updateBatch(@RequestBody List<BookInfo> records) {
         int result = bookInfoService.updateBatch(records);
         if (result > 0) {
