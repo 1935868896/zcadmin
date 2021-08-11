@@ -1,7 +1,7 @@
 package com.zc.modules.project.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zc.annoation.Anynomons;
+import com.zc.annoation.Anonymous;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class BookInfoController {
     @Log
     @GetMapping("count")
     @ApiOperation("根据条件查询符合数据的数量")
-    @Anynomons
+    @Anonymous
     public ResultResponse count(BookInfo record) {
         int result = bookInfoService.selectCountBySelective(record);
         return ResultResponse.success(result);
@@ -39,6 +39,7 @@ public class BookInfoController {
     @Log
     @GetMapping
     @ApiOperation("根据条件查询得到对象集合")
+    @Anonymous
     public ResultResponse get(BookInfo record) {
         List<BookInfo> result = bookInfoService.selectListBySelective(record);
         if (result != null && result.size() > 0) {
@@ -104,7 +105,7 @@ public class BookInfoController {
         }
         return ResultResponse.error();
     }
-
+    @Anonymous
     @ApiOperation("修改数据,仅修改不为null的数据")
     @PutMapping("/selective")
     public ResultResponse updateByPrimaryKeySelective(@RequestBody BookInfo record) {
