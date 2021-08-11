@@ -1,5 +1,6 @@
 package com.zc.service.impl;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         log.setUsername(username);
         log.setParams(getParameter(method, joinPoint.getArgs()));
         log.setBrowser(browser);
+        log.setCreateTime(new Timestamp(System.currentTimeMillis()));
         this.baseMapper.insert(log);
 
     }

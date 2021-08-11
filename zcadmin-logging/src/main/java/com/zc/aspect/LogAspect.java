@@ -22,6 +22,7 @@ import com.zc.service.ISysLogService;
 import com.zc.utils.RequestHolder;
 import com.zc.utils.SecurityUtils;
 import com.zc.utils.StringUtils;
+import com.zc.utils.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -65,7 +66,6 @@ public class LogAspect {
      */
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("执行环绕通知");
         Object result;
         currentTime.set(System.currentTimeMillis());
         result = joinPoint.proceed();
@@ -86,7 +86,7 @@ public class LogAspect {
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         SysLog log = new SysLog("ERROR",System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
-//        log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
+        log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
         logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request), (ProceedingJoinPoint)joinPoint, log);
     }
@@ -95,7 +95,7 @@ public class LogAspect {
         try {
             return SecurityUtils.getCurrentUsername();
         }catch (Exception e){
-            return "";
+            return "anonymous";
         }
     }
 }
