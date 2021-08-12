@@ -198,7 +198,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(${primaryKey.attrType} id) {
         return ${classname}Mapper.deleteByPrimaryKey(id);
     }
     /**
@@ -208,7 +208,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKeys(List<Integer> ids) {
+    public int deleteByPrimaryKeys(List<${primaryKey.attrType}> ids) {
         if (ids == null || ids.size() <= 0) {
             return 0;
         }

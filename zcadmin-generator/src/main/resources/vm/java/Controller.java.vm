@@ -29,14 +29,6 @@ import ${package}.service.${className}Service;
 public class ${className}Controller {
     private final ${className}Service ${classname}Service;
 
-
-    @Log("${tableComment}信息管理:根据条件查询符合数据的数量")
-    @PreAuthorize("@el.check(${classname}:getCount')")
-    @GetMapping("count")
-    @ApiOperation("根据条件查询符合数据的数量")
-
-
-
     @GetMapping("/id")
     @ApiOperation("根据主键获得对象数据")
     @Log("${tableComment}信息管理:根据主键获得对象数据")
