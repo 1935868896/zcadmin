@@ -14,6 +14,7 @@ import com.zc.modules.project.entity.BookInfo;
 import com.zc.modules.project.service.BookInfoService;
 /**
  * 图书 信息操作处理
+ *  1. 加权限 2. 改方法名
  *
  * @author ruoyi
  * @date 2021-08-10
@@ -28,11 +29,11 @@ public class BookInfoController {
 
 
 
-    @Log
+    @Log("")
     @GetMapping("count")
     @ApiOperation("根据条件查询符合数据的数量")
-    @Anonymous
-    public ResultResponse count(BookInfo record) {
+    @PreAuthorize("@el.check('bookInfo:getCount')")
+    public ResultResponse getCount(BookInfo record) {
         int result = bookInfoService.selectCountBySelective(record);
         return ResultResponse.success(result);
     }
@@ -40,8 +41,8 @@ public class BookInfoController {
     @Log
     @GetMapping
     @ApiOperation("根据条件查询得到对象集合")
-    @Anonymous
-    public ResultResponse get(BookInfo record) {
+    @PreAuthorize("@el.check('bookInfo:get')")
+    public ResultResponse getListByParam(BookInfo record) {
         List<BookInfo> result = bookInfoService.selectListBySelective(record);
         if (result != null && result.size() > 0) {
             return ResultResponse.success(result);
@@ -49,10 +50,10 @@ public class BookInfoController {
         return ResultResponse.error();
     }
 
-        @Log
+    @Log
     @GetMapping("/id")
     @ApiOperation("根据id获得对象数据")
-    public ResultResponse getById(Integer id) {
+    public ResultResponse getRecordById(Integer id) {
         BookInfo result = bookInfoService.selectByPrimaryKey(id);
         if (result != null) {
             return ResultResponse.success(result);
@@ -62,7 +63,7 @@ public class BookInfoController {
 
     @GetMapping("/ids")
     @ApiOperation("根据id集合获得目标数据集合")
-    public ResultResponse getByIds(@RequestParam(value = "ids" ,required=false)List<Integer> ids) {
+    public ResultResponse getListByIds(@RequestParam(value = "ids" ,required=false)List<Integer> ids) {
         List<BookInfo> result = bookInfoService.selectByPrimaryKeys(ids);
         if (result != null && result.size() > 0) {
             return ResultResponse.success(result);
@@ -72,7 +73,7 @@ public class BookInfoController {
 
     @ApiOperation("分页获得目标数据集合")
     @GetMapping("page")
-    public ResultResponse getPageResults(BookInfo record, Page page) {
+    public ResultResponse getPageByParam(BookInfo record, Page page) {
         IPage<BookInfo> recordIPage = bookInfoService.selectPageBySelective(record, page);
         return ResultResponse.success(recordIPage);
     }
@@ -109,7 +110,7 @@ public class BookInfoController {
     @Anonymous
     @ApiOperation("修改数据,仅修改不为null的数据")
     @PutMapping("/selective")
-    public ResultResponse updateByPrimaryKeySelective(@RequestBody BookInfo record) {
+    public ResultResponse updateBySelective(@RequestBody BookInfo record) {
         int result = bookInfoService.updateByPrimaryKeySelective(record);
         if (result > 0) {
             return ResultResponse.success();
@@ -130,7 +131,7 @@ public class BookInfoController {
 
     @ApiOperation("批量修改数据,仅修改不为null的数据,传来的对象必须全部赋值想要修改的某属性,未赋值的数值会赋值为空")
     @PutMapping("batch/selective")
-    public ResultResponse updateBatchSelective(@RequestBody List<BookInfo> records) {
+    public ResultResponse updateBatchBySelective(@RequestBody List<BookInfo> records) {
         int result = bookInfoService.updateBatchSelective(records);
         if (result > 0) {
             return ResultResponse.success();
