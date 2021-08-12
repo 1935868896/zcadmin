@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.quartz.mapper.QuartzLogMapper">
+    <resultMap type="QuartzLog" id="BaseResultMap">
+            <result property="logId" jdbcType="BIGINT" column="log_id"/>
+            <result property="beanName" jdbcType="VARCHAR" column="bean_name"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="cronExpression" jdbcType="VARCHAR" column="cron_expression"/>
+            <result property="exceptionDetail" jdbcType="TEXT" column="exception_detail"/>
+            <result property="isSuccess" jdbcType="BIT" column="is_success"/>
+            <result property="jobName" jdbcType="VARCHAR" column="job_name"/>
+            <result property="methodName" jdbcType="VARCHAR" column="method_name"/>
+            <result property="params" jdbcType="VARCHAR" column="params"/>
+            <result property="time" jdbcType="BIGINT" column="time"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+log_id,bean_name,create_time,cron_expression,exception_detail,is_success,job_name,method_name,params,time
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_log
+        where log_id = #{logId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_log
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="logId != null ">
+                and log_id = #{logId,jdbcType=BIGINT}
+            </if>
+            <if test="beanName != null  and beanName != '' ">
+                and bean_name = #{beanName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="cronExpression != null  and cronExpression != '' ">
+                and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+            </if>
+            <if test="exceptionDetail != null  and exceptionDetail != '' ">
+                and exception_detail = #{exceptionDetail,jdbcType=TEXT}
+            </if>
+            <if test="isSuccess != null ">
+                and is_success = #{isSuccess,jdbcType=BIT}
+            </if>
+            <if test="jobName != null  and jobName != '' ">
+                and job_name = #{jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="methodName != null  and methodName != '' ">
+                and method_name = #{methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="params != null  and params != '' ">
+                and params = #{params,jdbcType=VARCHAR}
+            </if>
+            <if test="time != null ">
+                and time = #{time,jdbcType=BIGINT}
+            </if>
+    </select>
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_log
+        where 1=1
+        <!-- <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="record.logId != null ">
+                and log_id = #{record.logId,jdbcType=BIGINT}
+            </if>
+            <if test="record.beanName != null  and record.beanName != '' ">
+                and bean_name = #{record.beanName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.createTime != null ">
+                and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="record.cronExpression != null  and record.cronExpression != '' ">
+                and cron_expression = #{record.cronExpression,jdbcType=VARCHAR}
+            </if>
+            <if test="record.exceptionDetail != null  and record.exceptionDetail != '' ">
+                and exception_detail = #{record.exceptionDetail,jdbcType=TEXT}
+            </if>
+            <if test="record.isSuccess != null ">
+                and is_success = #{record.isSuccess,jdbcType=BIT}
+            </if>
+            <if test="record.jobName != null  and record.jobName != '' ">
+                and job_name = #{record.jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.methodName != null  and record.methodName != '' ">
+                and method_name = #{record.methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.params != null  and record.params != '' ">
+                and params = #{record.params,jdbcType=VARCHAR}
+            </if>
+            <if test="record.time != null ">
+                and time = #{record.time,jdbcType=BIGINT}
+            </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultType="QuartzLog">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_log
+        where log_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_quartz_log
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        <if test="logId != null ">
+        and log_id = #{logId,jdbcType=BIGINT}
+        </if>
+        <if test="beanName != null  and beanName != '' ">
+        and bean_name = #{beanName,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="cronExpression != null  and cronExpression != '' ">
+        and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+        </if>
+        <if test="exceptionDetail != null  and exceptionDetail != '' ">
+        and exception_detail = #{exceptionDetail,jdbcType=TEXT}
+        </if>
+        <if test="isSuccess != null ">
+        and is_success = #{isSuccess,jdbcType=BIT}
+        </if>
+        <if test="jobName != null  and jobName != '' ">
+        and job_name = #{jobName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+        and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="params != null  and params != '' ">
+        and params = #{params,jdbcType=VARCHAR}
+        </if>
+        <if test="time != null ">
+        and time = #{time,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="QuartzLog"             useGeneratedKeys="true" keyProperty="logId">
+        insert into sys_quartz_log (
+            log_id,
+            bean_name,
+            create_time,
+            cron_expression,
+            exception_detail,
+            is_success,
+            job_name,
+            method_name,
+            params,
+            time
+    )
+        values
+        (         #{logId,jdbcType=BIGINT},         #{beanName,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{cronExpression,jdbcType=VARCHAR},         #{exceptionDetail,jdbcType=TEXT},         #{isSuccess,jdbcType=BIT},         #{jobName,jdbcType=VARCHAR},         #{methodName,jdbcType=VARCHAR},         #{params,jdbcType=VARCHAR},         #{time,jdbcType=BIGINT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="QuartzLog"            useGeneratedKeys="true" keyProperty="logId">
+        insert into sys_quartz_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">bean_name,</if>
+                    <if test="createTime != null  ">create_time,</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">cron_expression,</if>
+                    <if test="exceptionDetail != null  and exceptionDetail != ''  ">exception_detail,</if>
+                    <if test="isSuccess != null  ">is_success,</if>
+                    <if test="jobName != null  and jobName != ''  ">job_name,</if>
+                    <if test="methodName != null  and methodName != ''  ">method_name,</if>
+                    <if test="params != null  and params != ''  ">params,</if>
+                    <if test="time != null  ">time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">#{beanName,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">#{cronExpression,jdbcType=VARCHAR},</if>
+                    <if test="exceptionDetail != null  and exceptionDetail != ''  ">#{exceptionDetail,jdbcType=TEXT},</if>
+                    <if test="isSuccess != null  ">#{isSuccess,jdbcType=BIT},</if>
+                    <if test="jobName != null  and jobName != ''  ">#{jobName,jdbcType=VARCHAR},</if>
+                    <if test="methodName != null  and methodName != ''  ">#{methodName,jdbcType=VARCHAR},</if>
+                    <if test="params != null  and params != ''  ">#{params,jdbcType=VARCHAR},</if>
+                    <if test="time != null  ">#{time,jdbcType=BIGINT},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="logId">
+        insert into  sys_quartz_log (
+            log_id,
+            bean_name,
+            create_time,
+            cron_expression,
+            exception_detail,
+            is_success,
+            job_name,
+            method_name,
+            params,
+            time
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.logId,jdbcType=BIGINT},
+                #{record.beanName,jdbcType=VARCHAR},
+                #{record.createTime,jdbcType=TIMESTAMP},
+                #{record.cronExpression,jdbcType=VARCHAR},
+                #{record.exceptionDetail,jdbcType=TEXT},
+                #{record.isSuccess,jdbcType=BIT},
+                #{record.jobName,jdbcType=VARCHAR},
+                #{record.methodName,jdbcType=VARCHAR},
+                #{record.params,jdbcType=VARCHAR},
+                #{record.time,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="QuartzLog">
+        update sys_quartz_log
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">bean_name = #{beanName,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">cron_expression = #{cronExpression,jdbcType=VARCHAR},</if>
+                    <if test="exceptionDetail != null  and exceptionDetail != ''  ">exception_detail = #{exceptionDetail,jdbcType=TEXT},</if>
+                    <if test="isSuccess != null  ">is_success = #{isSuccess,jdbcType=BIT},</if>
+                    <if test="jobName != null  and jobName != ''  ">job_name = #{jobName,jdbcType=VARCHAR},</if>
+                    <if test="methodName != null  and methodName != ''  ">method_name = #{methodName,jdbcType=VARCHAR},</if>
+                    <if test="params != null  and params != ''  ">params = #{params,jdbcType=VARCHAR},</if>
+                    <if test="time != null  ">time = #{time,jdbcType=BIGINT},</if>
+        </trim>
+        where log_id = #{logId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="QuartzLog">
+        update sys_quartz_log set
+                log_id =#{logId,jdbcType=BIGINT} ,
+                bean_name =#{beanName,jdbcType=VARCHAR} ,
+                create_time =#{createTime,jdbcType=TIMESTAMP} ,
+                cron_expression =#{cronExpression,jdbcType=VARCHAR} ,
+                exception_detail =#{exceptionDetail,jdbcType=TEXT} ,
+                is_success =#{isSuccess,jdbcType=BIT} ,
+                job_name =#{jobName,jdbcType=VARCHAR} ,
+                method_name =#{methodName,jdbcType=VARCHAR} ,
+                params =#{params,jdbcType=VARCHAR} ,
+                time =#{time,jdbcType=BIGINT} 
+        where log_id = #{logId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update sys_quartz_log
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="beanName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.beanName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="createTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+                    <trim prefix="cronExpression = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.cronExpression,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="exceptionDetail = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.exceptionDetail,jdbcType=TEXT}
+                        </foreach>
+                    </trim>
+                    <trim prefix="isSuccess = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.isSuccess,jdbcType=BIT}
+                        </foreach>
+                    </trim>
+                    <trim prefix="jobName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.jobName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="methodName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.methodName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="params = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.params,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.time,jdbcType=BIGINT}
+                        </foreach>
+                    </trim>
+        </trim>
+        where log_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.logId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update sys_quartz_log
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="beanName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.beanName != null  and records.beanName != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.beanName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="createTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createTime != null  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="cronExpression = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.cronExpression != null  and records.cronExpression != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.cronExpression,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="exceptionDetail = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.exceptionDetail != null  and records.exceptionDetail != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.exceptionDetail,jdbcType=TEXT}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="isSuccess = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.isSuccess != null  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.isSuccess,jdbcType=BIT}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="jobName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.jobName != null  and records.jobName != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.jobName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="methodName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.methodName != null  and records.methodName != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.methodName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="params = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.params != null  and records.params != ''  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.params,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.time != null  " >
+                            when log_id = #{records.logId,jdbcType=BIGINT} then #{records.time,jdbcType=BIGINT}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where log_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.logId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sys_quartz_log where log_id = #{logId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from sys_quartz_log where log_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

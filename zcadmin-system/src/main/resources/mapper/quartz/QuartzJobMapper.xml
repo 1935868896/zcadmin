@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.quartz.mapper.QuartzJobMapper">
+    <resultMap type="QuartzJob" id="BaseResultMap">
+            <result property="jobId" jdbcType="BIGINT" column="job_id"/>
+            <result property="beanName" jdbcType="VARCHAR" column="bean_name"/>
+            <result property="cronExpression" jdbcType="VARCHAR" column="cron_expression"/>
+            <result property="isPause" jdbcType="BIT" column="is_pause"/>
+            <result property="jobName" jdbcType="VARCHAR" column="job_name"/>
+            <result property="methodName" jdbcType="VARCHAR" column="method_name"/>
+            <result property="params" jdbcType="VARCHAR" column="params"/>
+            <result property="description" jdbcType="VARCHAR" column="description"/>
+            <result property="personInCharge" jdbcType="VARCHAR" column="person_in_charge"/>
+            <result property="email" jdbcType="VARCHAR" column="email"/>
+            <result property="subTask" jdbcType="VARCHAR" column="sub_task"/>
+            <result property="pauseAfterFailure" jdbcType="BIT" column="pause_after_failure"/>
+            <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+            <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+job_id,bean_name,cron_expression,is_pause,job_name,method_name,params,description,person_in_charge,email,sub_task,pause_after_failure,create_by,update_by,create_time,update_time
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_job
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_job
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="jobId != null ">
+                and job_id = #{jobId,jdbcType=BIGINT}
+            </if>
+            <if test="beanName != null  and beanName != '' ">
+                and bean_name = #{beanName,jdbcType=VARCHAR}
+            </if>
+            <if test="cronExpression != null  and cronExpression != '' ">
+                and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+            </if>
+            <if test="isPause != null ">
+                and is_pause = #{isPause,jdbcType=BIT}
+            </if>
+            <if test="jobName != null  and jobName != '' ">
+                and job_name = #{jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="methodName != null  and methodName != '' ">
+                and method_name = #{methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="params != null  and params != '' ">
+                and params = #{params,jdbcType=VARCHAR}
+            </if>
+            <if test="description != null  and description != '' ">
+                and description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="personInCharge != null  and personInCharge != '' ">
+                and person_in_charge = #{personInCharge,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null  and email != '' ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="subTask != null  and subTask != '' ">
+                and sub_task = #{subTask,jdbcType=VARCHAR}
+            </if>
+            <if test="pauseAfterFailure != null ">
+                and pause_after_failure = #{pauseAfterFailure,jdbcType=BIT}
+            </if>
+            <if test="createBy != null  and createBy != '' ">
+                and create_by = #{createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="updateBy != null  and updateBy != '' ">
+                and update_by = #{updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null ">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+    </select>
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_job
+        where 1=1
+        <!-- <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="record.jobId != null ">
+                and job_id = #{record.jobId,jdbcType=BIGINT}
+            </if>
+            <if test="record.beanName != null  and record.beanName != '' ">
+                and bean_name = #{record.beanName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.cronExpression != null  and record.cronExpression != '' ">
+                and cron_expression = #{record.cronExpression,jdbcType=VARCHAR}
+            </if>
+            <if test="record.isPause != null ">
+                and is_pause = #{record.isPause,jdbcType=BIT}
+            </if>
+            <if test="record.jobName != null  and record.jobName != '' ">
+                and job_name = #{record.jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.methodName != null  and record.methodName != '' ">
+                and method_name = #{record.methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.params != null  and record.params != '' ">
+                and params = #{record.params,jdbcType=VARCHAR}
+            </if>
+            <if test="record.description != null  and record.description != '' ">
+                and description = #{record.description,jdbcType=VARCHAR}
+            </if>
+            <if test="record.personInCharge != null  and record.personInCharge != '' ">
+                and person_in_charge = #{record.personInCharge,jdbcType=VARCHAR}
+            </if>
+            <if test="record.email != null  and record.email != '' ">
+                and email = #{record.email,jdbcType=VARCHAR}
+            </if>
+            <if test="record.subTask != null  and record.subTask != '' ">
+                and sub_task = #{record.subTask,jdbcType=VARCHAR}
+            </if>
+            <if test="record.pauseAfterFailure != null ">
+                and pause_after_failure = #{record.pauseAfterFailure,jdbcType=BIT}
+            </if>
+            <if test="record.createBy != null  and record.createBy != '' ">
+                and create_by = #{record.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="record.updateBy != null  and record.updateBy != '' ">
+                and update_by = #{record.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="record.createTime != null ">
+                and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="record.updateTime != null ">
+                and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+            </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultType="QuartzJob">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_quartz_job
+        where job_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_quartz_job
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        <if test="jobId != null ">
+        and job_id = #{jobId,jdbcType=BIGINT}
+        </if>
+        <if test="beanName != null  and beanName != '' ">
+        and bean_name = #{beanName,jdbcType=VARCHAR}
+        </if>
+        <if test="cronExpression != null  and cronExpression != '' ">
+        and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+        </if>
+        <if test="isPause != null ">
+        and is_pause = #{isPause,jdbcType=BIT}
+        </if>
+        <if test="jobName != null  and jobName != '' ">
+        and job_name = #{jobName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+        and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="params != null  and params != '' ">
+        and params = #{params,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+        and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="personInCharge != null  and personInCharge != '' ">
+        and person_in_charge = #{personInCharge,jdbcType=VARCHAR}
+        </if>
+        <if test="email != null  and email != '' ">
+        and email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="subTask != null  and subTask != '' ">
+        and sub_task = #{subTask,jdbcType=VARCHAR}
+        </if>
+        <if test="pauseAfterFailure != null ">
+        and pause_after_failure = #{pauseAfterFailure,jdbcType=BIT}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+        and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+        and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="QuartzJob"             useGeneratedKeys="true" keyProperty="jobId">
+        insert into sys_quartz_job (
+            job_id,
+            bean_name,
+            cron_expression,
+            is_pause,
+            job_name,
+            method_name,
+            params,
+            description,
+            person_in_charge,
+            email,
+            sub_task,
+            pause_after_failure,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+    )
+        values
+        (         #{jobId,jdbcType=BIGINT},         #{beanName,jdbcType=VARCHAR},         #{cronExpression,jdbcType=VARCHAR},         #{isPause,jdbcType=BIT},         #{jobName,jdbcType=VARCHAR},         #{methodName,jdbcType=VARCHAR},         #{params,jdbcType=VARCHAR},         #{description,jdbcType=VARCHAR},         #{personInCharge,jdbcType=VARCHAR},         #{email,jdbcType=VARCHAR},         #{subTask,jdbcType=VARCHAR},         #{pauseAfterFailure,jdbcType=BIT},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="QuartzJob"            useGeneratedKeys="true" keyProperty="jobId">
+        insert into sys_quartz_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">bean_name,</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">cron_expression,</if>
+                    <if test="isPause != null  ">is_pause,</if>
+                    <if test="jobName != null  and jobName != ''  ">job_name,</if>
+                    <if test="methodName != null  and methodName != ''  ">method_name,</if>
+                    <if test="params != null  and params != ''  ">params,</if>
+                    <if test="description != null  and description != ''  ">description,</if>
+                    <if test="personInCharge != null  and personInCharge != ''  ">person_in_charge,</if>
+                    <if test="email != null  and email != ''  ">email,</if>
+                    <if test="subTask != null  and subTask != ''  ">sub_task,</if>
+                    <if test="pauseAfterFailure != null  ">pause_after_failure,</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by,</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+                    <if test="createTime != null  ">create_time,</if>
+                    <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">#{beanName,jdbcType=VARCHAR},</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">#{cronExpression,jdbcType=VARCHAR},</if>
+                    <if test="isPause != null  ">#{isPause,jdbcType=BIT},</if>
+                    <if test="jobName != null  and jobName != ''  ">#{jobName,jdbcType=VARCHAR},</if>
+                    <if test="methodName != null  and methodName != ''  ">#{methodName,jdbcType=VARCHAR},</if>
+                    <if test="params != null  and params != ''  ">#{params,jdbcType=VARCHAR},</if>
+                    <if test="description != null  and description != ''  ">#{description,jdbcType=VARCHAR},</if>
+                    <if test="personInCharge != null  and personInCharge != ''  ">#{personInCharge,jdbcType=VARCHAR},</if>
+                    <if test="email != null  and email != ''  ">#{email,jdbcType=VARCHAR},</if>
+                    <if test="subTask != null  and subTask != ''  ">#{subTask,jdbcType=VARCHAR},</if>
+                    <if test="pauseAfterFailure != null  ">#{pauseAfterFailure,jdbcType=BIT},</if>
+                    <if test="createBy != null  and createBy != ''  ">#{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">#{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="jobId">
+        insert into  sys_quartz_job (
+            job_id,
+            bean_name,
+            cron_expression,
+            is_pause,
+            job_name,
+            method_name,
+            params,
+            description,
+            person_in_charge,
+            email,
+            sub_task,
+            pause_after_failure,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.jobId,jdbcType=BIGINT},
+                #{record.beanName,jdbcType=VARCHAR},
+                #{record.cronExpression,jdbcType=VARCHAR},
+                #{record.isPause,jdbcType=BIT},
+                #{record.jobName,jdbcType=VARCHAR},
+                #{record.methodName,jdbcType=VARCHAR},
+                #{record.params,jdbcType=VARCHAR},
+                #{record.description,jdbcType=VARCHAR},
+                #{record.personInCharge,jdbcType=VARCHAR},
+                #{record.email,jdbcType=VARCHAR},
+                #{record.subTask,jdbcType=VARCHAR},
+                #{record.pauseAfterFailure,jdbcType=BIT},
+                #{record.createBy,jdbcType=VARCHAR},
+                #{record.updateBy,jdbcType=VARCHAR},
+                #{record.createTime,jdbcType=TIMESTAMP},
+                #{record.updateTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="QuartzJob">
+        update sys_quartz_job
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="beanName != null  and beanName != ''  ">bean_name = #{beanName,jdbcType=VARCHAR},</if>
+                    <if test="cronExpression != null  and cronExpression != ''  ">cron_expression = #{cronExpression,jdbcType=VARCHAR},</if>
+                    <if test="isPause != null  ">is_pause = #{isPause,jdbcType=BIT},</if>
+                    <if test="jobName != null  and jobName != ''  ">job_name = #{jobName,jdbcType=VARCHAR},</if>
+                    <if test="methodName != null  and methodName != ''  ">method_name = #{methodName,jdbcType=VARCHAR},</if>
+                    <if test="params != null  and params != ''  ">params = #{params,jdbcType=VARCHAR},</if>
+                    <if test="description != null  and description != ''  ">description = #{description,jdbcType=VARCHAR},</if>
+                    <if test="personInCharge != null  and personInCharge != ''  ">person_in_charge = #{personInCharge,jdbcType=VARCHAR},</if>
+                    <if test="email != null  and email != ''  ">email = #{email,jdbcType=VARCHAR},</if>
+                    <if test="subTask != null  and subTask != ''  ">sub_task = #{subTask,jdbcType=VARCHAR},</if>
+                    <if test="pauseAfterFailure != null  ">pause_after_failure = #{pauseAfterFailure,jdbcType=BIT},</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by = #{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="QuartzJob">
+        update sys_quartz_job set
+                job_id =#{jobId,jdbcType=BIGINT} ,
+                bean_name =#{beanName,jdbcType=VARCHAR} ,
+                cron_expression =#{cronExpression,jdbcType=VARCHAR} ,
+                is_pause =#{isPause,jdbcType=BIT} ,
+                job_name =#{jobName,jdbcType=VARCHAR} ,
+                method_name =#{methodName,jdbcType=VARCHAR} ,
+                params =#{params,jdbcType=VARCHAR} ,
+                description =#{description,jdbcType=VARCHAR} ,
+                person_in_charge =#{personInCharge,jdbcType=VARCHAR} ,
+                email =#{email,jdbcType=VARCHAR} ,
+                sub_task =#{subTask,jdbcType=VARCHAR} ,
+                pause_after_failure =#{pauseAfterFailure,jdbcType=BIT} ,
+                create_by =#{createBy,jdbcType=VARCHAR} ,
+                update_by =#{updateBy,jdbcType=VARCHAR} ,
+                create_time =#{createTime,jdbcType=TIMESTAMP} ,
+                update_time =#{updateTime,jdbcType=TIMESTAMP} 
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update sys_quartz_job
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="beanName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.beanName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="cronExpression = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.cronExpression,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="isPause = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.isPause,jdbcType=BIT}
+                        </foreach>
+                    </trim>
+                    <trim prefix="jobName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.jobName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="methodName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.methodName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="params = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.params,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="description = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.description,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="personInCharge = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.personInCharge,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="email = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.email,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="subTask = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.subTask,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="pauseAfterFailure = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.pauseAfterFailure,jdbcType=BIT}
+                        </foreach>
+                    </trim>
+                    <trim prefix="createBy = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="updateBy = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="createTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+                    <trim prefix="updateTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+        </trim>
+        where job_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.jobId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update sys_quartz_job
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="beanName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.beanName != null  and records.beanName != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.beanName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="cronExpression = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.cronExpression != null  and records.cronExpression != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.cronExpression,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="isPause = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.isPause != null  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.isPause,jdbcType=BIT}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="jobName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.jobName != null  and records.jobName != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.jobName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="methodName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.methodName != null  and records.methodName != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.methodName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="params = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.params != null  and records.params != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.params,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="description = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.description != null  and records.description != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.description,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="personInCharge = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.personInCharge != null  and records.personInCharge != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.personInCharge,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="email = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.email != null  and records.email != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.email,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="subTask = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.subTask != null  and records.subTask != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.subTask,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="pauseAfterFailure = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.pauseAfterFailure != null  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.pauseAfterFailure,jdbcType=BIT}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="createBy = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createBy != null  and records.createBy != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="updateBy = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateBy != null  and records.updateBy != ''  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="createTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createTime != null  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="updateTime = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateTime != null  " >
+                            when job_id = #{records.jobId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where job_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.jobId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sys_quartz_job where job_id = #{jobId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from sys_quartz_job where job_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>
