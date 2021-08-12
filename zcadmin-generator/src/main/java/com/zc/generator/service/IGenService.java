@@ -1,6 +1,7 @@
 package com.zc.generator.service;
 
 
+import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface IGenService {
      * @param tableName 表名称
      * @return 数据
      */
-    byte[] generatorCode(String tableName);
+    byte[] generatorCode(String tableName, GenBaseInfo genBaseInfo);
 
     /**
      * 批量生成代码
@@ -33,5 +34,5 @@ public interface IGenService {
      * @param tableNames 表数组
      * @return 数据
      */
-    byte[] generatorCode(String[] tableNames);
+    byte[] generatorCode(String[] tableNames,GenBaseInfo genBaseInfo);
 }

@@ -3,6 +3,7 @@ package com.zc.generator.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.zc.config.GlobalConfig;
 import com.zc.generator.domain.ColumnInfo;
+import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
 import com.zc.generator.mapper.GenMapper;
 import com.zc.generator.service.IGenService;
@@ -59,12 +60,12 @@ public class GenServiceImpl implements IGenService {
      * @return 数据
      */
     @Override
-    public byte[] generatorCode(String tableName) {
+    public byte[] generatorCode(String tableName, GenBaseInfo genBaseInfo) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip= new ZipOutputStream(outputStream);
 
         // 生成代码
-        generatorCode(zip, tableName);
+        generatorCode(zip, tableName,genBaseInfo);
 //        IOUtils.closeQuietly(zip);
         try {
             zip.close();
@@ -81,12 +82,12 @@ public class GenServiceImpl implements IGenService {
      * @return 数据
      */
     @Override
-    public byte[] generatorCode(String[] tableNames) {
+    public byte[] generatorCode(String[] tableNames,GenBaseInfo genBaseInfo) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (String tableName : tableNames) {
             // 生成代码
-            generatorCode(zip, tableName);
+            generatorCode(zip, tableName,genBaseInfo);
         }
         IOUtils.closeQuietly(zip);
         return outputStream.toByteArray();
@@ -98,13 +99,13 @@ public class GenServiceImpl implements IGenService {
      * @param zip 生成后的压缩包
      * @param tableName 表名
      */
-    private void generatorCode(ZipOutputStream zip, String tableName) {
+    private void generatorCode(ZipOutputStream zip, String tableName,GenBaseInfo genBaseInfo) {
         // 查询表信息 : 表必须包含注释信息,否则sql语句为null
         TableInfo table = genMapper.selectTableByName(tableName);
         // 查询列信息
         List<ColumnInfo> columns = genMapper.selectTableColumnsByName(tableName);
         // 表名转换成Java属性名
-        String className = GenUtils.tableToJava(table.getTableName());
+        String className = GenUtils.tableToJava(table.getTableName(),genBaseInfo);
         table.setClassName(className);
         table.setClassname(StrUtil.lowerFirst(className));
         // 列信息
@@ -114,15 +115,12 @@ public class GenServiceImpl implements IGenService {
 
         VelocityInitializer.initVelocity();
 
-        /**
-         *
-         *       本程序使用三种方式来获得 packageName : 传输请求,配置,默认
-         */
 
-        String packageName = GlobalConfig.getPackageName();
 
-        String moduleName = GenUtils.getModuleName(packageName);
-        VelocityContext context = GenUtils.getVelocityContext(table);
+        String packageName = genBaseInfo.getPackageName();
+        String moduleName = genBaseInfo.getModuleName();
+
+        VelocityContext context = GenUtils.getVelocityContext(table,genBaseInfo);
 
         // 获取模板列表
         List<String> templates = GenUtils.getTemplates();
@@ -133,7 +131,7 @@ public class GenServiceImpl implements IGenService {
             tpl.merge(context, sw);
             try {
                 // 添加到zip
-                zip.putNextEntry(new ZipEntry(Objects.requireNonNull(GenUtils.getFileName(template, table, moduleName))));
+                zip.putNextEntry(new ZipEntry(Objects.requireNonNull(GenUtils.getFileName(template, table, genBaseInfo))));
                 IOUtils.write(sw.toString(), zip, CharsetKit.UTF8);
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();

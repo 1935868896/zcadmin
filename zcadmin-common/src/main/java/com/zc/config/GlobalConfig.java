@@ -131,19 +131,19 @@ public class GlobalConfig {
         return getConfig(CONFIG_KEY) + "upload/";
     }
 
-    /**
-     * 获取作者
-     */
-    public static String getAuthor() {
-        return Convert.toStr(getConfig("gen.author"), "ruoyi");
-    }
-
-    /**
-     * 生成包路径
-     */
-    public static String getPackageName() {
-        return Convert.toStr(getConfig("gen.packageName"), "com.zc.modules.project");
-    }
+//    /**
+//     * 获取作者
+//     */
+//    public static String getAuthor() {
+//        return Convert.toStr(getConfig("gen.author"), "ruoyi");
+//    }
+//
+//    /**
+//     * 生成包路径
+//     */
+//    public static String getPackageName() {
+//        return Convert.toStr(getConfig("gen.packageName"), "com.zc.modules.project");
+//    }
 
     /**
      * 是否自动去除表前缀

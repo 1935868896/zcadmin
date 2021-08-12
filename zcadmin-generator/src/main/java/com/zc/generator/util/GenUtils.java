@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.zc.config.GlobalConfig;
 import com.zc.constant.Constants;
 import com.zc.generator.domain.ColumnInfo;
+import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
 import org.apache.velocity.VelocityContext;
 
@@ -16,15 +17,15 @@ import java.util.*;
  *
  * @author ruoyi
  */
+
 public class GenUtils {
+
+
 
     private GenUtils(){
         throw new IllegalStateException("Utility class");
     }
-    /**
-     * 项目空间路径
-     */
-    private static final String PROJECT_PATH = getProjectPath();
+
 
     /**
      * mybatis空间路径
@@ -69,20 +70,19 @@ public class GenUtils {
      *
      * @return 模板列表
      */
-    public static VelocityContext getVelocityContext(TableInfo table) {
+    public static VelocityContext getVelocityContext(TableInfo table, GenBaseInfo genBaseInfo) {
         // java对象数据传递到模板文件vm
         VelocityContext velocityContext = new VelocityContext();
-        String packageName = GlobalConfig.getPackageName();
         velocityContext.put("tableName" , table.getTableName());
         velocityContext.put("tableComment" , replaceKeyword(table.getTableComment()));
         velocityContext.put("primaryKey" , table.getPrimaryKey());
         velocityContext.put("className" , table.getClassName());
         velocityContext.put("classname" , table.getClassname());
-        velocityContext.put("moduleName" , getModuleName(packageName));
+        velocityContext.put("moduleName" ,genBaseInfo.getModuleName());
         velocityContext.put("columns" , table.getColumns());
-        velocityContext.put("basePackage" , getBasePackage(packageName));
-        velocityContext.put("package" , packageName);
-        velocityContext.put("author" , GlobalConfig.getAuthor());
+        velocityContext.put("basePackage" , genBaseInfo.getBasePackage());
+        velocityContext.put("package" ,genBaseInfo.getPackageName());
+        velocityContext.put("author" , genBaseInfo.getAuthor());
         velocityContext.put("datetime" , DateUtil.today());
         return velocityContext;
     }
@@ -123,8 +123,8 @@ public class GenUtils {
     /**
      * 表名转换成Java类名
      */
-    public static String tableToJava(String tableName) {
-        if (Constants.AUTO_REOMVE_PRE.equals(GlobalConfig.getAutoRemovePre())) {
+    public static String tableToJava(String tableName,GenBaseInfo genBaseInfo) {
+        if (!genBaseInfo.getPreservePrefix()) {
             tableName = tableName.substring(tableName.indexOf('_') + 1);
         }
         if (StrUtil.isNotEmpty(GlobalConfig.getTablePrefix())) {
@@ -137,15 +137,15 @@ public class GenUtils {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, TableInfo table, String moduleName) {
+    public static String getFileName(String template, TableInfo table, GenBaseInfo genBaseInfo) {
         String str = "/";
         // 小写类名
         String classname = table.getClassname();
         // 大写类名
         String className = table.getClassName();
-        String javaPath = PROJECT_PATH;
-        String mybatisPath = MYBATIS_PATH + str + moduleName + str + className;
-        String htmlPath = TEMPLATES_PATH + str + moduleName + str + classname;
+        String javaPath = genBaseInfo.getProjectPath();
+        String mybatisPath = MYBATIS_PATH + str + genBaseInfo.getModuleName() + str + className;
+        String htmlPath = TEMPLATES_PATH + str + genBaseInfo.getModuleName() + str + classname;
 
         if (template.contains("Entity.java.vm")) {
             return javaPath + "entity" + "/" + className + ".java" ;
@@ -186,31 +186,7 @@ public class GenUtils {
         return null;
     }
 
-    /**
-     * 获取模块名
-     *
-     * @param packageName 包名
-     * @return 模块名
-     */
-    public static String getModuleName(String packageName) {
-        int lastIndex = packageName.lastIndexOf('.');
-        int nameLength = packageName.length();
-        return StrUtil.sub(packageName, lastIndex + 1, nameLength);
-    }
 
-    private static String getBasePackage(String packageName) {
-        int lastIndex = packageName.lastIndexOf('.');
-        return StrUtil.sub(packageName, 0, lastIndex);
-    }
-
-    private static String getProjectPath() {
-        String packageName = GlobalConfig.getPackageName();
-        StringBuilder projectPath = new StringBuilder();
-        projectPath.append("main/java/");
-        projectPath.append(packageName.replace("." , "/"));
-        projectPath.append("/");
-        return projectPath.toString();
-    }
 
     private static String replaceKeyword(String keyword) {
         return keyword.replaceAll("(?:表|信息|管理)", "");
