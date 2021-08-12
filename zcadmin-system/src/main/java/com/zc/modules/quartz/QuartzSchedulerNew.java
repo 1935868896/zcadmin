@@ -105,7 +105,7 @@ public class QuartzSchedulerNew {
                 .usingJobData("word", "Hello,World")//可以往ScheduleQuartzJob传参
                 .build();
         // 基于表达式构建触发器
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 1 * * * ?");//mailJob.getCron()
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 */3 * * * ?");//mailJob.getCron()
         // CronTrigger表达式触发器 继承于Trigger
         // TriggerBuilder 用于构建触发器实例
         CronTrigger cronTrigger = TriggerBuilder
