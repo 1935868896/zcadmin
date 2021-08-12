@@ -115,6 +115,9 @@ public class GenUtils {
         if ("datetime".equals(dataType)){
             return "TIMESTAMP";
         }
+        if ("text".equals(dataType)){
+            return "VARCHAR";
+        }
         return dataType.toUpperCase();
 
     }
