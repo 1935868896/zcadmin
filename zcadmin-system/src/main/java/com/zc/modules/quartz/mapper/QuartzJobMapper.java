@@ -16,6 +16,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface QuartzJobMapper extends BaseMapper<QuartzJob> {
 
+
+
+
+    int updateAllBySelective(QuartzJob record);
+
+    int deleteAllBySelective(QuartzJob record);
+
     /**
      * 查询定时任务信息
      *

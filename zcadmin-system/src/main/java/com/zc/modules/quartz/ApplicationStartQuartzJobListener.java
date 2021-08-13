@@ -19,18 +19,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationStartQuartzJobListener implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
-    private QuartzSchedulerNew quartzSchedulerNew;
+    private QuartzScheduleHandle quartzScheduleHandle;
     /**
      * 初始启动quartz
      */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        try {
-            quartzSchedulerNew.startJob();
-            System.out.println("quartz初始化中.......");
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            quartzSchedulerNew.startJob();
+//            System.out.println("quartz初始化中.......");
+//        } catch (SchedulerException e) {
+//            e.printStackTrace();
+//        }
     }
     /**
      * 初始注入scheduler

@@ -1,5 +1,6 @@
 package com.zc.modules.quartz.entity;
 
+import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zc.entity.BaseEntity;
@@ -18,6 +19,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description="定时任务",parent=BaseEntity.class)
+@Builder
 public class QuartzJob extends BaseEntity{
 
     private static final long serialVersionUID=1L;
@@ -25,22 +27,22 @@ public class QuartzJob extends BaseEntity{
     @ApiModelProperty(value="ID",name="jobId")
     private Long jobId;
 
-    @ApiModelProperty(value="Spring Bean名称",name="beanName")
+    @ApiModelProperty(value="Spring Bean名称",name="beanName",example = "testTask")
     private String beanName;
 
     @ApiModelProperty(value="cron 表达式",name="cronExpression")
     private String cronExpression;
 
-    @ApiModelProperty(value="状态：1暂停、0启用",name="isPause")
+    @ApiModelProperty(value="状态：1暂停、0启用",name="isPause",example = "true")
     private Boolean isPause;
 
-    @ApiModelProperty(value="任务名称",name="jobName")
+    @ApiModelProperty(value="任务名称",name="jobName",example = "test1")
     private String jobName;
 
-    @ApiModelProperty(value="方法名称",name="methodName")
+    @ApiModelProperty(value="方法名称",name="methodName",example = "hello")
     private String methodName;
 
-    @ApiModelProperty(value="参数",name="params")
+    @ApiModelProperty(value="参数",name="params",example = "张三")
     private String params;
 
     @ApiModelProperty(value="备注",name="description")
@@ -55,7 +57,7 @@ public class QuartzJob extends BaseEntity{
     @ApiModelProperty(value="子任务ID",name="subTask")
     private String subTask;
 
-    @ApiModelProperty(value="任务失败后是否暂停",name="pauseAfterFailure")
+    @ApiModelProperty(value="任务失败后是否暂停",name="pauseAfterFailure",example = "true")
     private Boolean pauseAfterFailure;
 
 }

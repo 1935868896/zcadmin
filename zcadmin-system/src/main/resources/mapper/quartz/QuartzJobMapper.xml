@@ -556,6 +556,7 @@ job_id,bean_name,cron_expression,is_pause,job_name,method_name,params,descriptio
             #{records.jobId}
         </foreach>
     </update>
+    <update id="updateAllBySelective"></update>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -569,5 +570,6 @@ job_id,bean_name,cron_expression,is_pause,job_name,method_name,params,descriptio
             #{ids}
         </foreach>
     </delete>
+    <delete id="deleteAllBySelective"></delete>
 
 </mapper>

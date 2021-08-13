@@ -13,6 +13,35 @@ import java.util.List;
  * @date 2021-08-12
  */
 public interface QuartzJobService extends IService<QuartzJob> {
+
+    /**
+     * 1.任务创建
+     * 2.暂停
+     * 3.恢复
+     * 4.删除
+     * 5.修改
+     * 6.立即执行
+     */
+    int create(QuartzJob record);
+
+    void pause(QuartzJob record);
+
+    void pauseAll(QuartzJob record);
+
+    void resume(QuartzJob record);
+
+    void resumeAll(QuartzJob record);
+
+    void update(QuartzJob record);
+
+    void runNow(QuartzJob record);
+
+    void delete(QuartzJob record);
+
+
+
+
+
     /**
      * 查询定时任务信息
      *
@@ -62,6 +91,10 @@ public interface QuartzJobService extends IService<QuartzJob> {
      * @return 插入数量
      */
     int insert(QuartzJob record);
+
+
+
+
     /**
      * 条件插入单条数据
      *

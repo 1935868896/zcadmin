@@ -1,5 +1,6 @@
 package com.zc.modules.quartz.entity;
 
+import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zc.entity.BaseEntity;
@@ -18,6 +19,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description="定时任务日志",parent=BaseEntity.class)
+@Builder
 public class QuartzLog extends BaseEntity{
 
     private static final long serialVersionUID=1L;

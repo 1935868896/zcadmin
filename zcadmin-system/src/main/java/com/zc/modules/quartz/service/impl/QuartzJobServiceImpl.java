@@ -1,19 +1,19 @@
 package com.zc.modules.quartz.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zc.modules.quartz.mapper.QuartzJobMapper;
+import com.zc.exception.BadRequestException;
+import com.zc.modules.quartz.QuartzScheduleHandle;
 import com.zc.modules.quartz.entity.QuartzJob;
+import com.zc.modules.quartz.mapper.QuartzJobMapper;
 import com.zc.modules.quartz.service.QuartzJobService;
 import com.zc.utils.SqlListHandleUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 定时任务 服务层实现
@@ -26,6 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob> implements QuartzJobService {
 
     private final QuartzJobMapper quartzJobMapper;
+    private final QuartzScheduleHandle quartzScheduleHandle;
+
+
+
+
+
+
 
     /**
      * 查询定时任务信息
@@ -97,6 +104,72 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
     @Override
     public int insert(QuartzJob record) {
         return quartzJobMapper.insert(record);
+    }
+
+    @Override
+    public int create(QuartzJob record) {
+        int insert = quartzJobMapper.insert(record);
+        quartzScheduleHandle.createJob(record);
+        return insert;
+    }
+
+    @Override
+    public void pause(QuartzJob record) {
+        if (record.getJobId()==null){
+            throw new BadRequestException("不存在JobId");
+        }
+        quartzScheduleHandle.pauseJob(record);
+        quartzJobMapper.updateByPrimaryKeySelective(
+                QuartzJob.builder().jobId(record.getJobId()).isPause(true).build()
+        );
+    }
+
+    @Override
+    public void pauseAll(QuartzJob record) {
+
+    }
+
+    @Override
+    public void resume(QuartzJob record) {
+        if (record.getJobId()==null){
+            throw new BadRequestException("不存在JobId");
+        }
+        quartzScheduleHandle.resumeJob(record);
+        quartzJobMapper.updateByPrimaryKeySelective(
+                QuartzJob.builder().jobId(record.getJobId()).isPause(false).build()
+        );
+    }
+
+    @Override
+    public void resumeAll(QuartzJob record) {
+
+    }
+
+    @Override
+    public void update(QuartzJob record) {
+        if (record.getJobId()==null){
+            throw new BadRequestException("不存在JobId");
+        }
+        quartzScheduleHandle.modifyJob(record);
+        quartzJobMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    public void delete(QuartzJob record) {
+        if (record.getJobId()==null){
+            throw new BadRequestException("不存在JobId");
+        }
+        quartzScheduleHandle.deleteJob(record);
+        quartzJobMapper.deleteByPrimaryKey(record.getJobId());
+    }
+
+    @Override
+    public void runNow(QuartzJob record) {
+        if (record.getJobId()==null){
+            throw new BadRequestException("不存在JobId");
+        }
+        quartzScheduleHandle.runJobNow(record);
+
     }
 
     /**

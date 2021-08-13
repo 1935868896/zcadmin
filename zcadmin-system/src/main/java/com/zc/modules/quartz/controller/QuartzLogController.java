@@ -11,6 +11,8 @@ import com.zc.entity.ResultResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.zc.modules.quartz.entity.QuartzLog;
 import com.zc.modules.quartz.service.QuartzLogService;
+import springfox.documentation.annotations.ApiIgnore;
+
 /**
  * 定时任务日志 信息操作处理
  *
@@ -24,11 +26,6 @@ import com.zc.modules.quartz.service.QuartzLogService;
 @Api(tags = "定时任务日志信息管理")
 public class QuartzLogController {
     private final QuartzLogService quartzLogService;
-
-
-
-
-
 
     @GetMapping("/id")
     @ApiOperation("根据主键获得对象数据")
