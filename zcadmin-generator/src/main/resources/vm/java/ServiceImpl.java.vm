@@ -138,7 +138,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKey(${className} record) {
+    public int update(${className} record) {
         return ${classname}Mapper.updateByPrimaryKey(record);
     }
     /**
@@ -148,8 +148,8 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKeySelective(${className} record) {
-        return ${classname}Mapper.updateByPrimaryKeySelective(record);
+    public int updateBySelective(${className} record) {
+        return ${classname}Mapper.updateBySelective(record);
     }
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null

@@ -85,14 +85,14 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int updateByPrimaryKey(${className} record);
+    int update(${className} record);
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int updateByPrimaryKeySelective(${className} record);
+    int updateBySelective(${className} record);
 
 
     /**

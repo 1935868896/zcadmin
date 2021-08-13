@@ -6,6 +6,7 @@ import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import java.util.Date;
 
@@ -30,6 +31,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description="${tableComment}",parent=BaseEntity.class)
+@Builder
 public class ${className} extends BaseEntity{
 
     private static final long serialVersionUID=1L;

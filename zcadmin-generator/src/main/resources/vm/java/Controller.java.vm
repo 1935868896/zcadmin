@@ -113,7 +113,7 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:修改数据")
     @PreAuthorize("@el.check('${classname}:update')")
     public ResultResponse update(@RequestBody ${className} record) {
-        int result = ${classname}Service.updateByPrimaryKey(record);
+        int result = ${classname}Service.update(record);
         if (result > 0) {
             return ResultResponse.success();
         }
@@ -125,7 +125,7 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:修改部分数据")
     @PreAuthorize("@el.check('${classname}:updateBySelective')")
     public ResultResponse updateBySelective(@RequestBody ${className} record) {
-        int result = ${classname}Service.updateByPrimaryKeySelective(record);
+        int result = ${classname}Service.updateBySelective(record);
         if (result > 0) {
             return ResultResponse.success();
         }

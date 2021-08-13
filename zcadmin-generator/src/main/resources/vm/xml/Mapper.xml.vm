@@ -122,7 +122,15 @@
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="${className}">
+    <update id="update" parameterType="${className}">
+        update ${tableName} set
+            #foreach ($column in $columns)
+                $column.columnName =#{$column.attrname,jdbcType=$column.sqlType} #if($foreach.count != $columns.size()),#end
+            #end
+        where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
+    </update>
+
+    <update id="updateBySelective" parameterType="${className}">
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
@@ -135,13 +143,7 @@
         where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="${className}">
-        update ${tableName} set
-#foreach ($column in $columns)
-                $column.columnName =#{$column.attrname,jdbcType=$column.sqlType} #if($foreach.count != $columns.size()),#end
-#end
-        where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
-    </update>
+
 
     <update id="updateBatch" parameterType="java.util.List">
         update ${tableName}
