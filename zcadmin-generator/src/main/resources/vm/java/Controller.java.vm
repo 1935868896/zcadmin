@@ -150,7 +150,7 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:批量修改数据的部分属性")
     @PreAuthorize("@el.check('${classname}:updateBatchBySelective')")
     public ResultResponse updateBatchBySelective(@RequestBody List<${className}> records) {
-        int result = ${classname}Service.updateBatchSelective(records);
+        int result = ${classname}Service.updateBatchBySelective(records);
         if (result > 0) {
             return ResultResponse.success();
         }

@@ -139,7 +139,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      */
     @Override
     public int update(${className} record) {
-        return ${classname}Mapper.updateByPrimaryKey(record);
+        return ${classname}Mapper.update(record);
     }
     /**
      * 修改单条数据,仅修改存在数值的属性
@@ -179,7 +179,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      */
     @Override
     @Transactional
-    public int updateBatchSelective(List<${className}> recordList) {
+    public int updateBatchBySelective(List<${className}> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
