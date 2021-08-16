@@ -1,16 +1,17 @@
 package ${package}.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import java.util.Date;
+
 
 #foreach ($column in $columns)
-#if($column.attrType == 'Date' && $column.attrname == "createTime" && $column.attrname == "updateTime")
+#if($column.attrType == 'Date')
 import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 #break
 #end
 #end
