@@ -10,6 +10,7 @@ import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
 import org.apache.velocity.VelocityContext;
 
+import java.sql.JDBCType;
 import java.util.*;
 
 /**
@@ -109,13 +110,14 @@ public class GenUtils {
 
     public static String dataTypeToSqlType(String dataType){
 
-        if ("int".equals(dataType)){
+
+        if ("int".equals(dataType)||"tinyint".equals(dataType)){
             return "INTEGER";
         }
         if ("datetime".equals(dataType)){
             return "TIMESTAMP";
         }
-        if ("text".equals(dataType)){
+        if ("text".equals(dataType)||"longtext".equals(dataType)){
             return "VARCHAR";
         }
         return dataType.toUpperCase();

@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
             "/doc.html",
-            "/tool/gen/genCode/**",
+            "/tool/gen/**",
 //            "/project/bookInfo/**"
             // other public endpoints of your API may be appended to this array
     };

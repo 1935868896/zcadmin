@@ -52,29 +52,11 @@ public class GenController {
 
     @GetMapping("/genCode/{tableName}")
     public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName, GenBaseInfo genBaseInfo) throws IOException {
-        //代码生成的主要实现
-        String packageName= genBaseInfo.getPackageName();
-        if (genBaseInfo.getBasePackage()==null){
-            int lastIndex =packageName.lastIndexOf('.');
-            genBaseInfo.setBasePackage(StrUtil.sub(packageName, 0, lastIndex));
-        }
-        if (genBaseInfo.getModuleName()==null){
-            int lastIndex = packageName.lastIndexOf('.');
-            int nameLength = packageName.length();
-            genBaseInfo.setModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
-        }
-        if (genBaseInfo.getProjectPath()==null){
-            StringBuilder projectPath = new StringBuilder();
-            projectPath.append("main/java/");
-            projectPath.append(packageName.replace("." , "/"));
-            projectPath.append("/");
-            genBaseInfo.setProjectPath(projectPath.toString());
-        }
 
-
+        handleGenBaseInfo(genBaseInfo);
         byte[] data = genService.generatorCode(tableName, genBaseInfo);
         //提供网页下载
-        this.genCode(response, data);
+        this.genCode(response, data, tableName);
     }
 
     /**
@@ -83,17 +65,47 @@ public class GenController {
 
     @GetMapping("/batchGenCode")
     @ResponseBody
-    public void batchGenCode(HttpServletResponse response, String tables,GenBaseInfo genBaseInfo) throws IOException {
+    public void batchGenCode(HttpServletResponse response, String tables, GenBaseInfo genBaseInfo) throws IOException {
+        handleGenBaseInfo(genBaseInfo);
         String[] tableNames = Convert.toStrArray(tables);
-        byte[] data = genService.generatorCode(tableNames,genBaseInfo);
+        byte[] data = genService.generatorCode(tableNames, genBaseInfo);
         this.genCode(response, data);
     }
 
     private void genCode(HttpServletResponse response, byte[] data) throws IOException {
         response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"ruoyi.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"zcadmin.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         IOUtils.write(data, response.getOutputStream());
     }
+
+    private void genCode(HttpServletResponse response, byte[] data, String tableName) throws IOException {
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + tableName + ".zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        IOUtils.write(data, response.getOutputStream());
+    }
+    private void handleGenBaseInfo(GenBaseInfo genBaseInfo){
+        String packageName = genBaseInfo.getPackageName();
+
+        if (genBaseInfo.getBasePackage() == null) {
+            int lastIndex = packageName.lastIndexOf('.');
+            genBaseInfo.setBasePackage(StrUtil.sub(packageName, 0, lastIndex));
+        }
+        if (genBaseInfo.getModuleName() == null) {
+            int lastIndex = packageName.lastIndexOf('.');
+            int nameLength = packageName.length();
+            genBaseInfo.setModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
+        }
+        if (genBaseInfo.getProjectPath() == null) {
+            StringBuilder projectPath = new StringBuilder();
+            projectPath.append("main/java/");
+            projectPath.append(packageName.replace(".", "/"));
+            projectPath.append("/");
+            genBaseInfo.setProjectPath(projectPath.toString());
+        }
+    }
+
 }
