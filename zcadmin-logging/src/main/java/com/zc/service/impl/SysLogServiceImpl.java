@@ -1,6 +1,7 @@
 package com.zc.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -51,7 +52,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         assert log != null;
         log.setRequestIp(ip);
 
-        log.setAddress(StringUtils.getCityInfo(log.getRequestIp()));
+
         log.setMethod(methodName);
         log.setUsername(username);
         log.setParams(getParameter(method, joinPoint.getArgs()));
@@ -64,6 +65,15 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @Override
     public IPage<SysLog> selectByLogType(Page<?> page, String logType) {
         return this.baseMapper.selectByLogType(page,logType);
+    }
+
+    @Override
+    public Object findByErrDetail(Long id) {
+        SysLog sysLog = this.baseMapper.selectById(id);
+        byte[] exceptionDetail = sysLog.getExceptionDetail();
+        Map<String,String> map=new HashMap<>();
+        map.put("exception",new String(exceptionDetail));
+        return map;
     }
 
     /**

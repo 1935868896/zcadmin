@@ -16,6 +16,12 @@
 package com.zc.utils;
 
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentParser;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -59,38 +65,33 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         String comma = ",";
         String localhost = "127.0.0.1";
+        String remote="0:0:0:0:0:0:0:1";
         if (ip.contains(comma)) {
             ip = ip.split(",")[0];
         }
-        if (localhost.equals(ip)) {
+        if (localhost.equals(ip)||remote.equals(ip)) {
             // 获取本机真正的ip地址
-            try {
-                ip = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                log.error(e.getMessage(), e);
-            }
+return "localhost";
         }
         return ip;
     }
 
-    /**
-     * 根据ip获取详细地址
-     */
-    public static String getCityInfo(String ip) {
-        if (ipLocal) {
-            return getLocalCityInfo(ip);
-        } else {
-            return getHttpCityInfo(ip);
-        }
-    }
+
 
     /**
      * 根据ip获取详细地址
      */
     public static String getHttpCityInfo(String ip) {
-//        String api = String.format(ElAdminConstant.Url.IP_URL, ip);
-//        JSONObject object = JSONUtil.parseObj(HttpUtil.get(api));
-//        return object.get("addr", String.class);
+        String url = "http://ip.ws.126.net/ipquery?ip=" + ip;
+        String str = HttpUtil.get(url);
+        if(!StrUtil.hasBlank(str)){
+            String substring = str.substring(str.indexOf("{"), str.indexOf("}")+1);
+            System.out.println(substring);
+            JSONObject jsonObject = JSONUtil.parseObj(substring);
+            String province = jsonObject.getStr("province");
+            String city = jsonObject.getStr("city");
+            return province + " " + city;
+        }
         return "";
     }
 
@@ -98,26 +99,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 根据ip获取详细地址
      */
     public static String getLocalCityInfo(String ip) {
-//        try {
-//            DataBlock dataBlock = new DbSearcher(config, file.getPath())
-//                    .binarySearch(ip);
-//            String region = dataBlock.getRegion();
-//            String address = region.replace("0|", "");
-//            char symbol = '|';
-//            if (address.charAt(address.length() - 1) == symbol) {
-//                address = address.substring(0, address.length() - 1);
-//            }
-//            return address.equals(ElAdminConstant.REGION) ? "内网IP" : address;
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//        }
+        String url = "http://ip.ws.126.net/ipquery?ip=" + ip;
+        String str = HttpUtil.get(url);
+        if(!StrUtil.hasBlank(str)){
+            String substring = str.substring(str.indexOf("{"), str.indexOf("}")+1);
+            System.out.println(substring);
+            JSONObject jsonObject = JSONUtil.parseObj(substring);
+            String province = jsonObject.getStr("province");
+            String city = jsonObject.getStr("city");
+            return province + " " + city;
+        }
         return "";
     }
 
     public static String getBrowser(HttpServletRequest request) {
-//        UserAgent.ImmutableUserAgent userAgent = userAgentAnalyzer.parse(request.getHeader("User-Agent"));
-//        return userAgent.get(UserAgent.AGENT_NAME_VERSION).getValue();
-        return "";
+        UserAgent userAgent = UserAgentParser.parse(request.getHeader("user-Agent"));
+        return  userAgent.getBrowser().toString()+" "+userAgent.getVersion();
     }
 
     /**

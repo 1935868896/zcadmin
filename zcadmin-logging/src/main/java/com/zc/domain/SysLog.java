@@ -15,6 +15,8 @@
  */
 package com.zc.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.io.Serializable;
@@ -33,6 +35,7 @@ import java.sql.Timestamp;
 public class SysLog implements Serializable {
 
 
+    @TableId
     private Long logId;
 
     /** 操作用户 */
@@ -65,8 +68,9 @@ public class SysLog implements Serializable {
     /** 异常详细  */
     private byte[] exceptionDetail;
 
-    /** 创建日期 */
 
+    /** 创建日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
 
     public SysLog(String logType, Long time) {

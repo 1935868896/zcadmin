@@ -19,4 +19,6 @@ public interface ISysLogService extends IService<SysLog> {
     void save(String username, String browser, String ip, ProceedingJoinPoint joinPoint, SysLog log);
 
     IPage<SysLog> selectByLogType(Page<?> page, String logType);
+
+    Object findByErrDetail(Long id);
 }

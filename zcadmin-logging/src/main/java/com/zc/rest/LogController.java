@@ -18,6 +18,7 @@ package com.zc.rest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.domain.SysLog;
+import com.zc.entity.ResultResponse;
 import com.zc.service.ISysLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,10 +62,10 @@ public class LogController {
     @GetMapping
     @ApiOperation("日志查询")
 //    @PreAuthorize("@el.check()")
-    public ResponseEntity<Object> query(SysLog log, Page page){
+    public ResultResponse query(SysLog log, Page page){
         IPage<SysLog> sysLogIPage = logService.selectByLogType(page, log.getLogType());
 
-        return new ResponseEntity<>(sysLogIPage, HttpStatus.OK);
+        return ResultResponse.success(sysLogIPage);
     }
 
 //    @GetMapping(value = "/user")
@@ -82,12 +84,13 @@ public class LogController {
 //        return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
 //    }
 //
-//    @GetMapping(value = "/error/{id}")
-//    @ApiOperation("日志异常详情查询")
+    @GetMapping(value = "/error/{id}")
+    @ApiOperation("日志异常详情查询")
 //    @PreAuthorize("@el.check()")
-//    public ResponseEntity<Object> queryErrorLogs(@PathVariable Long id){
-//        return new ResponseEntity<>(logService.findByErrDetail(id), HttpStatus.OK);
-//    }
+    public  ResultResponse queryErrorLogs(@PathVariable Long id){
+        return ResultResponse.success(logService.findByErrDetail(id));
+    }
+
 //    @DeleteMapping(value = "/del/error")
 //    @Log("删除所有ERROR日志")
 //    @ApiOperation("删除所有ERROR日志")

@@ -33,6 +33,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * @author Zheng Jie
@@ -69,10 +71,22 @@ public class LogAspect {
         Object result;
         currentTime.set(System.currentTimeMillis());
         result = joinPoint.proceed();
-        SysLog log = new SysLog("INFO",System.currentTimeMillis() - currentTime.get());
+        SysLog sysLog = new SysLog("INFO",System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request),joinPoint, log);
+        String ip = StringUtils.getIp(request);
+        if ("localhost".equals(ip)){
+            try {
+                ip = InetAddress.getLocalHost().getHostAddress();
+                sysLog.setAddress("内网ip");
+            } catch (UnknownHostException e) {
+                log.error(e.getMessage(), e);
+            }
+        }else {
+            sysLog.setAddress(StringUtils.getHttpCityInfo(ip));
+        }
+
+        logService.save(getUsername(), StringUtils.getBrowser(request), ip,joinPoint, sysLog);
         return result;
     }
 
