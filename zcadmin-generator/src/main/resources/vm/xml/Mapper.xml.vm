@@ -5,7 +5,7 @@
 <mapper namespace="${package}.mapper.${className}Mapper">
     <resultMap type="${className}" id="BaseResultMap">
         #foreach ($column in $columns)
-            <result property="${column.attrname}" jdbcType="${column.sqlType}" column="${column.columnName}"/>
+            <result property="${column.attrNameFirstToLow}" jdbcType="${column.columnJdbcType}" column="${column.columnName}"/>
             #end
     </resultMap>
     ## 访问循环的当前目标的index可通过$foreach.count，$velocityCount已失效
@@ -15,11 +15,11 @@
 
     </sql>
     ## 1. 主键属性名  2. 主键类型  3. 主键column名 4. 主键类型
-    <select id="selectByPrimaryKey" parameterType="java.lang.${primaryKey.attrType}" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
-        where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
+        where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </select>
 
     <select id="selectListBySelective" resultMap="BaseResultMap">
@@ -27,12 +27,22 @@
         <include refid="Base_Column_List"/>
         from ${tableName}
         where 1=1
-        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
 #foreach($column in $columns)
-            <if test="$column.attrname != null #if($column.attrType =='String' ) and $column.attrname.trim() != '' #end">
-                and $column.columnName = #{$column.attrname,jdbcType=${column.sqlType}}
+    #if($column.queryType=='like')
+            <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
             </if>
+#elseif($column.queryType=='between')
+    <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+    <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+#elseif($column.queryType=='not null')
+        and $column.columnName not null
+#else
+        <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+            and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
+        </if>
 #end
+    #end
     </select>
 
     <select id="selectPageBySelective" resultMap="BaseResultMap">
@@ -40,12 +50,22 @@
         <include refid="Base_Column_List"/>
         from ${tableName}
         where 1=1
-        <!-- <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
-#foreach($column in $columns)
-            <if test="record.$column.attrname != null #if($column.attrType =='String' ) and record.$column.attrname.trim() != '' #end">
-                and $column.columnName = #{record.$column.attrname,jdbcType=$column.sqlType}
-            </if>
-#end
+        #foreach($column in $columns)
+            #if($column.queryType=='like')
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
+                </if>
+            #elseif($column.queryType=='between')
+                <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+            #elseif($column.queryType=='not null')
+                and $column.columnName not null
+            #else
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
+                </if>
+            #end
+        #end
     </select>
 
     <select id="selectByPrimaryKeys" parameterType="java.util.List"
@@ -64,41 +84,51 @@
         count(1)
         from ${tableName}
         where 1=1
-        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
-#foreach($column in $columns)
-        <if test="$column.attrname != null #if($column.attrType =='String' ) and $column.attrname.trim() != '' #end">
-        and $column.columnName = #{$column.attrname,jdbcType=$column.sqlType}
-        </if>
-#end
+        #foreach($column in $columns)
+            #if($column.queryType=='like')
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
+                </if>
+            #elseif($column.queryType=='between')
+                <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+            #elseif($column.queryType=='not null')
+                and $column.columnName not null
+            #else
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
+                </if>
+            #end
+        #end
     </select>
 
     <insert id="insert" parameterType="${className}" #if($primaryKey.extra == 'auto_increment')
-            useGeneratedKeys="true" keyProperty="$primaryKey.attrname"#end>
+            useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
         insert into ${tableName} (
 #foreach ($column in $columns)
             $column.columnName#if($foreach.count != $columns.size()),#end
 #end    )
         values
         (#foreach ($column in $columns)
-         #{$column.attrname,jdbcType=$column.sqlType}#if($foreach.count != $columns.size()),#end#end)
+         #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}#if($foreach.count != $columns.size()),#end#end)
     </insert>
 
     <insert id="insertSelective" parameterType="${className}"#if($primaryKey.extra == 'auto_increment')
-            useGeneratedKeys="true" keyProperty="$primaryKey.attrname"#end>
+            useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
-                    <if test="$column.attrname != null #if($column.attrType ==
-                        'String' ) and $column.attrname != '' #end ">$column.columnName,</if>
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
+                        'String' ) and $column.attrNameFirstToLow != '' #end ">$column.columnName,</if>
                 #end
             #end
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
-                    <if test="$column.attrname != null #if($column.attrType ==
-                        'String' ) and $column.attrname != '' #end ">#{$column.attrname,jdbcType=$column.sqlType},</if>
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
+                        'String' ) and $column.attrNameFirstToLow != '' #end ">#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
                 #end
             #end
         </trim>
@@ -106,7 +136,7 @@
 
 
     <insert id="insertBatch" parameterType="java.util.List" #if($primaryKey.extra == 'auto_increment')
-            useGeneratedKeys="true" keyProperty="$primaryKey.attrname"#end>
+            useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
         insert into  ${tableName} (
 #foreach ($column in $columns)
             $column.columnName#if($foreach.count != $columns.size()),#end
@@ -116,7 +146,7 @@
         <foreach collection="recordList" item="record" index="index" separator=",">
             (
 #foreach ($column in $columns)
-                #{record.$column.attrname,jdbcType=$column.sqlType}#if($foreach.count != $columns.size()),#end
+                #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}#if($foreach.count != $columns.size()),#end
 #end
             )
         </foreach>
@@ -125,9 +155,9 @@
     <update id="update" parameterType="${className}">
         update ${tableName} set
             #foreach ($column in $columns)
-                $column.columnName =#{$column.attrname,jdbcType=$column.sqlType} #if($foreach.count != $columns.size()),#end
+                $column.columnName =#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType} #if($foreach.count != $columns.size()),#end
             #end
-        where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
+        where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </update>
 
     <update id="updateBySelective" parameterType="${className}">
@@ -135,12 +165,12 @@
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName)
-                    <if test="$column.attrname != null #if($column.attrType ==
-                        'String' ) and $column.attrname != '' #end ">$column.columnName = #{$column.attrname,jdbcType=$column.sqlType},</if>
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
+                        'String' ) and $column.attrNameFirstToLow != '' #end ">$column.columnName = #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
                 #end
 #end
         </trim>
-        where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
+        where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </update>
 
 
@@ -150,9 +180,9 @@
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName)
-                    <trim prefix="$column.attrname = case" suffix="end,">
+                    <trim prefix="$column.attrNameFirstToLow = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
-                            when ${primaryKey.columnName} = #{records.${primaryKey.attrname},jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname,jdbcType=$column.sqlType}
+                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
                         </foreach>
                     </trim>
                 #end
@@ -160,7 +190,7 @@
         </trim>
         where ${primaryKey.columnName} in
         <foreach collection="list" item="records" open="(" close=")" separator=", ">
-            #{records.${primaryKey.attrname}}
+            #{records.${primaryKey.attrNameFirstToLow}}
         </foreach>
     </update>
 
@@ -169,10 +199,10 @@
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
                 #if($column.columnName != $primaryKey.columnName)
-                    <trim prefix="$column.attrname = case" suffix="end,">
+                    <trim prefix="$column.attrNameFirstToLow = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
-                            <if test="records.$column.attrname != null #if($column.attrType == 'String' ) and records.$column.attrname != '' #end " >
-                            when ${primaryKey.columnName} = #{records.${primaryKey.attrname},jdbcType=${primaryKey.sqlType}} then #{records.$column.attrname,jdbcType=$column.sqlType}
+                            <if test="records.$column.attrNameFirstToLow != null #if($column.columnJavaType == 'String' ) and records.$column.attrNameFirstToLow != '' #end " >
+                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
                             </if>
                         </foreach>
                     </trim>
@@ -181,14 +211,14 @@
         </trim>
         where ${primaryKey.columnName} in
         <foreach collection="list" item="records" open="(" close=")" separator=", ">
-            #{records.${primaryKey.attrname}}
+            #{records.${primaryKey.attrNameFirstToLow}}
         </foreach>
     </update>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.attrType}">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}">
         delete
-        from ${tableName} where ${primaryKey.columnName} = #{${primaryKey.attrname},jdbcType=${primaryKey.sqlType}}
+        from ${tableName} where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </delete>
 
     <delete id="deleteByPrimaryKeys" parameterType="java.util.List">

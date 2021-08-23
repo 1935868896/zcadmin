@@ -19,7 +19,7 @@ public interface ${className}Service extends IService<${className}> {
      * @param id ${tableComment}ID
      * @return ${tableComment}信息
      */
-    ${className} selectByPrimaryKey(${primaryKey.attrType} id);
+    ${className} selectByPrimaryKey(${primaryKey.columnJavaType} id);
 
 
     /**
@@ -44,7 +44,7 @@ public interface ${className}Service extends IService<${className}> {
      * @param ids ${tableComment}主键List集合
      * @return ${tableComment}集合
      */
-    List<${className}> selectByPrimaryKeys(List<${primaryKey.attrType}> ids);
+    List<${className}> selectByPrimaryKeys(List<${primaryKey.columnJavaType}> ids);
 
     /**
      * 查询符合条件的语句数量
@@ -112,13 +112,13 @@ public interface ${className}Service extends IService<${className}> {
      * @param id ${tableComment} 主键
      * @return 删除数量
      */
-    int deleteByPrimaryKey(${primaryKey.attrType} id);
+    int deleteByPrimaryKey(${primaryKey.columnJavaType} id);
     /**
      * 根据主键集合删除数据
      *
      * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */
-    int deleteByPrimaryKeys(List<${primaryKey.attrType}> ids);
+    int deleteByPrimaryKeys(List<${primaryKey.columnJavaType}> ids);
 
 }

@@ -158,8 +158,6 @@ public class GenServiceImpl implements IGenService {
         genConfig.setColumnConfigList(columnConfigs);
         ColumnConfig primayConfig=new ColumnConfig();
         for (ColumnConfig config : columnConfigs) {
-
-
             if ("PRI".equals(config.getKeyType())){
                 primayConfig=config;
             }

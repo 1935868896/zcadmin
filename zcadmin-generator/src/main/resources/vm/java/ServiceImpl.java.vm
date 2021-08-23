@@ -34,7 +34,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}信息
      */
     @Override
-    public ${className} selectByPrimaryKey(${primaryKey.attrType} id) {
+    public ${className} selectByPrimaryKey(${primaryKey.columnJavaType} id) {
         return ${classname}Mapper.selectByPrimaryKey(id);
     }
 
@@ -69,7 +69,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}集合
      */
     @Override
-    public List<${className}> selectByPrimaryKeys(List<${primaryKey.attrType}> ids) {
+    public List<${className}> selectByPrimaryKeys(List<${primaryKey.columnJavaType}> ids) {
         if (ids == null || ids.size() <= 0) {
             return null;
         }
@@ -198,7 +198,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKey(${primaryKey.attrType} id) {
+    public int deleteByPrimaryKey(${primaryKey.columnJavaType} id) {
         return ${classname}Mapper.deleteByPrimaryKey(id);
     }
     /**
@@ -208,7 +208,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKeys(List<${primaryKey.attrType}> ids) {
+    public int deleteByPrimaryKeys(List<${primaryKey.columnJavaType}> ids) {
         if (ids == null || ids.size() <= 0) {
             return 0;
         }

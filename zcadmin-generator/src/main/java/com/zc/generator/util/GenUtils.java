@@ -132,7 +132,7 @@ public class GenUtils {
         velocityContext.put("author" , table.getAuthor());
         velocityContext.put("datetime" , DateUtil.today());
         //以上为通用
-        //下面研究一下 如何复用
+        //下面为
         return velocityContext;
     }
 
