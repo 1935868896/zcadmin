@@ -3,14 +3,11 @@ package com.zc.generator.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
-import com.zc.config.GlobalConfig;
-import com.zc.constant.Constants;
-import com.zc.generator.domain.ColumnInfo;
-import com.zc.generator.domain.GenBaseInfo;
-import com.zc.generator.domain.TableInfo;
+
+import com.zc.generator.entity.ColumnConfig;
+import com.zc.generator.entity.GenConfig;
 import org.apache.velocity.VelocityContext;
 
-import java.sql.JDBCType;
 import java.util.*;
 
 /**
@@ -43,48 +40,99 @@ public class GenUtils {
      */
     private static Map<String, String> javaTypeMap = new HashMap<>();
 
-    /**
-     * 设置列信息
-     */
-    public static List<ColumnInfo> transColums(List<ColumnInfo> columns) {
+
+
+    public static void initColumsConfig(List<ColumnConfig> columns) {
         // 列信息
-        List<ColumnInfo> columsList = new ArrayList<>();
-        for (ColumnInfo column : columns) {
+        for (ColumnConfig column : columns) {
             // 列名转换成Java属性名
             String attrName = StrUtil.upperFirst(StrUtil.toCamelCase(column.getColumnName()));
-            column.setAttrName(attrName);
-            column.setAttrname(StrUtil.lowerFirst(attrName));
+            column.setAttrNameFirstToUpper(attrName);
+            column.setAttrNameFirstToLow(StrUtil.lowerFirst(attrName));
             column.setExtra(column.getExtra());
-            // 列的数据类型，转换成Java类型
             String attrType = javaTypeMap.get(column.getDataType());
-            column.setAttrType(attrType);
-            //将dateType转为大写
-            column.setSqlType(dataTypeToSqlType(column.getDataType()));
+            column.setColumnJavaType(attrType);
+            column.setColumnJdbcType(dataTypeToSqlType(column.getDataType()));
+            column.setKeyType(column.getColumnKey());
+            column.setColumnType(column.getDataType());
 
-            columsList.add(column);
+            column.setFormShow(true);
+            column.setSearchShow(true);
+            column.setListShow(true);
+
+            column.setFormType("text");
+            column.setQueryType("=");
+            column.setNotNull(false);
+            column.setRemark(column.getColumnComment());
+
         }
-        return columsList;
     }
+
+    public static void initGenConfig(GenConfig genConfig) {
+        genConfig.setAuthor("zhangc");
+        String packageName="com.zc.modules.quartz";
+        genConfig.setPack(packageName);
+        genConfig.setPrefix(null);
+        genConfig.setApiAlias(genConfig.getTableComment());
+
+        int lastIndex = packageName.lastIndexOf('.');
+        genConfig.setBasePack(StrUtil.sub(packageName, 0, lastIndex));
+
+    }
+
+
+    public static void handleGenConfig(GenConfig genConfig) {
+        String packageName = genConfig.getPack();
+        int lastIndex = packageName.lastIndexOf('.');
+
+        genConfig.setModuleName(StrUtil.sub(packageName, 0, lastIndex));
+        StringBuilder projectPath = new StringBuilder();
+        projectPath.append("main/java/");
+        projectPath.append(packageName.replace(".", "/"));
+        projectPath.append("/");
+        genConfig.setProjectPath(projectPath.toString());
+        int nameLength = packageName.length();
+        genConfig.setVueModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
+
+        String className=tableToJava(genConfig.getTableName(), genConfig.getPrefix());
+        genConfig.setClassNameFirstToUpper(className);
+        genConfig.setClassnameFirstToLow(StrUtil.lowerFirst(className));
+        genConfig.setVueTableName(className);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 获取模板信息
      *
      * @return 模板列表
      */
-    public static VelocityContext getVelocityContext(TableInfo table, GenBaseInfo genBaseInfo) {
+    public static VelocityContext getVelocityContext(GenConfig table) {
         // java对象数据传递到模板文件vm
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tableName" , table.getTableName());
-        velocityContext.put("tableComment" , replaceKeyword(table.getTableComment()));
+        velocityContext.put("tableComment" , replaceKeyword(table.getApiAlias()));
         velocityContext.put("primaryKey" , table.getPrimaryKey());
-        velocityContext.put("className" , table.getClassName());
-        velocityContext.put("classname" , table.getClassname());
-        velocityContext.put("moduleName" ,genBaseInfo.getModuleName());
-        velocityContext.put("columns" , table.getColumns());
-        velocityContext.put("basePackage" , genBaseInfo.getBasePackage());
-        velocityContext.put("package" ,genBaseInfo.getPackageName());
-        velocityContext.put("author" , genBaseInfo.getAuthor());
+        velocityContext.put("className" , table.getClassNameFirstToUpper());
+        velocityContext.put("classname" , table.getClassnameFirstToLow());
+        velocityContext.put("moduleName" ,table.getModuleName());
+        velocityContext.put("columns" , table.getColumnConfigList());
+        velocityContext.put("basePackage" , table.getPack());
+        velocityContext.put("package" ,table.getPack());
+        velocityContext.put("author" , table.getAuthor());
         velocityContext.put("datetime" , DateUtil.today());
+        //以上为通用
+        //下面研究一下 如何复用
         return velocityContext;
     }
 
@@ -128,29 +176,26 @@ public class GenUtils {
     /**
      * 表名转换成Java类名
      */
-    public static String tableToJava(String tableName,GenBaseInfo genBaseInfo) {
-        if (!genBaseInfo.getPreservePrefix()) {
-            tableName = tableName.substring(tableName.indexOf('_') + 1);
+    public static String tableToJava(String tableName,String prefix) {
+        if (!StrUtil.isBlankIfStr(prefix)) {
+            tableName.replaceFirst(prefix + "", "");
         }
-        if (StrUtil.isNotEmpty(GlobalConfig.getTablePrefix())) {
-            tableName = tableName.replace(GlobalConfig.getTablePrefix(), "");
-        }
-        //此处若以
+
         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName));
     }
 
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, TableInfo table, GenBaseInfo genBaseInfo) {
+    public static String getFileName(String template, GenConfig table) {
         String str = "/";
         // 小写类名
-        String classname = table.getClassname();
+        String classname = table.getClassnameFirstToLow();
         // 大写类名
-        String className = table.getClassName();
-        String javaPath = genBaseInfo.getProjectPath();
-        String mybatisPath = MYBATIS_PATH + str + genBaseInfo.getModuleName() + str + className;
-        String htmlPath = TEMPLATES_PATH + str + genBaseInfo.getModuleName() + str + classname;
+        String className = table.getClassNameFirstToUpper();
+        String javaPath = table.getProjectPath();
+        String mybatisPath = MYBATIS_PATH + str + table.getModuleName() + str + className;
+        String htmlPath = TEMPLATES_PATH + str + table.getModuleName() + str + classname;
 
         if (template.contains("Entity.java.vm")) {
             return javaPath + "entity" + "/" + className + ".java" ;

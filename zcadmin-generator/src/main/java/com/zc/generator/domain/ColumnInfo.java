@@ -7,9 +7,11 @@ import lombok.Data;
 import java.io.IOException;
 
 /**
- * ry数据库表列信息
+ * 数据库表列信息
+ *  1. 字段名称 字段类型 (==>延申 java属性 sql属性) 字段描述  Java属性名 attrNameFirstToUpper Java属性名 attrNameFirstToLow
+ *  2. 表名  表格是否展示, 表单是否展示,上方查询是否展示,表格的类型 ,表单的类型,查询类型
  *
- * @author ruoyi
+ *
  */
 @Data
 public class ColumnInfo {
@@ -24,7 +26,7 @@ public class ColumnInfo {
     private String dataType;
 
     /**
-     * 列描述
+     *字段描述
      */
     private String columnComment;
 

@@ -22,10 +22,16 @@ public class TableInfo extends BaseEntity {
      */
     private String tableName;
 
+    private String vueTableName;
+
     /**
      * 表描述
      */
     private String tableComment;
+
+    private String engine;
+
+    private String tableCollation;
 
     /**
      * 表的主键列信息

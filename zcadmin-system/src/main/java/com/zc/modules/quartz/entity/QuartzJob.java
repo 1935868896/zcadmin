@@ -1,13 +1,12 @@
 package com.zc.modules.quartz.entity;
 
-import lombok.Builder;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 /**
@@ -20,6 +19,8 @@ import java.util.Date;
 @Data
 @ApiModel(description="定时任务",parent=BaseEntity.class)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuartzJob extends BaseEntity{
 
     private static final long serialVersionUID=1L;

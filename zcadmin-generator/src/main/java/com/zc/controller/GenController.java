@@ -3,8 +3,12 @@ package com.zc.controller;
 import cn.hutool.core.convert.Convert;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.config.GlobalConfig;
+import com.zc.entity.ResultResponse;
 import com.zc.generator.domain.GenBaseInfo;
+import com.zc.generator.domain.TableInfo;
 import com.zc.generator.service.IGenService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 代码生成 操作处理
@@ -38,23 +43,23 @@ public class GenController {
         return prefix + "/gen";
     }
 
-//    @PostMapping("/list")
-//    @ResponseBody
-//    public TableDataInfo list(TableInfo tableInfo) {
-//        startPage();
-//        List<TableInfo> list = genService.selectTableList(tableInfo);
-//        return getDataTable(list);
-//    }
+    @GetMapping("/list")
+    @ResponseBody
+    public ResultResponse list(TableInfo tableInfo, Page page) {
+        IPage<TableInfo> tableInfoIPage = genService.selectTablePage(tableInfo, page);
+        return ResultResponse.success(tableInfoIPage);
+    }
 
     /**
      * 生成代码
      */
 
     @GetMapping("/genCode/{tableName}")
-    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName, GenBaseInfo genBaseInfo) throws IOException {
-
-        handleGenBaseInfo(genBaseInfo);
-        byte[] data = genService.generatorCode(tableName, genBaseInfo);
+    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        /**
+         *
+         */
+        byte[] data = genService.generatorCode(tableName);
         //提供网页下载
         this.genCode(response, data, tableName);
     }
@@ -68,7 +73,7 @@ public class GenController {
     public void batchGenCode(HttpServletResponse response, String tables, GenBaseInfo genBaseInfo) throws IOException {
         handleGenBaseInfo(genBaseInfo);
         String[] tableNames = Convert.toStrArray(tables);
-        byte[] data = genService.generatorCode(tableNames, genBaseInfo);
+        byte[] data = genService.generatorCode(tableNames);
         this.genCode(response, data);
     }
 

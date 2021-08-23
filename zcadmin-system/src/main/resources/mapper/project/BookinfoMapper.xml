@@ -96,9 +96,11 @@
         <if test="record.countWord != null  and record.countWord != '' ">
             and count_word = #{record.countWord,jdbcType=VARCHAR}
         </if>
-        <if test="record.updateAt != null ">
-            and update_at = #{record.updateAt,jdbcType=TIMESTAMP}
-        </if>
+<!--        <if test="record.beginTIme != null and record.afterTIme != null">-->
+<!--            and update_at between #{record.beginTime,jdbcType=TIMESTAMP} and #{record.afterTime,jdbcType=TIMESTAMP}-->
+<!--        </if>-->
+        <if test="record.beginTime!= null and record.beginTime != ''">AND update_at <![CDATA[>=]]> #{beginTime}</if>
+        <if test="record.afterTime!= null and record.afterTime != ''">AND update_at <![CDATA[<=]]>#{afterTIme}</if>
     </select>
 
     <select id="selectByPrimaryKeys" parameterType="java.util.List"

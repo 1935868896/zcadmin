@@ -115,8 +115,8 @@ public class QuartzJobController {
 //        }
 //        return ResultResponse.error();
 //    }
-//
-//
+
+
 //    @GetMapping("/ids")
 //    @ApiOperation("根据id集合获得目标数据集合")
 //    @Log("定时任务信息管理:根据id集合获得目标数据集合")
@@ -129,14 +129,13 @@ public class QuartzJobController {
 //        return ResultResponse.error();
 //    }
 //
-//    @ApiOperation("分页获得目标数据集合")
-//    @GetMapping("page")
-//    @Log("定时任务信息管理:分页获得目标数据集合")
-//    @PreAuthorize("@el.check('quartzJob:getPageByParam')")
-//    public ResultResponse getPageByParam(QuartzJob record, Page page) {
-//        IPage<QuartzJob> recordIPage = quartzJobService.selectPageBySelective(record, page);
-//        return ResultResponse.success(recordIPage);
-//    }
+    @ApiOperation("分页获得目标数据集合")
+    @GetMapping("page")
+    @Log("定时任务信息管理:分页获得目标数据集合")
+    public ResultResponse getPageByParam(QuartzJob record, Page page) {
+        IPage<QuartzJob> recordIPage = quartzJobService.selectPageBySelective(record, page);
+        return ResultResponse.success(recordIPage);
+    }
 //
 //    @Log("定时任务信息管理:根据条件查询符合数据的数量")
 //    @GetMapping("count")

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.generator.mapper.GenConfigMapper">
+    <resultMap type="GenConfig" id="BaseResultMap">
+            <result property="configId" jdbcType="BIGINT" column="config_id"/>
+            <result property="tableName" jdbcType="VARCHAR" column="table_name"/>
+            <result property="author" jdbcType="VARCHAR" column="author"/>
+            <result property="cover" jdbcType="BIT" column="cover"/>
+            <result property="vueModuleName" jdbcType="VARCHAR" column="vue_module_name"/>
+            <result property="pack" jdbcType="VARCHAR" column="pack"/>
+            <result property="path" jdbcType="VARCHAR" column="path"/>
+            <result property="apiPath" jdbcType="VARCHAR" column="api_path"/>
+            <result property="prefix" jdbcType="VARCHAR" column="prefix"/>
+            <result property="apiAlias" jdbcType="VARCHAR" column="api_alias"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_alias
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_gen_config
+        where config_id = #{configId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_gen_config
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="configId != null ">
+                and config_id = #{configId,jdbcType=BIGINT}
+            </if>
+            <if test="tableName != null  and tableName != '' ">
+                and table_name = #{tableName,jdbcType=VARCHAR}
+            </if>
+            <if test="author != null  and author != '' ">
+                and author = #{author,jdbcType=VARCHAR}
+            </if>
+            <if test="cover != null ">
+                and cover = #{cover,jdbcType=BIT}
+            </if>
+            <if test="vueModuleName != null  and vueModuleName != '' ">
+                and vue_module_name = #{vueModuleName,jdbcType=VARCHAR}
+            </if>
+            <if test="pack != null  and pack != '' ">
+                and pack = #{pack,jdbcType=VARCHAR}
+            </if>
+            <if test="path != null  and path != '' ">
+                and path = #{path,jdbcType=VARCHAR}
+            </if>
+            <if test="apiPath != null  and apiPath != '' ">
+                and api_path = #{apiPath,jdbcType=VARCHAR}
+            </if>
+            <if test="prefix != null  and prefix != '' ">
+                and prefix = #{prefix,jdbcType=VARCHAR}
+            </if>
+            <if test="apiAlias != null  and apiAlias != '' ">
+                and api_alias = #{apiAlias,jdbcType=VARCHAR}
+            </if>
+    </select>
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_gen_config
+        where 1=1
+        <!-- <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+            <if test="record.configId != null ">
+                and config_id = #{record.configId,jdbcType=BIGINT}
+            </if>
+            <if test="record.tableName != null  and record.tableName != '' ">
+                and table_name = #{record.tableName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.author != null  and record.author != '' ">
+                and author = #{record.author,jdbcType=VARCHAR}
+            </if>
+            <if test="record.cover != null ">
+                and cover = #{record.cover,jdbcType=BIT}
+            </if>
+            <if test="record.vueModuleName != null  and record.vueModuleName != '' ">
+                and vue_module_name = #{record.vueModuleName,jdbcType=VARCHAR}
+            </if>
+            <if test="record.pack != null  and record.pack != '' ">
+                and pack = #{record.pack,jdbcType=VARCHAR}
+            </if>
+            <if test="record.path != null  and record.path != '' ">
+                and path = #{record.path,jdbcType=VARCHAR}
+            </if>
+            <if test="record.apiPath != null  and record.apiPath != '' ">
+                and api_path = #{record.apiPath,jdbcType=VARCHAR}
+            </if>
+            <if test="record.prefix != null  and record.prefix != '' ">
+                and prefix = #{record.prefix,jdbcType=VARCHAR}
+            </if>
+            <if test="record.apiAlias != null  and record.apiAlias != '' ">
+                and api_alias = #{record.apiAlias,jdbcType=VARCHAR}
+            </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultType="GenConfig">
+        select
+        <include refid="Base_Column_List"/>
+        from code_gen_config
+        where config_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from code_gen_config
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        <if test="configId != null ">
+        and config_id = #{configId,jdbcType=BIGINT}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+        and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="author != null  and author != '' ">
+        and author = #{author,jdbcType=VARCHAR}
+        </if>
+        <if test="cover != null ">
+        and cover = #{cover,jdbcType=BIT}
+        </if>
+        <if test="vueModuleName != null  and vueModuleName != '' ">
+        and vue_module_name = #{vueModuleName,jdbcType=VARCHAR}
+        </if>
+        <if test="pack != null  and pack != '' ">
+        and pack = #{pack,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+        and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="apiPath != null  and apiPath != '' ">
+        and api_path = #{apiPath,jdbcType=VARCHAR}
+        </if>
+        <if test="prefix != null  and prefix != '' ">
+        and prefix = #{prefix,jdbcType=VARCHAR}
+        </if>
+        <if test="apiAlias != null  and apiAlias != '' ">
+        and api_alias = #{apiAlias,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="GenConfig"             useGeneratedKeys="true" keyProperty="configId">
+        insert into code_gen_config (
+            config_id,
+            table_name,
+            author,
+            cover,
+            vue_module_name,
+            pack,
+            path,
+            api_path,
+            prefix,
+            api_alias
+    )
+        values
+        (         #{configId,jdbcType=BIGINT},         #{tableName,jdbcType=VARCHAR},         #{author,jdbcType=VARCHAR},         #{cover,jdbcType=BIT},         #{vueModuleName,jdbcType=VARCHAR},         #{pack,jdbcType=VARCHAR},         #{path,jdbcType=VARCHAR},         #{apiPath,jdbcType=VARCHAR},         #{prefix,jdbcType=VARCHAR},         #{apiAlias,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="GenConfig"            useGeneratedKeys="true" keyProperty="configId">
+        insert into code_gen_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="tableName != null  and tableName != ''  ">table_name,</if>
+                    <if test="author != null  and author != ''  ">author,</if>
+                    <if test="cover != null  ">cover,</if>
+                    <if test="vueModuleName != null  and vueModuleName != ''  ">vue_module_name,</if>
+                    <if test="pack != null  and pack != ''  ">pack,</if>
+                    <if test="path != null  and path != ''  ">path,</if>
+                    <if test="apiPath != null  and apiPath != ''  ">api_path,</if>
+                    <if test="prefix != null  and prefix != ''  ">prefix,</if>
+                    <if test="apiAlias != null  and apiAlias != ''  ">api_alias,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="tableName != null  and tableName != ''  ">#{tableName,jdbcType=VARCHAR},</if>
+                    <if test="author != null  and author != ''  ">#{author,jdbcType=VARCHAR},</if>
+                    <if test="cover != null  ">#{cover,jdbcType=BIT},</if>
+                    <if test="vueModuleName != null  and vueModuleName != ''  ">#{vueModuleName,jdbcType=VARCHAR},</if>
+                    <if test="pack != null  and pack != ''  ">#{pack,jdbcType=VARCHAR},</if>
+                    <if test="path != null  and path != ''  ">#{path,jdbcType=VARCHAR},</if>
+                    <if test="apiPath != null  and apiPath != ''  ">#{apiPath,jdbcType=VARCHAR},</if>
+                    <if test="prefix != null  and prefix != ''  ">#{prefix,jdbcType=VARCHAR},</if>
+                    <if test="apiAlias != null  and apiAlias != ''  ">#{apiAlias,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="configId">
+        insert into  code_gen_config (
+            config_id,
+            table_name,
+            author,
+            cover,
+            vue_module_name,
+            pack,
+            path,
+            api_path,
+            prefix,
+            api_alias
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.configId,jdbcType=BIGINT},
+                #{record.tableName,jdbcType=VARCHAR},
+                #{record.author,jdbcType=VARCHAR},
+                #{record.cover,jdbcType=BIT},
+                #{record.vueModuleName,jdbcType=VARCHAR},
+                #{record.pack,jdbcType=VARCHAR},
+                #{record.path,jdbcType=VARCHAR},
+                #{record.apiPath,jdbcType=VARCHAR},
+                #{record.prefix,jdbcType=VARCHAR},
+                #{record.apiAlias,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="GenConfig">
+        update code_gen_config set
+                config_id =#{configId,jdbcType=BIGINT} ,
+                table_name =#{tableName,jdbcType=VARCHAR} ,
+                author =#{author,jdbcType=VARCHAR} ,
+                cover =#{cover,jdbcType=BIT} ,
+                vue_module_name =#{vueModuleName,jdbcType=VARCHAR} ,
+                pack =#{pack,jdbcType=VARCHAR} ,
+                path =#{path,jdbcType=VARCHAR} ,
+                api_path =#{apiPath,jdbcType=VARCHAR} ,
+                prefix =#{prefix,jdbcType=VARCHAR} ,
+                api_alias =#{apiAlias,jdbcType=VARCHAR}
+        where config_id = #{configId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBySelective" parameterType="GenConfig">
+        update code_gen_config
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="tableName != null  and tableName != ''  ">table_name = #{tableName,jdbcType=VARCHAR},</if>
+                    <if test="author != null  and author != ''  ">author = #{author,jdbcType=VARCHAR},</if>
+                    <if test="cover != null  ">cover = #{cover,jdbcType=BIT},</if>
+                    <if test="vueModuleName != null  and vueModuleName != ''  ">vue_module_name = #{vueModuleName,jdbcType=VARCHAR},</if>
+                    <if test="pack != null  and pack != ''  ">pack = #{pack,jdbcType=VARCHAR},</if>
+                    <if test="path != null  and path != ''  ">path = #{path,jdbcType=VARCHAR},</if>
+                    <if test="apiPath != null  and apiPath != ''  ">api_path = #{apiPath,jdbcType=VARCHAR},</if>
+                    <if test="prefix != null  and prefix != ''  ">prefix = #{prefix,jdbcType=VARCHAR},</if>
+                    <if test="apiAlias != null  and apiAlias != ''  ">api_alias = #{apiAlias,jdbcType=VARCHAR},</if>
+        </trim>
+        where config_id = #{configId,jdbcType=BIGINT}
+    </update>
+
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update code_gen_config
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="tableName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.tableName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="author = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.author,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="cover = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.cover,jdbcType=BIT}
+                        </foreach>
+                    </trim>
+                    <trim prefix="vueModuleName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.vueModuleName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="pack = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.pack,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="path = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.path,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="apiPath = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.apiPath,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="prefix = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.prefix,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="apiAlias = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.apiAlias,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+        </trim>
+        where config_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.configId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update code_gen_config
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="tableName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.tableName != null  and records.tableName != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.tableName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="author = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.author != null  and records.author != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.author,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="cover = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.cover != null  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.cover,jdbcType=BIT}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="vueModuleName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.vueModuleName != null  and records.vueModuleName != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.vueModuleName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="pack = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.pack != null  and records.pack != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.pack,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="path = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.path != null  and records.path != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.path,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="apiPath = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.apiPath != null  and records.apiPath != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.apiPath,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="prefix = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.prefix != null  and records.prefix != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.prefix,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="apiAlias = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.apiAlias != null  and records.apiAlias != ''  " >
+                            when config_id = #{records.configId,jdbcType=BIGINT} then #{records.apiAlias,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where config_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.configId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from code_gen_config where config_id = #{configId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from code_gen_config where config_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

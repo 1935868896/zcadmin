@@ -1,5 +1,7 @@
 package com.zc.modules.project.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
@@ -23,6 +25,7 @@ public class BookInfo extends BaseEntity{
 
     private static final long serialVersionUID=1L;
 
+    @TableId(value = "book_id")
     @ApiModelProperty(value="主键",name="bookId")
     private Integer bookId;
 
@@ -54,5 +57,14 @@ public class BookInfo extends BaseEntity{
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value="更新时间",name="updateAt")
     private Date updateAt;
+
+
+    @TableField(exist = false)
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date beginTime;
+
+    @TableField(exist = false)
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date AfterTime;
 
 }
