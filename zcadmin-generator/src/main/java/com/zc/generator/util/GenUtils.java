@@ -56,11 +56,25 @@ public class GenUtils {
             column.setKeyType(column.getColumnKey());
             column.setColumnType(column.getDataType());
 
-            column.setFormShow(true);
-            column.setSearchShow(true);
             column.setListShow(true);
+            // 这里可以处理一下表单的形式
+            if ("data".equals(column.getDataType())){
+                column.setFormType("text");
+            }else {
+                column.setFormType("text");
+            }
 
-            column.setFormType("text");
+            if ("PRI".equals(column.getKeyType())){
+                column.setFormShow(false);
+                column.setSearchShow(false);
+            }else {
+                column.setFormShow(true);
+                column.setSearchShow(true);
+            }
+
+
+
+
             column.setQueryType("=");
             column.setNotNull(false);
             column.setRemark(column.getColumnComment());
@@ -76,7 +90,9 @@ public class GenUtils {
         genConfig.setApiAlias(genConfig.getTableComment());
 
         int lastIndex = packageName.lastIndexOf('.');
-        genConfig.setBasePack(StrUtil.sub(packageName, 0, lastIndex));
+        int nameLength = packageName.length();
+
+        genConfig.setVueModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
 
     }
 
@@ -84,20 +100,22 @@ public class GenUtils {
     public static void handleGenConfig(GenConfig genConfig) {
         String packageName = genConfig.getPack();
         int lastIndex = packageName.lastIndexOf('.');
+        int nameLength = packageName.length();
 
-        genConfig.setModuleName(StrUtil.sub(packageName, 0, lastIndex));
         StringBuilder projectPath = new StringBuilder();
         projectPath.append("main/java/");
         projectPath.append(packageName.replace(".", "/"));
         projectPath.append("/");
-        genConfig.setProjectPath(projectPath.toString());
-        int nameLength = packageName.length();
-        genConfig.setVueModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
 
         String className=tableToJava(genConfig.getTableName(), genConfig.getPrefix());
         genConfig.setClassNameFirstToUpper(className);
         genConfig.setClassnameFirstToLow(StrUtil.lowerFirst(className));
-        genConfig.setVueTableName(className);
+        genConfig.setBasePack(StrUtil.sub(packageName, 0, lastIndex));
+        genConfig.setModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
+        genConfig.setProjectPath(projectPath.toString());
+        genConfig.setVueTableName(genConfig.getTableName().replaceAll("_","-"));
+
+
     }
 
 
@@ -131,6 +149,8 @@ public class GenUtils {
         velocityContext.put("package" ,table.getPack());
         velocityContext.put("author" , table.getAuthor());
         velocityContext.put("datetime" , DateUtil.today());
+        velocityContext.put("vueTableName" , table.getVueTableName());
+        velocityContext.put("vueModuleName" , table.getVueModuleName());
         //以上为通用
         //下面为
         return velocityContext;
@@ -149,10 +169,9 @@ public class GenUtils {
         templates.add("vm/java/ServiceImpl.java.vm");
         templates.add("vm/java/Controller.java.vm");
         templates.add("vm/xml/Mapper.xml.vm");
-//        templates.add("vm/html/list.html.vm");
-//        templates.add("vm/html/add.html.vm");
-//        templates.add("vm/html/edit.html.vm");
-//        templates.add("vm/sql/sql.vm");
+        templates.add("vm/vue/api.js.vm");
+        templates.add("vm/vue/router.js.vm");
+        templates.add("vm/vue/view.vue.vm");
         return templates;
     }
 
@@ -195,7 +214,7 @@ public class GenUtils {
         String className = table.getClassNameFirstToUpper();
         String javaPath = table.getProjectPath();
         String mybatisPath = MYBATIS_PATH + str + table.getModuleName() + str + className;
-        String htmlPath = TEMPLATES_PATH + str + table.getModuleName() + str + classname;
+        String vuePath="vue/src";
 
         if (template.contains("Entity.java.vm")) {
             return javaPath + "entity" + "/" + className + ".java" ;
@@ -220,19 +239,17 @@ public class GenUtils {
         if (template.contains("Mapper.xml.vm")) {
             return mybatisPath + "Mapper.xml" ;
         }
+        if (template.contains("api.js.vm")) {
+            return vuePath+"/api/"+table.getVueModuleName()+"/"+table.getVueTableName()+".js";
+        }
+        if (template.contains("router.js.vm")) {
+            return vuePath + "/router/modules/" +table.getVueModuleName() + ".js" ;
+        }
+        if (template.contains("view.vue.vm")) {
+            return vuePath+"/views/"+table.getVueModuleName()+"/"+table.getVueTableName()+".vue";
+        }
 
-        if (template.contains("list.html.vm")) {
-            return htmlPath + "/" + classname + ".html" ;
-        }
-        if (template.contains("add.html.vm")) {
-            return htmlPath + "/" + "add.html" ;
-        }
-        if (template.contains("edit.html.vm")) {
-            return htmlPath + "/" + "edit.html" ;
-        }
-        if (template.contains("sql.vm")) {
-            return classname + "Menu.sql" ;
-        }
+
         return null;
     }
 

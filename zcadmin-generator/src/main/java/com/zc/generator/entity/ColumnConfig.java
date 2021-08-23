@@ -45,6 +45,7 @@ public class ColumnConfig extends BaseEntity{
     private Boolean formShow;
 
     @ApiModelProperty(value="表单存在的类型",name="formType")
+    //文本框, 文本域 ,单选,下拉,日期
     private String formType;
 
     @ApiModelProperty(value="主键或者唯一键",name="keyType")

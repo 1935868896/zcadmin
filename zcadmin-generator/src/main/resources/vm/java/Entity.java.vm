@@ -48,7 +48,7 @@ public class ${className} extends BaseEntity{
     private $column.columnJavaType $column.attrNameFirstToLow;
     #elseif($column.attrNameFirstToLow==$primaryKey.attrNameFirstToLow)
 
-    @TableId(value = "$primaryKey.columnName")
+    @TableId(value = "$primaryKey.columnName",type = IdType.AUTO)
     @ApiModelProperty(value="$column.remark",name="$column.attrNameFirstToLow")
     private $column.columnJavaType $column.attrNameFirstToLow;
     #else

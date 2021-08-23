@@ -1,6 +1,6 @@
 {
     path: '${vueTableName}',
-        component: () => import('@/views/project/${vueTableName}'),
+        component: () => import('@/views/${vueModuleName}/${vueTableName}'),
     name: '${vueTableName}',
     meta: { title: '${tableComment}管理' }
 },
