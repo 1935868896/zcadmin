@@ -166,7 +166,7 @@
                                 <el-input v-model="temp.${column.attrNameFirstToLow}" style="width: 556px;" rows="4" type="textarea" />
                             </el-form-item>
                         #else
-                            <el-form-item label="${column.remark}" prop="jobName">
+                            <el-form-item label="${column.remark}">
                                 <el-input v-model="temp.${column.attrNameFirstToLow}" style="width: 220px;" />
                             </el-form-item>
                         #end

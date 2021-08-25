@@ -48,4 +48,5 @@ public interface IGenService {
 
     GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName);
 
+    void syncColumnConfig(String tableName);
     }

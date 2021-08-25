@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.generator.entity.CodeColumnConfig;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -23,6 +24,9 @@ public interface CodeColumnConfigMapper extends BaseMapper<CodeColumnConfig> {
      * @return 代码生成字段存储信息
      */
     CodeColumnConfig selectByPrimaryKey(Long id);
+
+    @Delete("delete from code_column_config where table_name=#{tableName}")
+    int deleteByTableName(String tableName);
 
 
     /**

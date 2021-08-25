@@ -9,8 +9,11 @@ import com.zc.config.GlobalConfig;
 import com.zc.entity.ResultResponse;
 import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
+import com.zc.generator.entity.CodeColumnConfig;
+import com.zc.generator.service.CodeColumnConfigService;
 import com.zc.generator.service.IGenService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,8 @@ import java.util.List;
 public class GenController {
 
     private final IGenService genService;
+    @Autowired
+    CodeColumnConfigService codeColumnConfigService;
 
     @Autowired
     public GenController(IGenService genService) {
@@ -55,6 +60,19 @@ public class GenController {
      * 生成代码
      */
 
+    @GetMapping("/updateAndGenCode/{tableName}")
+    public void genCode(HttpServletResponse response,HttpServletRequest request, @PathVariable("tableName") String tableName
+    ,@RequestBody List<CodeColumnConfig> records) throws IOException {
+        /**
+         *
+         */
+        codeColumnConfigService.updateBatch(records);
+
+        byte[] data = genService.generatorCode(tableName);
+        //提供网页下载
+        this.genCode(response,request, data, tableName);
+    }
+
     @GetMapping("/genCode/{tableName}")
     public void genCode(HttpServletResponse response,HttpServletRequest request, @PathVariable("tableName") String tableName) throws IOException {
         /**
@@ -64,6 +82,7 @@ public class GenController {
         //提供网页下载
         this.genCode(response,request, data, tableName);
     }
+
 
     /**
      * 批量生成代码

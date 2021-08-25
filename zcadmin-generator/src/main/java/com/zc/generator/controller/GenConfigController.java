@@ -69,6 +69,8 @@ public class GenConfigController {
         }
         return ResultResponse.error();
     }
+
+
     @ApiOperationSupport(order = 3)
     @ApiOperation("批量修改数据")
     @PutMapping("codeColumnConfig")
@@ -77,6 +79,18 @@ public class GenConfigController {
     @Anonymous
     public ResultResponse updateBatch(@RequestBody List<CodeColumnConfig> records) {
         int result = codeColumnConfigService.updateBatch(records);
+        return ResultResponse.success();
+    }
+
+
+    @ApiOperationSupport(order = 4)
+    @GetMapping("sync/{tableName}")
+    @ApiOperation("根据条件查询得到对象集合")
+    @Log("代码生成字段存储信息管理:根据条件查询得到对象集合")
+//    @PreAuthorize("@el.check('codeColumnConfig:getListByParam')")
+    @Anonymous
+    public ResultResponse getSyncByName(@PathVariable String tableName) {
+        genService.syncColumnConfig(tableName);
         return ResultResponse.success();
     }
 

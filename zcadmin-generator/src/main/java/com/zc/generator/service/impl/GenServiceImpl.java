@@ -1,6 +1,7 @@
 package com.zc.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.generator.domain.TableInfo;
 import com.zc.generator.entity.CodeColumnConfig;
@@ -170,6 +171,18 @@ public class GenServiceImpl implements IGenService {
                 log.error("渲染模板失败，表名：" + codeGenConfig.getTableName(), e);
             }
         }
+    }
+
+
+
+    @Override
+    public void syncColumnConfig(String tableName) {
+
+        columnConfigMapper.deleteByTableName(tableName);
+
+        List<CodeColumnConfig> codeColumnConfigs = genMapper.selectTableColumnsByName(tableName);
+        GenUtils.initColumsConfig(codeColumnConfigs);
+        columnConfigMapper.insertBatch(codeColumnConfigs);
     }
 
     public GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName){
