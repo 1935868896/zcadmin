@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
+import com.zc.generator.entity.CodeColumnConfig;
+import com.zc.generator.entity.CodeGenConfig;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 import java.util.List;
@@ -42,4 +44,7 @@ public interface IGenService {
      * @return 数据
      */
     byte[] generatorCode(String[] tableNames);
-}
+
+    void initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName);
+
+    }

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zc.generator.mapper.GenConfigMapper">
-    <resultMap type="GenConfig" id="BaseResultMap">
+<mapper namespace="com.zc.generator.mapper.CodeGenConfigMapper">
+    <resultMap type="CodeGenConfig" id="BaseResultMap">
             <result property="configId" jdbcType="BIGINT" column="config_id"/>
             <result property="tableName" jdbcType="VARCHAR" column="table_name"/>
             <result property="author" jdbcType="VARCHAR" column="author"/>
@@ -62,7 +62,44 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
                 and api_alias = #{apiAlias,jdbcType=VARCHAR}
             </if>
     </select>
-
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_gen_config
+        where 1=1
+        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
+        <if test="configId != null ">
+            and config_id = #{configId,jdbcType=BIGINT}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="author != null  and author != '' ">
+            and author = #{author,jdbcType=VARCHAR}
+        </if>
+        <if test="cover != null ">
+            and cover = #{cover,jdbcType=BIT}
+        </if>
+        <if test="vueModuleName != null  and vueModuleName != '' ">
+            and vue_module_name = #{vueModuleName,jdbcType=VARCHAR}
+        </if>
+        <if test="pack != null  and pack != '' ">
+            and pack = #{pack,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="apiPath != null  and apiPath != '' ">
+            and api_path = #{apiPath,jdbcType=VARCHAR}
+        </if>
+        <if test="prefix != null  and prefix != '' ">
+            and prefix = #{prefix,jdbcType=VARCHAR}
+        </if>
+        <if test="apiAlias != null  and apiAlias != '' ">
+            and api_alias = #{apiAlias,jdbcType=VARCHAR}
+        </if>
+         limit 1
+    </select>
     <select id="selectPageBySelective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -102,7 +139,7 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
     </select>
 
     <select id="selectByPrimaryKeys" parameterType="java.util.List"
-            resultType="GenConfig">
+            resultType="CodeGenConfig">
         select
         <include refid="Base_Column_List"/>
         from code_gen_config
@@ -150,7 +187,7 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
         </if>
     </select>
 
-    <insert id="insert" parameterType="GenConfig"             useGeneratedKeys="true" keyProperty="configId">
+    <insert id="insert" parameterType="CodeGenConfig"             useGeneratedKeys="true" keyProperty="configId">
         insert into code_gen_config (
             config_id,
             table_name,
@@ -167,7 +204,7 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
         (         #{configId,jdbcType=BIGINT},         #{tableName,jdbcType=VARCHAR},         #{author,jdbcType=VARCHAR},         #{cover,jdbcType=BIT},         #{vueModuleName,jdbcType=VARCHAR},         #{pack,jdbcType=VARCHAR},         #{path,jdbcType=VARCHAR},         #{apiPath,jdbcType=VARCHAR},         #{prefix,jdbcType=VARCHAR},         #{apiAlias,jdbcType=VARCHAR})
     </insert>
 
-    <insert id="insertSelective" parameterType="GenConfig"            useGeneratedKeys="true" keyProperty="configId">
+    <insert id="insertSelective" parameterType="CodeGenConfig"            useGeneratedKeys="true" keyProperty="configId">
         insert into code_gen_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
                     <if test="tableName != null  and tableName != ''  ">table_name,</if>
@@ -224,7 +261,7 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
         </foreach>
     </insert>
 
-    <update id="update" parameterType="GenConfig">
+    <update id="update" parameterType="CodeGenConfig">
         update code_gen_config set
                 config_id =#{configId,jdbcType=BIGINT} ,
                 table_name =#{tableName,jdbcType=VARCHAR} ,
@@ -239,7 +276,7 @@ config_id,table_name,author,cover,vue_module_name,pack,path,api_path,prefix,api_
         where config_id = #{configId,jdbcType=BIGINT}
     </update>
 
-    <update id="updateBySelective" parameterType="GenConfig">
+    <update id="updateBySelective" parameterType="CodeGenConfig">
         update code_gen_config
         <trim prefix="SET" suffixOverrides=",">
                     <if test="tableName != null  and tableName != ''  ">table_name = #{tableName,jdbcType=VARCHAR},</if>

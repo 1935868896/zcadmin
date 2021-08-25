@@ -4,7 +4,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zc.generator.entity.GenConfig;
+import com.zc.generator.entity.CodeGenConfig;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2021-08-20
  */
 @Mapper
-public interface GenConfigMapper extends BaseMapper<GenConfig> {
+public interface CodeGenConfigMapper extends BaseMapper<CodeGenConfig> {
 
     /**
      * 查询代码生成器配置信息
@@ -22,7 +22,7 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param id 代码生成器配置ID
      * @return 代码生成器配置信息
      */
-    GenConfig selectByPrimaryKey(Long id);
+    CodeGenConfig selectByPrimaryKey(Long id);
 
 
     /**
@@ -31,7 +31,9 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param record 代码生成器配置信息
      * @return 代码生成器配置集合
      */
-    List<GenConfig> selectListBySelective(GenConfig record);
+    List<CodeGenConfig> selectListBySelective(CodeGenConfig record);
+
+    CodeGenConfig selectOneBySelective(CodeGenConfig record);
 
     /**
      * 根据条件,分页查询代码生成器配置列表
@@ -40,14 +42,14 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param page mybatis-plus 分页对象
      * @return 代码生成器配置集合
      */
-    IPage<GenConfig> selectPageBySelective(GenConfig record, Page page);
+    IPage<CodeGenConfig> selectPageBySelective(CodeGenConfig record, Page page);
     /**
      * 根据主键集合,批量查询代码生成器配置列表
      *
      * @param ids 代码生成器配置主键List集合
      * @return 代码生成器配置集合
      */
-    List<GenConfig> selectByPrimaryKeys(List<Long> ids);
+    List<CodeGenConfig> selectByPrimaryKeys(List<Long> ids);
 
     /**
      * 查询符合条件的语句数量
@@ -55,7 +57,7 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param record 代码生成器配置 信息
      * @return 查询结果数量
      */
-    int selectCountBySelective(GenConfig record);
+    int selectCountBySelective(CodeGenConfig record);
 
 
     /**
@@ -64,35 +66,35 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param record 代码生成器配置 信息
      * @return 插入数量
      */
-    int insert(GenConfig record);
+    int insert(CodeGenConfig record);
     /**
      * 条件插入单条数据
      *
      * @param record 代码生成器配置 信息
      * @return 插入数量
      */
-    int insertSelective(GenConfig record);
+    int insertSelective(CodeGenConfig record);
     /**
      * 批量插入多条数据
      *
      * @param recordList 代码生成器配置集合
      * @return 插入数量
      */
-    int insertBatch(List<GenConfig> recordList);
+    int insertBatch(List<CodeGenConfig> recordList);
     /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
      * @param record 代码生成器配置 信息
      * @return 修改数量
      */
-    int update(GenConfig record);
+    int update(CodeGenConfig record);
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
      * @param record 代码生成器配置 信息
      * @return 修改数量
      */
-    int updateBySelective(GenConfig record);
+    int updateBySelective(CodeGenConfig record);
 
 
     /**
@@ -101,14 +103,14 @@ public interface GenConfigMapper extends BaseMapper<GenConfig> {
      * @param recordList 代码生成器配置 集合
      * @return 修改数量
      */
-    int updateBatch(List<GenConfig> recordList);
+    int updateBatch(List<CodeGenConfig> recordList);
     /**
      * 修改多条数据,仅修改存在数值的属性
      *
      * @param recordList 代码生成器配置 集合
      * @return 修改数量
      */
-    int updateBatchSelective(List<GenConfig> recordList);
+    int updateBatchSelective(List<CodeGenConfig> recordList);
     /**
      * 根据主键删除数据
      *

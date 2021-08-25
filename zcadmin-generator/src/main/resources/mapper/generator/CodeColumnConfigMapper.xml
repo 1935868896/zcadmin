@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.generator.mapper.CodeColumnConfigMapper">
+    <resultMap type="CodeColumnConfig" id="BaseResultMap">
+        <result property="columnId" jdbcType="BIGINT" column="column_id"/>
+        <result property="tableName" jdbcType="VARCHAR" column="table_name"/>
+        <result property="columnName" jdbcType="VARCHAR" column="column_name"/>
+        <result property="columnType" jdbcType="VARCHAR" column="column_type"/>
+        <result property="extra" jdbcType="VARCHAR" column="extra"/>
+        <result property="formShow" jdbcType="BIT" column="form_show"/>
+        <result property="formType" jdbcType="VARCHAR" column="form_type"/>
+        <result property="keyType" jdbcType="VARCHAR" column="key_type"/>
+        <result property="listShow" jdbcType="BIT" column="list_show"/>
+        <result property="notNull" jdbcType="BIT" column="not_null"/>
+        <result property="queryType" jdbcType="VARCHAR" column="query_type"/>
+        <result property="remark" jdbcType="VARCHAR" column="remark"/>
+        <result property="columnJavaType" jdbcType="VARCHAR" column="column_java_type"/>
+        <result property="columnJdbcType" jdbcType="VARCHAR" column="column_jdbc_type"/>
+        <result property="attrNameFirstToUpper" jdbcType="VARCHAR" column="attr_name_first_to_upper"/>
+        <result property="attrNameFirstToLow" jdbcType="VARCHAR" column="attr_name_first_to_low"/>
+        <result property="searchShow" jdbcType="BIT" column="search_show"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        column_id,table_name,column_name,column_type,extra,form_show,form_type,key_type,list_show,not_null,query_type,remark,column_java_type,column_jdbc_type,attr_name_first_to_upper,attr_name_first_to_low,search_show
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_column_config
+        where column_id = #{columnId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_column_config
+        where 1=1
+        <if test="columnId != null ">
+            and column_id = #{columnId,jdbcType=BIGINT}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="columnName != null  and columnName != '' ">
+            and column_name = #{columnName,jdbcType=VARCHAR}
+        </if>
+        <if test="columnType != null  and columnType != '' ">
+            and column_type = #{columnType,jdbcType=VARCHAR}
+        </if>
+        <if test="extra != null  and extra != '' ">
+            and extra = #{extra,jdbcType=VARCHAR}
+        </if>
+        <if test="formShow != null ">
+            and form_show = #{formShow,jdbcType=BIT}
+        </if>
+        <if test="formType != null  and formType != '' ">
+            and form_type = #{formType,jdbcType=VARCHAR}
+        </if>
+        <if test="keyType != null  and keyType != '' ">
+            and key_type = #{keyType,jdbcType=VARCHAR}
+        </if>
+        <if test="listShow != null ">
+            and list_show = #{listShow,jdbcType=BIT}
+        </if>
+        <if test="notNull != null ">
+            and not_null = #{notNull,jdbcType=BIT}
+        </if>
+        <if test="queryType != null  and queryType != '' ">
+            and query_type = #{queryType,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null  and remark != '' ">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="columnJavaType != null  and columnJavaType != '' ">
+            and column_java_type = #{columnJavaType,jdbcType=VARCHAR}
+        </if>
+        <if test="columnJdbcType != null  and columnJdbcType != '' ">
+            and column_jdbc_type = #{columnJdbcType,jdbcType=VARCHAR}
+        </if>
+        <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != '' ">
+            and attr_name_first_to_upper = #{attrNameFirstToUpper,jdbcType=VARCHAR}
+        </if>
+        <if test="attrNameFirstToLow != null  and attrNameFirstToLow != '' ">
+            and attr_name_first_to_low = #{attrNameFirstToLow,jdbcType=VARCHAR}
+        </if>
+        <if test="searchShow != null ">
+            and search_show = #{searchShow,jdbcType=BIT}
+        </if>
+    </select>
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_column_config
+        where 1=1
+        <if test="record.columnId != null ">
+            and column_id = #{record.columnId,jdbcType=BIGINT}
+        </if>
+        <if test="record.tableName != null  and record.tableName != '' ">
+            and table_name = #{record.tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.columnName != null  and record.columnName != '' ">
+            and column_name = #{record.columnName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.columnType != null  and record.columnType != '' ">
+            and column_type = #{record.columnType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.extra != null  and record.extra != '' ">
+            and extra = #{record.extra,jdbcType=VARCHAR}
+        </if>
+        <if test="record.formShow != null ">
+            and form_show = #{record.formShow,jdbcType=BIT}
+        </if>
+        <if test="record.formType != null  and record.formType != '' ">
+            and form_type = #{record.formType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.keyType != null  and record.keyType != '' ">
+            and key_type = #{record.keyType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.listShow != null ">
+            and list_show = #{record.listShow,jdbcType=BIT}
+        </if>
+        <if test="record.notNull != null ">
+            and not_null = #{record.notNull,jdbcType=BIT}
+        </if>
+        <if test="record.queryType != null  and record.queryType != '' ">
+            and query_type = #{record.queryType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.remark != null  and record.remark != '' ">
+            and remark = #{record.remark,jdbcType=VARCHAR}
+        </if>
+        <if test="record.columnJavaType != null  and record.columnJavaType != '' ">
+            and column_java_type = #{record.columnJavaType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.columnJdbcType != null  and record.columnJdbcType != '' ">
+            and column_jdbc_type = #{record.columnJdbcType,jdbcType=VARCHAR}
+        </if>
+        <if test="record.attrNameFirstToUpper != null  and record.attrNameFirstToUpper != '' ">
+            and attr_name_first_to_upper = #{record.attrNameFirstToUpper,jdbcType=VARCHAR}
+        </if>
+        <if test="record.attrNameFirstToLow != null  and record.attrNameFirstToLow != '' ">
+            and attr_name_first_to_low = #{record.attrNameFirstToLow,jdbcType=VARCHAR}
+        </if>
+        <if test="record.searchShow != null ">
+            and search_show = #{record.searchShow,jdbcType=BIT}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultType="CodeColumnConfig">
+        select
+        <include refid="Base_Column_List"/>
+        from code_column_config
+        where column_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from code_column_config
+        where 1=1
+        <if test="columnId != null ">
+            and column_id = #{columnId,jdbcType=BIGINT}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="columnName != null  and columnName != '' ">
+            and column_name = #{columnName,jdbcType=VARCHAR}
+        </if>
+        <if test="columnType != null  and columnType != '' ">
+            and column_type = #{columnType,jdbcType=VARCHAR}
+        </if>
+        <if test="extra != null  and extra != '' ">
+            and extra = #{extra,jdbcType=VARCHAR}
+        </if>
+        <if test="formShow != null ">
+            and form_show = #{formShow,jdbcType=BIT}
+        </if>
+        <if test="formType != null  and formType != '' ">
+            and form_type = #{formType,jdbcType=VARCHAR}
+        </if>
+        <if test="keyType != null  and keyType != '' ">
+            and key_type = #{keyType,jdbcType=VARCHAR}
+        </if>
+        <if test="listShow != null ">
+            and list_show = #{listShow,jdbcType=BIT}
+        </if>
+        <if test="notNull != null ">
+            and not_null = #{notNull,jdbcType=BIT}
+        </if>
+        <if test="queryType != null  and queryType != '' ">
+            and query_type = #{queryType,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null  and remark != '' ">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="columnJavaType != null  and columnJavaType != '' ">
+            and column_java_type = #{columnJavaType,jdbcType=VARCHAR}
+        </if>
+        <if test="columnJdbcType != null  and columnJdbcType != '' ">
+            and column_jdbc_type = #{columnJdbcType,jdbcType=VARCHAR}
+        </if>
+        <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != '' ">
+            and attr_name_first_to_upper = #{attrNameFirstToUpper,jdbcType=VARCHAR}
+        </if>
+        <if test="attrNameFirstToLow != null  and attrNameFirstToLow != '' ">
+            and attr_name_first_to_low = #{attrNameFirstToLow,jdbcType=VARCHAR}
+        </if>
+        <if test="searchShow != null ">
+            and search_show = #{searchShow,jdbcType=BIT}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="CodeColumnConfig"             useGeneratedKeys="true" keyProperty="columnId">
+        insert into code_column_config (
+            column_id,
+            table_name,
+            column_name,
+            column_type,
+            extra,
+            form_show,
+            form_type,
+            key_type,
+            list_show,
+            not_null,
+            query_type,
+            remark,
+            column_java_type,
+            column_jdbc_type,
+            attr_name_first_to_upper,
+            attr_name_first_to_low,
+            search_show
+        )
+        values
+        (         #{columnId,jdbcType=BIGINT},         #{tableName,jdbcType=VARCHAR},         #{columnName,jdbcType=VARCHAR},         #{columnType,jdbcType=VARCHAR},         #{extra,jdbcType=VARCHAR},         #{formShow,jdbcType=BIT},         #{formType,jdbcType=VARCHAR},         #{keyType,jdbcType=VARCHAR},         #{listShow,jdbcType=BIT},         #{notNull,jdbcType=BIT},         #{queryType,jdbcType=VARCHAR},         #{remark,jdbcType=VARCHAR},         #{columnJavaType,jdbcType=VARCHAR},         #{columnJdbcType,jdbcType=VARCHAR},         #{attrNameFirstToUpper,jdbcType=VARCHAR},         #{attrNameFirstToLow,jdbcType=VARCHAR},         #{searchShow,jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="CodeColumnConfig"            useGeneratedKeys="true" keyProperty="columnId">
+        insert into code_column_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableName != null  and tableName != ''  ">table_name,</if>
+            <if test="columnName != null  and columnName != ''  ">column_name,</if>
+            <if test="columnType != null  and columnType != ''  ">column_type,</if>
+            <if test="extra != null  and extra != ''  ">extra,</if>
+            <if test="formShow != null  ">form_show,</if>
+            <if test="formType != null  and formType != ''  ">form_type,</if>
+            <if test="keyType != null  and keyType != ''  ">key_type,</if>
+            <if test="listShow != null  ">list_show,</if>
+            <if test="notNull != null  ">not_null,</if>
+            <if test="queryType != null  and queryType != ''  ">query_type,</if>
+            <if test="remark != null  and remark != ''  ">remark,</if>
+            <if test="columnJavaType != null  and columnJavaType != ''  ">column_java_type,</if>
+            <if test="columnJdbcType != null  and columnJdbcType != ''  ">column_jdbc_type,</if>
+            <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">attr_name_first_to_upper,</if>
+            <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">attr_name_first_to_low,</if>
+            <if test="searchShow != null  ">search_show,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableName != null  and tableName != ''  ">#{tableName,jdbcType=VARCHAR},</if>
+            <if test="columnName != null  and columnName != ''  ">#{columnName,jdbcType=VARCHAR},</if>
+            <if test="columnType != null  and columnType != ''  ">#{columnType,jdbcType=VARCHAR},</if>
+            <if test="extra != null  and extra != ''  ">#{extra,jdbcType=VARCHAR},</if>
+            <if test="formShow != null  ">#{formShow,jdbcType=BIT},</if>
+            <if test="formType != null  and formType != ''  ">#{formType,jdbcType=VARCHAR},</if>
+            <if test="keyType != null  and keyType != ''  ">#{keyType,jdbcType=VARCHAR},</if>
+            <if test="listShow != null  ">#{listShow,jdbcType=BIT},</if>
+            <if test="notNull != null  ">#{notNull,jdbcType=BIT},</if>
+            <if test="queryType != null  and queryType != ''  ">#{queryType,jdbcType=VARCHAR},</if>
+            <if test="remark != null  and remark != ''  ">#{remark,jdbcType=VARCHAR},</if>
+            <if test="columnJavaType != null  and columnJavaType != ''  ">#{columnJavaType,jdbcType=VARCHAR},</if>
+            <if test="columnJdbcType != null  and columnJdbcType != ''  ">#{columnJdbcType,jdbcType=VARCHAR},</if>
+            <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">#{attrNameFirstToUpper,jdbcType=VARCHAR},</if>
+            <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">#{attrNameFirstToLow,jdbcType=VARCHAR},</if>
+            <if test="searchShow != null  ">#{searchShow,jdbcType=BIT},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="columnId">
+        insert into  code_column_config (
+        column_id,
+        table_name,
+        column_name,
+        column_type,
+        extra,
+        form_show,
+        form_type,
+        key_type,
+        list_show,
+        not_null,
+        query_type,
+        remark,
+        column_java_type,
+        column_jdbc_type,
+        attr_name_first_to_upper,
+        attr_name_first_to_low,
+        search_show
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+            #{record.columnId,jdbcType=BIGINT},
+            #{record.tableName,jdbcType=VARCHAR},
+            #{record.columnName,jdbcType=VARCHAR},
+            #{record.columnType,jdbcType=VARCHAR},
+            #{record.extra,jdbcType=VARCHAR},
+            #{record.formShow,jdbcType=BIT},
+            #{record.formType,jdbcType=VARCHAR},
+            #{record.keyType,jdbcType=VARCHAR},
+            #{record.listShow,jdbcType=BIT},
+            #{record.notNull,jdbcType=BIT},
+            #{record.queryType,jdbcType=VARCHAR},
+            #{record.remark,jdbcType=VARCHAR},
+            #{record.columnJavaType,jdbcType=VARCHAR},
+            #{record.columnJdbcType,jdbcType=VARCHAR},
+            #{record.attrNameFirstToUpper,jdbcType=VARCHAR},
+            #{record.attrNameFirstToLow,jdbcType=VARCHAR},
+            #{record.searchShow,jdbcType=BIT}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="CodeColumnConfig">
+        update code_column_config set
+                                      column_id =#{columnId,jdbcType=BIGINT} ,
+                                      table_name =#{tableName,jdbcType=VARCHAR} ,
+                                      column_name =#{columnName,jdbcType=VARCHAR} ,
+                                      column_type =#{columnType,jdbcType=VARCHAR} ,
+                                      extra =#{extra,jdbcType=VARCHAR} ,
+                                      form_show =#{formShow,jdbcType=BIT} ,
+                                      form_type =#{formType,jdbcType=VARCHAR} ,
+                                      key_type =#{keyType,jdbcType=VARCHAR} ,
+                                      list_show =#{listShow,jdbcType=BIT} ,
+                                      not_null =#{notNull,jdbcType=BIT} ,
+                                      query_type =#{queryType,jdbcType=VARCHAR} ,
+                                      remark =#{remark,jdbcType=VARCHAR} ,
+                                      column_java_type =#{columnJavaType,jdbcType=VARCHAR} ,
+                                      column_jdbc_type =#{columnJdbcType,jdbcType=VARCHAR} ,
+                                      attr_name_first_to_upper =#{attrNameFirstToUpper,jdbcType=VARCHAR} ,
+                                      attr_name_first_to_low =#{attrNameFirstToLow,jdbcType=VARCHAR} ,
+                                      search_show =#{searchShow,jdbcType=BIT}
+        where column_id = #{columnId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBySelective" parameterType="CodeColumnConfig">
+        update code_column_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tableName != null  and tableName != ''  ">table_name = #{tableName,jdbcType=VARCHAR},</if>
+            <if test="columnName != null  and columnName != ''  ">column_name = #{columnName,jdbcType=VARCHAR},</if>
+            <if test="columnType != null  and columnType != ''  ">column_type = #{columnType,jdbcType=VARCHAR},</if>
+            <if test="extra != null  and extra != ''  ">extra = #{extra,jdbcType=VARCHAR},</if>
+            <if test="formShow != null  ">form_show = #{formShow,jdbcType=BIT},</if>
+            <if test="formType != null  and formType != ''  ">form_type = #{formType,jdbcType=VARCHAR},</if>
+            <if test="keyType != null  and keyType != ''  ">key_type = #{keyType,jdbcType=VARCHAR},</if>
+            <if test="listShow != null  ">list_show = #{listShow,jdbcType=BIT},</if>
+            <if test="notNull != null  ">not_null = #{notNull,jdbcType=BIT},</if>
+            <if test="queryType != null  and queryType != ''  ">query_type = #{queryType,jdbcType=VARCHAR},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="columnJavaType != null  and columnJavaType != ''  ">column_java_type = #{columnJavaType,jdbcType=VARCHAR},</if>
+            <if test="columnJdbcType != null  and columnJdbcType != ''  ">column_jdbc_type = #{columnJdbcType,jdbcType=VARCHAR},</if>
+            <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">attr_name_first_to_upper = #{attrNameFirstToUpper,jdbcType=VARCHAR},</if>
+            <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">attr_name_first_to_low = #{attrNameFirstToLow,jdbcType=VARCHAR},</if>
+            <if test="searchShow != null  ">search_show = #{searchShow,jdbcType=BIT},</if>
+        </trim>
+        where column_id = #{columnId,jdbcType=BIGINT}
+    </update>
+
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update code_column_config
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="table_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.tableName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="column_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="column_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="extra = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.extra,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="form_show = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.formShow,jdbcType=BIT}
+                </foreach>
+            </trim>
+            <trim prefix="form_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.formType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="key_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.keyType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="list_show = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.listShow,jdbcType=BIT}
+                </foreach>
+            </trim>
+            <trim prefix="not_null = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.notNull,jdbcType=BIT}
+                </foreach>
+            </trim>
+            <trim prefix="query_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.queryType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.remark,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="column_java_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnJavaType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="column_jdbc_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnJdbcType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="attr_name_first_to_upper = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.attrNameFirstToUpper,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="attr_name_first_to_low = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.attrNameFirstToLow,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="search_show = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.searchShow,jdbcType=BIT}
+                </foreach>
+            </trim>
+        </trim>
+        where column_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.columnId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update code_column_config
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="tableName = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.tableName != null  and records.tableName != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.tableName,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="columnName = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.columnName != null  and records.columnName != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnName,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="columnType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.columnType != null  and records.columnType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="extra = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.extra != null  and records.extra != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.extra,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="formShow = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.formShow != null  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.formShow,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="formType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.formType != null  and records.formType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.formType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="keyType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.keyType != null  and records.keyType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.keyType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="listShow = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.listShow != null  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.listShow,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="notNull = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.notNull != null  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.notNull,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="queryType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.queryType != null  and records.queryType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.queryType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.remark != null  and records.remark != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.remark,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="columnJavaType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.columnJavaType != null  and records.columnJavaType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnJavaType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="columnJdbcType = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.columnJdbcType != null  and records.columnJdbcType != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.columnJdbcType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="attrNameFirstToUpper = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.attrNameFirstToUpper != null  and records.attrNameFirstToUpper != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.attrNameFirstToUpper,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="attrNameFirstToLow = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.attrNameFirstToLow != null  and records.attrNameFirstToLow != ''  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.attrNameFirstToLow,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="searchShow = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.searchShow != null  " >
+                        when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.searchShow,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where column_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.columnId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from code_column_config where column_id = #{columnId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from code_column_config where column_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

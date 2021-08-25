@@ -1,22 +1,17 @@
 package com.zc.generator.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zc.config.GlobalConfig;
-import com.zc.generator.domain.ColumnInfo;
-import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
-import com.zc.generator.entity.ColumnConfig;
-import com.zc.generator.entity.GenConfig;
-import com.zc.generator.mapper.ColumnConfigMapper;
-import com.zc.generator.mapper.GenConfigMapper;
+import com.zc.generator.entity.CodeColumnConfig;
+import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.mapper.CodeColumnConfigMapper;
+import com.zc.generator.mapper.CodeGenConfigMapper;
 import com.zc.generator.mapper.GenMapper;
 import com.zc.generator.service.IGenService;
 import com.zc.generator.util.GenUtils;
 import com.zc.generator.util.VelocityInitializer;
 import com.zc.utils.CharsetKit;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -28,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
@@ -45,9 +41,9 @@ public class GenServiceImpl implements IGenService {
     @Autowired
     GenMapper genMapper;
     @Autowired
-    GenConfigMapper genConfigMapper;
+    CodeGenConfigMapper codeGenConfigMapper;
     @Autowired
-    ColumnConfigMapper columnConfigMapper;
+    CodeColumnConfigMapper columnConfigMapper;
 
 
     /**
@@ -75,8 +71,8 @@ public class GenServiceImpl implements IGenService {
          *  1.根据tablename查询所有的数据
          */
         String tableName = "bookInfo";
-        GenConfig tableInfo = genMapper.selectTableByName(tableName);
-        List<ColumnConfig> columnInfos = genMapper.selectTableColumnsByName(tableName);
+        CodeGenConfig tableInfo = genMapper.selectTableByName(tableName);
+        List<CodeColumnConfig> columnInfos = genMapper.selectTableColumnsByName(tableName);
 
 
         return new byte[0];
@@ -131,44 +127,31 @@ public class GenServiceImpl implements IGenService {
      */
     private void generatorCode(ZipOutputStream zip, String tableName) {
         //
-        List<GenConfig> genConfigs = genConfigMapper.selectListBySelective(GenConfig.builder().tableName(tableName).build());
-        GenConfig genConfig=new GenConfig();
-        if (genConfigs==null||genConfigs.size()<=0){
-            /**
-             * genConfig 初始化,将必须的一些配置预先定义好
-             */
-            genConfig=genMapper.selectTableByName(tableName);
-            GenUtils.initGenConfig(genConfig);
-            genConfigMapper.insert(genConfig);
-
+        CodeGenConfig codeGenConfig = codeGenConfigMapper.selectOneBySelective(CodeGenConfig.builder().tableName(tableName).build());
+        List<CodeColumnConfig> codeColumnConfigs =new ArrayList<>();
+        /**
+         * 获取 表配置 和列配置对象 如果不存在的话就
+         */
+        if (codeGenConfig ==null){
+            initGenConfig(codeGenConfig,codeColumnConfigs,tableName);
         }else {
-            genConfig=genConfigs.get(0);
-        }
-        GenUtils.handleGenConfig(genConfig);
-        List<ColumnConfig> columnConfigs = columnConfigMapper.selectListBySelective(ColumnConfig.builder().tableName(tableName).build());
-        if (columnConfigs==null||columnConfigs.size()<=0){
-            /**
-             * columnConfigs 初始化
-             */
-            columnConfigs = genMapper.selectTableColumnsByName(tableName);
-            GenUtils.initColumsConfig(columnConfigs);
-            columnConfigMapper.insertBatch(columnConfigs);
+            codeColumnConfigs = columnConfigMapper.selectListBySelective(CodeColumnConfig.builder().tableName(tableName).build());
         }
 
-        genConfig.setColumnConfigList(columnConfigs);
-        ColumnConfig primayConfig=new ColumnConfig();
-        for (ColumnConfig config : columnConfigs) {
+
+        GenUtils.handleGenConfig(codeGenConfig);
+        codeGenConfig.setCodeColumnConfigList(codeColumnConfigs);
+        CodeColumnConfig primayConfig=new CodeColumnConfig();
+        for (CodeColumnConfig config : codeColumnConfigs) {
             if ("PRI".equals(config.getKeyType())){
                 primayConfig=config;
             }
         }
-        genConfig.setPrimaryKey(primayConfig);
+        codeGenConfig.setPrimaryKey(primayConfig);
 
 
         VelocityInitializer.initVelocity();
-
-        VelocityContext context = GenUtils.getVelocityContext(genConfig);
-
+        VelocityContext context = GenUtils.getVelocityContext(codeGenConfig);
         // 获取模板列表
         List<String> templates = GenUtils.getTemplates();
         for (String template : templates) {
@@ -178,13 +161,23 @@ public class GenServiceImpl implements IGenService {
             tpl.merge(context, sw);
             try {
                 // 添加到zip
-                zip.putNextEntry(new ZipEntry(Objects.requireNonNull(GenUtils.getFileName(template,genConfig))));
+                zip.putNextEntry(new ZipEntry(Objects.requireNonNull(GenUtils.getFileName(template, codeGenConfig))));
                 IOUtils.write(sw.toString(), zip, CharsetKit.UTF8);
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
             } catch (IOException e) {
-                log.error("渲染模板失败，表名：" + genConfig.getTableName(), e);
+                log.error("渲染模板失败，表名：" + codeGenConfig.getTableName(), e);
             }
         }
+    }
+
+    public void initGenConfig(CodeGenConfig codeGenConfig,List<CodeColumnConfig> codeColumnConfigs,String tableName){
+        codeGenConfig =genMapper.selectTableByName(tableName);
+        GenUtils.initGenConfig(codeGenConfig);
+        codeGenConfigMapper.insert(codeGenConfig);
+
+        codeColumnConfigs = genMapper.selectTableColumnsByName(tableName);
+        GenUtils.initColumsConfig(codeColumnConfigs);
+        columnConfigMapper.insertBatch(codeColumnConfigs);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.io.IOUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -55,13 +56,13 @@ public class GenController {
      */
 
     @GetMapping("/genCode/{tableName}")
-    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+    public void genCode(HttpServletResponse response,HttpServletRequest request, @PathVariable("tableName") String tableName) throws IOException {
         /**
          *
          */
         byte[] data = genService.generatorCode(tableName);
         //提供网页下载
-        this.genCode(response, data, tableName);
+        this.genCode(response,request, data, tableName);
     }
 
     /**
@@ -70,26 +71,30 @@ public class GenController {
 
     @GetMapping("/batchGenCode")
     @ResponseBody
-    public void batchGenCode(HttpServletResponse response, String tables, GenBaseInfo genBaseInfo) throws IOException {
+    public void batchGenCode(HttpServletResponse response,HttpServletRequest request ,String tables, GenBaseInfo genBaseInfo) throws IOException {
         handleGenBaseInfo(genBaseInfo);
         String[] tableNames = Convert.toStrArray(tables);
         byte[] data = genService.generatorCode(tableNames);
-        this.genCode(response, data);
+        this.genCode(response, request,data);
     }
 
-    private void genCode(HttpServletResponse response, byte[] data) throws IOException {
+    private void genCode(HttpServletResponse response,HttpServletRequest request, byte[] data) throws IOException {
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"zcadmin.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
         IOUtils.write(data, response.getOutputStream());
     }
 
-    private void genCode(HttpServletResponse response, byte[] data, String tableName) throws IOException {
+    private void genCode(HttpServletResponse response, HttpServletRequest request,byte[] data, String tableName) throws IOException {
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"" + tableName + ".zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
         IOUtils.write(data, response.getOutputStream());
     }
     private void handleGenBaseInfo(GenBaseInfo genBaseInfo){

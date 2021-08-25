@@ -68,6 +68,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = BadRequestException.class)
 	public ResponseEntity<ApiError> badRequestException(BadRequestException e) {
         // 打印堆栈信息
+        e.printStackTrace();
         return buildResponseEntity(ApiError.error(e.getStatus(),e.getMessage()));
 	}
 

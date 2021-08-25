@@ -4,8 +4,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
 
-import com.zc.generator.entity.ColumnConfig;
-import com.zc.generator.entity.GenConfig;
+import com.zc.generator.entity.CodeColumnConfig;
+import com.zc.generator.entity.CodeGenConfig;
 import org.apache.velocity.VelocityContext;
 
 import java.util.*;
@@ -42,9 +42,9 @@ public class GenUtils {
 
 
 
-    public static void initColumsConfig(List<ColumnConfig> columns) {
+    public static void initColumsConfig(List<CodeColumnConfig> columns) {
         // 列信息
-        for (ColumnConfig column : columns) {
+        for (CodeColumnConfig column : columns) {
             // 列名转换成Java属性名
             String attrName = StrUtil.upperFirst(StrUtil.toCamelCase(column.getColumnName()));
             column.setAttrNameFirstToUpper(attrName);
@@ -82,23 +82,23 @@ public class GenUtils {
         }
     }
 
-    public static void initGenConfig(GenConfig genConfig) {
-        genConfig.setAuthor("zhangc");
+    public static void initGenConfig(CodeGenConfig codeGenConfig) {
+        codeGenConfig.setAuthor("zhangc");
         String packageName="com.zc.modules.quartz";
-        genConfig.setPack(packageName);
-        genConfig.setPrefix(null);
-        genConfig.setApiAlias(genConfig.getTableComment());
+        codeGenConfig.setPack(packageName);
+        codeGenConfig.setPrefix(null);
+        codeGenConfig.setApiAlias(codeGenConfig.getTableComment());
 
         int lastIndex = packageName.lastIndexOf('.');
         int nameLength = packageName.length();
 
-        genConfig.setVueModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
+        codeGenConfig.setVueModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
 
     }
 
 
-    public static void handleGenConfig(GenConfig genConfig) {
-        String packageName = genConfig.getPack();
+    public static void handleGenConfig(CodeGenConfig codeGenConfig) {
+        String packageName = codeGenConfig.getPack();
         int lastIndex = packageName.lastIndexOf('.');
         int nameLength = packageName.length();
 
@@ -107,13 +107,13 @@ public class GenUtils {
         projectPath.append(packageName.replace(".", "/"));
         projectPath.append("/");
 
-        String className=tableToJava(genConfig.getTableName(), genConfig.getPrefix());
-        genConfig.setClassNameFirstToUpper(className);
-        genConfig.setClassnameFirstToLow(StrUtil.lowerFirst(className));
-        genConfig.setBasePack(StrUtil.sub(packageName, 0, lastIndex));
-        genConfig.setModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
-        genConfig.setProjectPath(projectPath.toString());
-        genConfig.setVueTableName(genConfig.getTableName().replaceAll("_","-"));
+        String className=tableToJava(codeGenConfig.getTableName(), codeGenConfig.getPrefix());
+        codeGenConfig.setClassNameFirstToUpper(className);
+        codeGenConfig.setClassnameFirstToLow(StrUtil.lowerFirst(className));
+        codeGenConfig.setBasePack(StrUtil.sub(packageName, 0, lastIndex));
+        codeGenConfig.setModuleName(StrUtil.sub(packageName, lastIndex + 1, nameLength));
+        codeGenConfig.setProjectPath(projectPath.toString());
+        codeGenConfig.setVueTableName(codeGenConfig.getTableName().replaceAll("_","-"));
 
 
     }
@@ -135,7 +135,7 @@ public class GenUtils {
      *
      * @return 模板列表
      */
-    public static VelocityContext getVelocityContext(GenConfig table) {
+    public static VelocityContext getVelocityContext(CodeGenConfig table) {
         // java对象数据传递到模板文件vm
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tableName" , table.getTableName());
@@ -144,7 +144,7 @@ public class GenUtils {
         velocityContext.put("className" , table.getClassNameFirstToUpper());
         velocityContext.put("classname" , table.getClassnameFirstToLow());
         velocityContext.put("moduleName" ,table.getModuleName());
-        velocityContext.put("columns" , table.getColumnConfigList());
+        velocityContext.put("columns" , table.getCodeColumnConfigList());
         velocityContext.put("basePackage" , table.getPack());
         velocityContext.put("package" ,table.getPack());
         velocityContext.put("author" , table.getAuthor());
@@ -206,7 +206,7 @@ public class GenUtils {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, GenConfig table) {
+    public static String getFileName(String template, CodeGenConfig table) {
         String str = "/";
         // 小写类名
         String classname = table.getClassnameFirstToLow();

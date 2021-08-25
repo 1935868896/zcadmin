@@ -1,9 +1,9 @@
 package com.zc.generator.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.zc.entity.BaseEntity;
-import com.zc.generator.domain.ColumnInfo;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
@@ -23,11 +23,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GenConfig extends BaseEntity{
+public class CodeGenConfig extends BaseEntity{
 
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "config_id")
+    @TableId(value = "config_id",type = IdType.AUTO)
     @ApiModelProperty(value="ID",name="configId")
     private Long configId;
 
@@ -59,9 +59,9 @@ public class GenConfig extends BaseEntity{
     private String apiAlias;
 
 
-    List<ColumnConfig> columnConfigList;
+    List<CodeColumnConfig> codeColumnConfigList;
 
-    ColumnConfig primaryKey;
+    CodeColumnConfig primaryKey;
 
 
     private String vueTableName;

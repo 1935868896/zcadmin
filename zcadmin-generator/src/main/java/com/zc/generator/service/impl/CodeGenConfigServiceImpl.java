@@ -2,17 +2,15 @@ package com.zc.generator.service.impl;
 
 import java.util.List;
 
-import com.zc.generator.entity.GenConfig;
-import com.zc.generator.mapper.GenConfigMapper;
-import com.zc.generator.service.GenConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.mapper.CodeGenConfigMapper;
+import com.zc.generator.service.CodeGenConfigService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zc.utils.SqlListHandleUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,9 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig> implements GenConfigService {
+public class CodeGenConfigServiceImpl extends ServiceImpl<CodeGenConfigMapper, CodeGenConfig> implements CodeGenConfigService {
 
-    private final GenConfigMapper genConfigMapper;
+    private final CodeGenConfigMapper codeGenConfigMapper;
 
     /**
      * 查询代码生成器配置信息
@@ -34,8 +32,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 代码生成器配置信息
      */
     @Override
-    public GenConfig selectByPrimaryKey(Long id) {
-        return genConfigMapper.selectByPrimaryKey(id);
+    public CodeGenConfig selectByPrimaryKey(Long id) {
+        return codeGenConfigMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public CodeGenConfig selectOneBySelective(CodeGenConfig record) {
+        return codeGenConfigMapper.selectOneBySelective(record);
     }
 
 
@@ -46,8 +49,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 代码生成器配置集合
      */
     @Override
-    public List<GenConfig> selectListBySelective(GenConfig record) {
-        return genConfigMapper.selectListBySelective(record);
+    public List<CodeGenConfig> selectListBySelective(CodeGenConfig record) {
+        return codeGenConfigMapper.selectListBySelective(record);
     }
 
     /**
@@ -58,8 +61,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 代码生成器配置集合
      */
     @Override
-    public IPage<GenConfig> selectPageBySelective(GenConfig record, Page page) {
-        return genConfigMapper.selectPageBySelective(record, page);
+    public IPage<CodeGenConfig> selectPageBySelective(CodeGenConfig record, Page page) {
+        return codeGenConfigMapper.selectPageBySelective(record, page);
     }
 
     /**
@@ -69,11 +72,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 代码生成器配置集合
      */
     @Override
-    public List<GenConfig> selectByPrimaryKeys(List<Long> ids) {
+    public List<CodeGenConfig> selectByPrimaryKeys(List<Long> ids) {
         if (ids == null || ids.size() <= 0) {
             return null;
         }
-        return genConfigMapper.selectByPrimaryKeys(ids);
+        return codeGenConfigMapper.selectByPrimaryKeys(ids);
     }
 
 
@@ -84,8 +87,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 查询结果数量
      */
     @Override
-    public int selectCountBySelective(GenConfig record) {
-        return genConfigMapper.selectCountBySelective(record);
+    public int selectCountBySelective(CodeGenConfig record) {
+        return codeGenConfigMapper.selectCountBySelective(record);
     }
 
     /**
@@ -95,8 +98,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 插入数量
      */
     @Override
-    public int insert(GenConfig record) {
-        return genConfigMapper.insert(record);
+    public int insert(CodeGenConfig record) {
+        return codeGenConfigMapper.insert(record);
     }
 
     /**
@@ -106,8 +109,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 插入数量
      */
     @Override
-    public int insertSelective(GenConfig record) {
-        return genConfigMapper.insertSelective(record);
+    public int insertSelective(CodeGenConfig record) {
+        return codeGenConfigMapper.insertSelective(record);
     }
 
     /**
@@ -118,14 +121,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     @Override
     @Transactional
-    public int insertBatch(List<GenConfig> recordList) {
+    public int insertBatch(List<CodeGenConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<GenConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<GenConfig> records : list) {
-            int count = genConfigMapper.insertBatch(records);
+        List<List<CodeGenConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeGenConfig> records : list) {
+            int count = codeGenConfigMapper.insertBatch(records);
             result = result + count;
         }
         return result;
@@ -138,8 +141,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 修改数量
      */
     @Override
-    public int update(GenConfig record) {
-        return genConfigMapper.update(record);
+    public int update(CodeGenConfig record) {
+        return codeGenConfigMapper.update(record);
     }
     /**
      * 修改单条数据,仅修改存在数值的属性
@@ -148,8 +151,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      * @return 修改数量
      */
     @Override
-    public int updateBySelective(GenConfig record) {
-        return genConfigMapper.updateBySelective(record);
+    public int updateBySelective(CodeGenConfig record) {
+        return codeGenConfigMapper.updateBySelective(record);
     }
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
@@ -159,14 +162,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     @Override
     @Transactional
-    public int updateBatch(List<GenConfig> recordList) {
+    public int updateBatch(List<CodeGenConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<GenConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<GenConfig> records : list) {
-            int count = genConfigMapper.updateBatch(records);
+        List<List<CodeGenConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeGenConfig> records : list) {
+            int count = codeGenConfigMapper.updateBatch(records);
             result = result + count;
         }
         return result;
@@ -179,14 +182,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     @Override
     @Transactional
-    public int updateBatchBySelective(List<GenConfig> recordList) {
+    public int updateBatchBySelective(List<CodeGenConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<GenConfig>> listLists = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<GenConfig> records : listLists) {
-            int count = genConfigMapper.updateBatchSelective(records);
+        List<List<CodeGenConfig>> listLists = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeGenConfig> records : listLists) {
+            int count = codeGenConfigMapper.updateBatchSelective(records);
             result = result + count;
         }
         return result;
@@ -199,7 +202,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     @Override
     public int deleteByPrimaryKey(Long id) {
-        return genConfigMapper.deleteByPrimaryKey(id);
+        return codeGenConfigMapper.deleteByPrimaryKey(id);
     }
     /**
      * 根据主键集合删除数据
@@ -212,7 +215,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         if (ids == null || ids.size() <= 0) {
             return 0;
         }
-        return genConfigMapper.deleteByPrimaryKeys(ids);
+        return codeGenConfigMapper.deleteByPrimaryKeys(ids);
     }
 
 }

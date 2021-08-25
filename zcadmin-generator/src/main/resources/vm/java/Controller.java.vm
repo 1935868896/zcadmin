@@ -56,8 +56,21 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-
     @ApiOperationSupport(order = 3)
+    @GetMapping("/single")
+    @ApiOperation("根据条件查询得到单个对象")
+    @Log("${tableComment}信息管理:根据条件查询得到单个对象")
+    @PreAuthorize("@el.check('${classname}:getOneByParam')")
+    public ResultResponse getOneByParam(${className} record) {
+        ${className} result = ${classname}Service.selectOneBySelective(record);
+        if (result != null ) {
+            return ResultResponse.success(result);
+        }
+        return ResultResponse.error();
+    }
+
+
+    @ApiOperationSupport(order = 4)
     @GetMapping("/ids")
     @ApiOperation("根据id集合获得目标数据集合")
     @Log("${tableComment}信息管理:根据id集合获得目标数据集合")
@@ -70,7 +83,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 4)
+    @ApiOperationSupport(order = 5)
     @ApiOperation("分页获得目标数据集合")
     @GetMapping("page")
     @Log("${tableComment}信息管理:分页获得目标数据集合")
@@ -80,7 +93,7 @@ public class ${className}Controller {
         return ResultResponse.success(recordIPage);
     }
 
-    @ApiOperationSupport(order = 5)
+    @ApiOperationSupport(order = 6)
     @Log("${tableComment}信息管理:根据条件查询符合数据的数量")
     @GetMapping("count")
     @ApiOperation("根据条件查询符合数据的数量")
@@ -90,7 +103,7 @@ public class ${className}Controller {
         return ResultResponse.success(result);
     }
 
-    @ApiOperationSupport(order = 6)
+    @ApiOperationSupport(order = 7)
     @ApiOperation("插入单条数据")
     @PostMapping
     @Log("${tableComment}信息管理:插入单条数据")
@@ -103,7 +116,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 7)
+    @ApiOperationSupport(order = 8)
     @ApiOperation("批量插入数据")
     @PostMapping("batch")
     @Log("${tableComment}信息管理:批量插入数据")
@@ -116,7 +129,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 8)
+    @ApiOperationSupport(order = 9)
     @ApiOperation("修改数据")
     @PutMapping
     @Log("${tableComment}信息管理:修改数据")
@@ -129,7 +142,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 9)
+    @ApiOperationSupport(order = 10)
     @ApiOperation("修改数据,仅修改不为null的数据")
     @PutMapping("/selective")
     @Log("${tableComment}信息管理:修改部分数据")
@@ -142,7 +155,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 10)
+    @ApiOperationSupport(order = 11)
     @ApiOperation("批量修改数据")
     @PutMapping("batch")
     @Log("${tableComment}信息管理:批量修改数据")
@@ -156,7 +169,7 @@ public class ${className}Controller {
     }
 
     //如果某批数据中,有一个数据属性存在值,其他数据的属性不存在值,那么最终修改结果为其他数据的该属性将设为null值
-    @ApiOperationSupport(order = 11)
+    @ApiOperationSupport(order = 12)
     @ApiOperation("批量修改数据,仅修改部分属性")
     @PutMapping("batch/selective")
     @Log("${tableComment}信息管理:批量修改数据的部分属性")
@@ -169,7 +182,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 12)
+    @ApiOperationSupport(order = 13)
     @ApiOperation("删除数据")
     @DeleteMapping()
     @Log("${tableComment}信息管理:删除数据")
@@ -182,7 +195,7 @@ public class ${className}Controller {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 13)
+    @ApiOperationSupport(order = 14)
     @ApiOperation("根据主键集合批量删除数据")
     @DeleteMapping("ids")
     @Log("${tableComment}信息管理:根据主键集合批量删除数据")

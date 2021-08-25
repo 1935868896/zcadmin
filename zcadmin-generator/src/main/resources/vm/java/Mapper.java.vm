@@ -34,6 +34,14 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
     List<${className}> selectListBySelective(${className} record);
 
     /**
+     * 根据条件,查询第一个${tableComment}对象(一般用于条件可以确定唯一数据)
+     *
+     * @param record ${tableComment}信息
+     * @return ${tableComment}
+     */
+    List<${className}> selectOneBySelective(${className} record);
+
+    /**
      * 根据条件,分页查询${tableComment}列表
      *
      * @param record ${tableComment}信息

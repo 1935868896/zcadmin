@@ -1,6 +1,7 @@
 package com.zc.generator.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.zc.entity.BaseEntity;
@@ -21,11 +22,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ColumnConfig extends BaseEntity{
+public class CodeColumnConfig extends BaseEntity{
 
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "column_id")
+    @TableId(value = "column_id",type = IdType.AUTO)
     @ApiModelProperty(value="ID",name="columnId")
     private Long columnId;
 

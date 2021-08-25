@@ -209,7 +209,6 @@
     // 导入模块
     import {
         fetchList,
-        fetchPv,
         create,
         update,
         deleteData
@@ -439,13 +438,6 @@
                                 message: '已取消删除'
                             })
                         })
-            },
-
-            handleFetchPv(pv) {
-                fetchPv(pv).then((response) => {
-                    this.pvData = response.data.pvData
-                    this.dialogPvVisible = true
-                })
             },
             handleDownload() {
                 this.downloadLoading = true

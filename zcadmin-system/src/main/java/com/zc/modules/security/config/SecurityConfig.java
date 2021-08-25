@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.setAllowedOrigins(Arrays.asList("*"));
 
+        //'Access-Control-Allow-Origin
         //setAllowedOriginPatterns 和 setAllowedOrigins 效果相同
         //setAllowCredentials(true) 和 setAllowedOriginPatterns 是配套的
         configuration.setAllowCredentials(true);

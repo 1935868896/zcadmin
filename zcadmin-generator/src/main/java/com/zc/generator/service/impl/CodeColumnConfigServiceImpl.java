@@ -2,17 +2,15 @@ package com.zc.generator.service.impl;
 
 import java.util.List;
 
-import com.zc.generator.entity.ColumnConfig;
-import com.zc.generator.mapper.ColumnConfigMapper;
-import com.zc.generator.service.ColumnConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zc.generator.entity.CodeColumnConfig;
+import com.zc.generator.mapper.CodeColumnConfigMapper;
+import com.zc.generator.service.CodeColumnConfigService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zc.utils.SqlListHandleUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,9 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, ColumnConfig> implements ColumnConfigService {
+public class CodeColumnConfigServiceImpl extends ServiceImpl<CodeColumnConfigMapper, CodeColumnConfig> implements CodeColumnConfigService {
 
-    private final ColumnConfigMapper columnConfigMapper;
+    private final CodeColumnConfigMapper columnConfigMapper;
 
     /**
      * 查询代码生成字段存储信息
@@ -34,7 +32,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 代码生成字段存储信息
      */
     @Override
-    public ColumnConfig selectByPrimaryKey(Long id) {
+    public CodeColumnConfig selectByPrimaryKey(Long id) {
         return columnConfigMapper.selectByPrimaryKey(id);
     }
 
@@ -46,7 +44,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 代码生成字段存储集合
      */
     @Override
-    public List<ColumnConfig> selectListBySelective(ColumnConfig record) {
+    public List<CodeColumnConfig> selectListBySelective(CodeColumnConfig record) {
         return columnConfigMapper.selectListBySelective(record);
     }
 
@@ -58,7 +56,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 代码生成字段存储集合
      */
     @Override
-    public IPage<ColumnConfig> selectPageBySelective(ColumnConfig record, Page page) {
+    public IPage<CodeColumnConfig> selectPageBySelective(CodeColumnConfig record, Page page) {
         return columnConfigMapper.selectPageBySelective(record, page);
     }
 
@@ -69,7 +67,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 代码生成字段存储集合
      */
     @Override
-    public List<ColumnConfig> selectByPrimaryKeys(List<Long> ids) {
+    public List<CodeColumnConfig> selectByPrimaryKeys(List<Long> ids) {
         if (ids == null || ids.size() <= 0) {
             return null;
         }
@@ -84,7 +82,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 查询结果数量
      */
     @Override
-    public int selectCountBySelective(ColumnConfig record) {
+    public int selectCountBySelective(CodeColumnConfig record) {
         return columnConfigMapper.selectCountBySelective(record);
     }
 
@@ -95,7 +93,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 插入数量
      */
     @Override
-    public int insert(ColumnConfig record) {
+    public int insert(CodeColumnConfig record) {
         return columnConfigMapper.insert(record);
     }
 
@@ -106,7 +104,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 插入数量
      */
     @Override
-    public int insertSelective(ColumnConfig record) {
+    public int insertSelective(CodeColumnConfig record) {
         return columnConfigMapper.insertSelective(record);
     }
 
@@ -118,13 +116,13 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      */
     @Override
     @Transactional
-    public int insertBatch(List<ColumnConfig> recordList) {
+    public int insertBatch(List<CodeColumnConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<ColumnConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<ColumnConfig> records : list) {
+        List<List<CodeColumnConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeColumnConfig> records : list) {
             int count = columnConfigMapper.insertBatch(records);
             result = result + count;
         }
@@ -138,7 +136,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 修改数量
      */
     @Override
-    public int update(ColumnConfig record) {
+    public int update(CodeColumnConfig record) {
         return columnConfigMapper.update(record);
     }
     /**
@@ -148,7 +146,7 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      * @return 修改数量
      */
     @Override
-    public int updateBySelective(ColumnConfig record) {
+    public int updateBySelective(CodeColumnConfig record) {
         return columnConfigMapper.updateBySelective(record);
     }
     /**
@@ -159,13 +157,13 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      */
     @Override
     @Transactional
-    public int updateBatch(List<ColumnConfig> recordList) {
+    public int updateBatch(List<CodeColumnConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<ColumnConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<ColumnConfig> records : list) {
+        List<List<CodeColumnConfig>> list = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeColumnConfig> records : list) {
             int count = columnConfigMapper.updateBatch(records);
             result = result + count;
         }
@@ -179,13 +177,13 @@ public class ColumnConfigServiceImpl extends ServiceImpl<ColumnConfigMapper, Col
      */
     @Override
     @Transactional
-    public int updateBatchBySelective(List<ColumnConfig> recordList) {
+    public int updateBatchBySelective(List<CodeColumnConfig> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
-        List<List<ColumnConfig>> listLists = SqlListHandleUtils.splitList(recordList, 50);
-        for (List<ColumnConfig> records : listLists) {
+        List<List<CodeColumnConfig>> listLists = SqlListHandleUtils.splitList(recordList, 50);
+        for (List<CodeColumnConfig> records : listLists) {
             int count = columnConfigMapper.updateBatchSelective(records);
             result = result + count;
         }
