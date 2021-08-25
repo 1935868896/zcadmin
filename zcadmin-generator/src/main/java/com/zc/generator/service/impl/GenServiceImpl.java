@@ -11,6 +11,7 @@ import com.zc.generator.mapper.GenMapper;
 import com.zc.generator.service.IGenService;
 import com.zc.generator.util.GenUtils;
 import com.zc.generator.util.VelocityInitializer;
+import com.zc.generator.vo.GenConfigVO;
 import com.zc.utils.CharsetKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -171,7 +172,7 @@ public class GenServiceImpl implements IGenService {
         }
     }
 
-    public void initGenConfig(CodeGenConfig codeGenConfig,List<CodeColumnConfig> codeColumnConfigs,String tableName){
+    public GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName){
         codeGenConfig =genMapper.selectTableByName(tableName);
         GenUtils.initGenConfig(codeGenConfig);
         codeGenConfigMapper.insert(codeGenConfig);
@@ -179,5 +180,6 @@ public class GenServiceImpl implements IGenService {
         codeColumnConfigs = genMapper.selectTableColumnsByName(tableName);
         GenUtils.initColumsConfig(codeColumnConfigs);
         columnConfigMapper.insertBatch(codeColumnConfigs);
+        return GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).build();
     }
 }

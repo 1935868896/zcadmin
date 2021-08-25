@@ -46,13 +46,14 @@ public class GenConfigController {
         /**
          * 获取 表配置 和列配置对象 如果不存在的话就初始化赋值创建
          */
+        GenConfigVO result;
         if (codeGenConfig == null) {
-            genService.initGenConfig(codeGenConfig, codeColumnConfigs, tableName);
+            result = genService.initGenConfig(codeGenConfig, codeColumnConfigs, tableName);
         } else {
             codeColumnConfigs = codeColumnConfigService.selectListBySelective(CodeColumnConfig.builder().tableName(tableName).build());
+            result = GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).build();
         }
 
-        GenConfigVO result = GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).build();
         return ResultResponse.success(result);
     }
 
