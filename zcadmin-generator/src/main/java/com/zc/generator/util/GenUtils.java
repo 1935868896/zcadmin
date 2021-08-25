@@ -197,7 +197,7 @@ public class GenUtils {
      */
     public static String tableToJava(String tableName,String prefix) {
         if (!StrUtil.isBlankIfStr(prefix)) {
-            tableName.replaceFirst(prefix + "", "");
+           tableName= tableName.replaceFirst(prefix + "_", "");
         }
 
         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName));
