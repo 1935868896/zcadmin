@@ -57,7 +57,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}
      */
     @Override
-    ${className} selectOneBySelective(${className} record) {
+    public ${className} selectOneBySelective(${className} record) {
         return ${classname}Mapper.selectOneBySelective(record);
     }
 
@@ -152,6 +152,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     public int update(${className} record) {
         return ${classname}Mapper.update(record);
     }
+
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
@@ -159,9 +160,24 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int updateBySelective(${className} record) {
-        return ${classname}Mapper.updateBySelective(record);
+    public int updateSelective(${className} record) {
+        return ${classname}Mapper.updateSelective(record);
     }
+
+
+    /**
+    * 根据条件修改某些参数,仅修改存在数值的属性
+    *
+    * @param  params  需要修改的信息
+    * @param  record  根据的条件信息
+    * @return 修改数量
+    */
+    @Override
+    public int updateParamsBySelective(${className} params,${className} record) {
+        return ${classname}Mapper.updateParamsBySelective(params, record);
+    }
+
+
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -182,6 +198,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
         return result;
     }
+
     /**
      * 修改多条数据,仅修改存在数值的属性
      *
@@ -202,6 +219,18 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
         return result;
     }
+
+    /**
+    * 根据条件删除数据
+    *
+    * @param record  删除的条件
+    * @return 删除数量
+    */
+    public int deleteBySelective(${className} record){
+        return ${classname}Mapper.deleteBySelective(record);
+    }
+
+
     /**
      * 根据主键删除数据
      *
@@ -212,6 +241,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     public int deleteByPrimaryKey(${primaryKey.columnJavaType} id) {
         return ${classname}Mapper.deleteByPrimaryKey(id);
     }
+
     /**
      * 根据主键集合删除数据
      *

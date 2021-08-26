@@ -95,12 +95,21 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      */
     int update(${className} record);
     /**
-     * 修改单条数据,仅修改存在数值的属性
+     * 根据主键修改单条数据,仅修改存在数值的属性
      *
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int updateBySelective(${className} record);
+    int updateSelective(${className} record);
+
+    /**
+     * 根据条件修改某些参数,仅修改存在数值的属性
+     *
+     * @param params  需要修改的信息
+     * @param record  根据的条件信息
+     * @return 修改数量
+     */
+    int updateParamsBySelective(${className} params,${className} record);
 
 
     /**
@@ -118,12 +127,21 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      */
     int updateBatchSelective(List<${className}> recordList);
     /**
-     * 根据主键删除数据
+     * 根据条件删除数据
+     *
+     * @param record  删除的条件
+     * @return 删除数量
+     */
+    int deleteBySelective(${className} record);
+    /**
+     * 根据数据值删除数据
      *
      * @param id ${tableComment} 主键
      * @return 删除数量
      */
     int deleteByPrimaryKey(${primaryKey.columnJavaType} id);
+
+
     /**
      * 根据主键集合删除数据
      *
