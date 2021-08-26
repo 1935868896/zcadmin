@@ -39,7 +39,7 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param record ${tableComment}信息
      * @return ${tableComment}
      */
-    List<${className}> selectOneBySelective(${className} record);
+     ${className} selectOneBySelective(${className} record);
 
     /**
      * 根据条件,分页查询${tableComment}列表

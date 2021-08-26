@@ -27,7 +27,7 @@ export function create(data) {
     data
   })
 }
-//修改
+// 修改
 export function update(data) {
   return request({
     url: '/${moduleName}/${classname}',
@@ -36,7 +36,7 @@ export function update(data) {
     data
   })
 }
-//删除
+// 删除
 export function deleteData(id) {
   return request({
     url: '/${moduleName}/${classname}',

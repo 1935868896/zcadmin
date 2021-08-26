@@ -57,7 +57,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}
      */
     @Override
-    public List<${className}> selectOneBySelective(${className} record) {
+    ${className} selectOneBySelective(${className} record) {
         return ${classname}Mapper.selectOneBySelective(record);
     }
 

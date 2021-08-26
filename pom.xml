@@ -8,6 +8,7 @@
         <module>zcadmin-logging</module>
         <module>zcadmin-generator</module>
         <module>zcadmin-tools</module>
+        <module>zcadmin-system</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -30,7 +30,7 @@
 #foreach($column in $columns)
     #if($column.queryType=='like')
             <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
+                and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
             </if>
 #elseif($column.queryType=='between')
     <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
@@ -53,7 +53,7 @@
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
+                    and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
                 </if>
             #elseif($column.queryType=='between')
                 <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
@@ -78,7 +78,7 @@
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="record.$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and record.$column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName like CONCAT('%','#{record.$column.attrNameFirstToLow}','%' )
+                    and $column.columnName like CONCAT('%',#{record.$column.attrNameFirstToLow},'%' )
                 </if>
             #elseif($column.queryType=='between')
                 <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{record.beginTime}</if>
@@ -112,7 +112,7 @@
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName like CONCAT('%','#{$column.attrNameFirstToLow}','%' )
+                    and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
                 </if>
             #elseif($column.queryType=='between')
                 <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>

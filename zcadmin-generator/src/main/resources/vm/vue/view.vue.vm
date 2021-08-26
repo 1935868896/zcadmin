@@ -404,7 +404,7 @@
                 const tempData = Object.assign({}, this.temp)
                 tempData.timestamp = +new Date(tempData.timestamp)
                 update(tempData).then(() => {
-                const index = this.list.findIndex((v) => v.id === this.temp.id)
+                const index = this.list.findIndex((v) => v.id === this.temp.${primaryKey.attrNameFirstToLow})
                 this.list.splice(index, 1, this.temp)
                 this.dialogFormVisible = false
                 this.$notify({
@@ -424,7 +424,7 @@
                     type: 'warning'
                 })
                         .then(() => {
-                            deleteData(row.bookId).then((res) => {
+                            deleteData(row.${primaryKey.attrNameFirstToLow}).then((res) => {
                                 this.list.splice(index, 1)
                                 this.$message({
                                     type: 'info',
