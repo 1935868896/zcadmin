@@ -30,7 +30,6 @@
         <include refid="Base_Column_List"/>
         from book_info
         where 1=1
-        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -63,12 +62,50 @@
         </if>
     </select>
 
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from book_info
+        where 1=1
+        <if test="bookId != null ">
+            and book_id = #{bookId,jdbcType=INTEGER}
+        </if>
+        <if test="status != null  and status != '' ">
+            and status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="tags != null  and tags != '' ">
+            and tags = #{tags,jdbcType=VARCHAR}
+        </if>
+        <if test="score != null  and score != '' ">
+            and score = #{score,jdbcType=VARCHAR}
+        </if>
+        <if test="scoreCount != null  and scoreCount != '' ">
+            and score_count = #{scoreCount,jdbcType=VARCHAR}
+        </if>
+        <if test="title != null  and title != '' ">
+            and title = #{title,jdbcType=VARCHAR}
+        </if>
+        <if test="author != null  and author != '' ">
+            and author = #{author,jdbcType=VARCHAR}
+        </if>
+        <if test="cover != null  and cover != '' ">
+            and cover = #{cover,jdbcType=VARCHAR}
+        </if>
+        <if test="countWord != null  and countWord != '' ">
+            and count_word = #{countWord,jdbcType=VARCHAR}
+        </if>
+        <if test="updateAt != null ">
+            and update_at = #{updateAt,jdbcType=TIMESTAMP}
+        </if>
+        limit 1
+    </select>
+
+
     <select id="selectPageBySelective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from book_info
         where 1=1
-        <!-- <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
         <if test="record.bookId != null ">
             and book_id = #{record.bookId,jdbcType=INTEGER}
         </if>
@@ -96,15 +133,13 @@
         <if test="record.countWord != null  and record.countWord != '' ">
             and count_word = #{record.countWord,jdbcType=VARCHAR}
         </if>
-<!--        <if test="record.beginTIme != null and record.afterTIme != null">-->
-<!--            and update_at between #{record.beginTime,jdbcType=TIMESTAMP} and #{record.afterTime,jdbcType=TIMESTAMP}-->
-<!--        </if>-->
-        <if test="record.beginTime!= null and record.beginTime != ''">AND update_at <![CDATA[>=]]> #{beginTime}</if>
-        <if test="record.afterTime!= null and record.afterTime != ''">AND update_at <![CDATA[<=]]>#{afterTIme}</if>
+        <if test="record.updateAt != null ">
+            and update_at = #{record.updateAt,jdbcType=TIMESTAMP}
+        </if>
     </select>
 
     <select id="selectByPrimaryKeys" parameterType="java.util.List"
-            resultType="BookInfo">
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from book_info
@@ -119,7 +154,6 @@
         count(1)
         from book_info
         where 1=1
-        <!--        <if test="name != null and name != ''">and name like CONCAT('%','${name}','%' )</if>-->
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -226,7 +260,22 @@
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="BookInfo">
+    <update id="update" parameterType="BookInfo">
+        update book_info
+        set book_id     =#{bookId,jdbcType=INTEGER},
+            status      =#{status,jdbcType=VARCHAR},
+            tags        =#{tags,jdbcType=VARCHAR},
+            score       =#{score,jdbcType=VARCHAR},
+            score_count =#{scoreCount,jdbcType=VARCHAR},
+            title       =#{title,jdbcType=VARCHAR},
+            author      =#{author,jdbcType=VARCHAR},
+            cover       =#{cover,jdbcType=VARCHAR},
+            count_word  =#{countWord,jdbcType=VARCHAR},
+            update_at   =#{updateAt,jdbcType=TIMESTAMP}
+        where book_id = #{bookId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateSelective" parameterType="BookInfo">
         update book_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null  and status != ''  ">status = #{status,jdbcType=VARCHAR},</if>
@@ -242,20 +291,58 @@
         where book_id = #{bookId,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="BookInfo">
+    <update id="updateParamsBySelective" parameterType="BookInfo">
         update book_info
-        set book_id     =#{bookId,jdbcType=INTEGER},
-            status      =#{status,jdbcType=VARCHAR},
-            tags        =#{tags,jdbcType=VARCHAR},
-            score       =#{score,jdbcType=VARCHAR},
-            score_count =#{scoreCount,jdbcType=VARCHAR},
-            title       =#{title,jdbcType=VARCHAR},
-            author      =#{author,jdbcType=VARCHAR},
-            cover       =#{cover,jdbcType=VARCHAR},
-            count_word  =#{countWord,jdbcType=VARCHAR},
-            update_at   =#{updateAt,jdbcType=TIMESTAMP}
-        where book_id = #{bookId,jdbcType=INTEGER}
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="params.status != null  and params.status != ''  ">status = #{params.status,jdbcType=VARCHAR},</if>
+            <if test="params.tags != null  and params.tags != ''  ">tags = #{params.tags,jdbcType=VARCHAR},</if>
+            <if test="params.score != null  and params.score != ''  ">score = #{params.score,jdbcType=VARCHAR},</if>
+            <if test="params.scoreCount != null  and params.scoreCount != ''  ">score_count =
+                #{params.scoreCount,jdbcType=VARCHAR},
+            </if>
+            <if test="params.title != null  and params.title != ''  ">title = #{params.title,jdbcType=VARCHAR},</if>
+            <if test="params.author != null  and params.author != ''  ">author = #{params.author,jdbcType=VARCHAR},</if>
+            <if test="params.cover != null  and params.cover != ''  ">cover = #{params.cover,jdbcType=VARCHAR},</if>
+            <if test="params.countWord != null  and params.countWord != ''  ">count_word =
+                #{params.countWord,jdbcType=VARCHAR},
+            </if>
+            <if test="params.updateAt != null  ">update_at = #{params.updateAt,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where 1=1
+        <if test="record.bookId != null ">
+            and book_id = #{record.bookId,jdbcType=INTEGER}
+        </if>
+        <if test="record.status != null  and record.status != '' ">
+            and status = #{record.status,jdbcType=VARCHAR}
+        </if>
+        <if test="record.tags != null  and record.tags != '' ">
+            and tags = #{record.tags,jdbcType=VARCHAR}
+        </if>
+        <if test="record.score != null  and record.score != '' ">
+            and score = #{record.score,jdbcType=VARCHAR}
+        </if>
+        <if test="record.scoreCount != null  and record.scoreCount != '' ">
+            and score_count = #{record.scoreCount,jdbcType=VARCHAR}
+        </if>
+        <if test="record.title != null  and record.title != '' ">
+            and title = #{record.title,jdbcType=VARCHAR}
+        </if>
+        <if test="record.author != null  and record.author != '' ">
+            and author = #{record.author,jdbcType=VARCHAR}
+        </if>
+        <if test="record.cover != null  and record.cover != '' ">
+            and cover = #{record.cover,jdbcType=VARCHAR}
+        </if>
+        <if test="record.countWord != null  and record.countWord != '' ">
+            and count_word = #{record.countWord,jdbcType=VARCHAR}
+        </if>
+        <if test="record.updateAt != null ">
+            and update_at = #{record.updateAt,jdbcType=TIMESTAMP}
+        </if>
+
+
     </update>
+
 
     <update id="updateBatch" parameterType="java.util.List">
         update book_info
@@ -275,7 +362,7 @@
                     when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.score,jdbcType=VARCHAR}
                 </foreach>
             </trim>
-            <trim prefix="scoreCount = case" suffix="end,">
+            <trim prefix="score_count = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.scoreCount,jdbcType=VARCHAR}
                 </foreach>
@@ -295,12 +382,12 @@
                     when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.cover,jdbcType=VARCHAR}
                 </foreach>
             </trim>
-            <trim prefix="countWord = case" suffix="end,">
+            <trim prefix="count_word = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.countWord,jdbcType=VARCHAR}
                 </foreach>
             </trim>
-            <trim prefix="updateAt = case" suffix="end,">
+            <trim prefix="update_at = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.updateAt,jdbcType=TIMESTAMP}
                 </foreach>
@@ -336,7 +423,7 @@
                     </if>
                 </foreach>
             </trim>
-            <trim prefix="scoreCount = case" suffix="end,">
+            <trim prefix="score_count = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     <if test="records.scoreCount != null  and records.scoreCount != ''  ">
                         when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.scoreCount,jdbcType=VARCHAR}
@@ -364,14 +451,14 @@
                     </if>
                 </foreach>
             </trim>
-            <trim prefix="countWord = case" suffix="end,">
+            <trim prefix="count_word = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     <if test="records.countWord != null  and records.countWord != ''  ">
                         when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.countWord,jdbcType=VARCHAR}
                     </if>
                 </foreach>
             </trim>
-            <trim prefix="updateAt = case" suffix="end,">
+            <trim prefix="update_at = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     <if test="records.updateAt != null  ">
                         when book_id = #{records.bookId,jdbcType=INTEGER} then #{records.updateAt,jdbcType=TIMESTAMP}
@@ -385,6 +472,40 @@
         </foreach>
     </update>
 
+    <delete id="deleteBySelective" parameterType="java.lang.Integer">
+        delete
+        from book_info where 1=1
+        <if test="bookId != null ">
+            and book_id = #{bookId,jdbcType=INTEGER}
+        </if>
+        <if test="status != null  and status != '' ">
+            and status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="tags != null  and tags != '' ">
+            and tags = #{tags,jdbcType=VARCHAR}
+        </if>
+        <if test="score != null  and score != '' ">
+            and score = #{score,jdbcType=VARCHAR}
+        </if>
+        <if test="scoreCount != null  and scoreCount != '' ">
+            and score_count = #{scoreCount,jdbcType=VARCHAR}
+        </if>
+        <if test="title != null  and title != '' ">
+            and title = #{title,jdbcType=VARCHAR}
+        </if>
+        <if test="author != null  and author != '' ">
+            and author = #{author,jdbcType=VARCHAR}
+        </if>
+        <if test="cover != null  and cover != '' ">
+            and cover = #{cover,jdbcType=VARCHAR}
+        </if>
+        <if test="countWord != null  and countWord != '' ">
+            and count_word = #{countWord,jdbcType=VARCHAR}
+        </if>
+        <if test="updateAt != null ">
+            and update_at = #{updateAt,jdbcType=TIMESTAMP}
+        </if>
+    </delete>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

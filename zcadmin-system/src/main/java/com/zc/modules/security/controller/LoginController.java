@@ -48,7 +48,16 @@ public class LoginController {
         map.put("token",s);
         return ResultResponse.success(map);
     }
-
+    @Log("刷新token")
+    @ResponseBody
+    @PostMapping("/system/refresh/token")
+    public ResultResponse refresh(@RequestBody String token){
+        //第一步验证密码的正确性
+        log.info("刷新Token");
+        jwtUtil.canTokenBeRefreshed(token);
+        String newToken = jwtUtil.refreshToken(token);
+        return ResultResponse.success(newToken);
+    }
 
 
 

@@ -34,7 +34,7 @@ public class TokenFilter extends OncePerRequestFilter /*GenericFilterBean*/ {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String token = httpServletRequest.getHeader("token");
+        String token = httpServletRequest.getHeader("X-Token");
         if(token!=null) {
             String usernameFromToken = jwtUtil.getUsernameFromToken(token);
             //此处可以通过redis缓存解决每次都要请求数据库的问题

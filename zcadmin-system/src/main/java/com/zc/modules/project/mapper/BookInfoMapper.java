@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 图书 数据层
  *
- * @author ruoyi
- * @date 2021-08-10
+ * @author zhangc
+ * @date 2021-08-26
  */
 @Mapper
 public interface BookInfoMapper extends BaseMapper<BookInfo> {
@@ -32,6 +32,14 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
      * @return 图书集合
      */
     List<BookInfo> selectListBySelective(BookInfo record);
+
+    /**
+     * 根据条件,查询第一个图书对象(一般用于条件可以确定唯一数据)
+     *
+     * @param record 图书信息
+     * @return 图书
+     */
+    BookInfo selectOneBySelective(BookInfo record);
 
     /**
      * 根据条件,分页查询图书列表
@@ -85,14 +93,23 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
      * @param record 图书 信息
      * @return 修改数量
      */
-    int updateByPrimaryKey(BookInfo record);
+    int update(BookInfo record);
     /**
-     * 修改单条数据,仅修改存在数值的属性
+     * 根据主键修改单条数据,仅修改存在数值的属性
      *
      * @param record 图书 信息
      * @return 修改数量
      */
-    int updateByPrimaryKeySelective(BookInfo record);
+    int updateSelective(BookInfo record);
+
+    /**
+     * 根据条件修改某些参数,仅修改存在数值的属性
+     *
+     * @param params  需要修改的信息
+     * @param record  根据的条件信息
+     * @return 修改数量
+     */
+    int updateParamsBySelective(BookInfo params,BookInfo record);
 
 
     /**
@@ -110,12 +127,21 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
      */
     int updateBatchSelective(List<BookInfo> recordList);
     /**
-     * 根据主键删除数据
+     * 根据条件删除数据
+     *
+     * @param record  删除的条件
+     * @return 删除数量
+     */
+    int deleteBySelective(BookInfo record);
+    /**
+     * 根据数据值删除数据
      *
      * @param id 图书 主键
      * @return 删除数量
      */
     int deleteByPrimaryKey(Integer id);
+
+
     /**
      * 根据主键集合删除数据
      *

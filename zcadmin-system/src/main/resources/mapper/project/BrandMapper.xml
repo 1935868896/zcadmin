@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.project.mapper.BrandMapper">
+    <resultMap type="Brand" id="BaseResultMap">
+            <result property="brandId" jdbcType="BIGINT" column="brand_id"/>
+            <result property="name" jdbcType="CHAR" column="name"/>
+            <result property="logo" jdbcType="VARCHAR" column="logo"/>
+            <result property="descript" jdbcType="VARCHAR" column="descript"/>
+            <result property="showStatus" jdbcType="INTEGER" column="show_status"/>
+            <result property="firstLetter" jdbcType="CHAR" column="first_letter"/>
+            <result property="sort" jdbcType="INTEGER" column="sort"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+brand_id,name,logo,descript,show_status,first_letter,sort
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_brand
+        where brand_id = #{brandId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_brand
+        where 1=1
+        <if test="brandId != null ">
+            and brand_id = #{brandId,jdbcType=BIGINT}
+        </if>
+            <if test="name != null  and name != '' ">
+                and name like CONCAT('%','#{name}','%' )
+            </if>
+        <if test="logo != null  and logo != '' ">
+            and logo = #{logo,jdbcType=VARCHAR}
+        </if>
+        <if test="descript != null  and descript != '' ">
+            and descript = #{descript,jdbcType=VARCHAR}
+        </if>
+        <if test="showStatus != null ">
+            and show_status = #{showStatus,jdbcType=INTEGER}
+        </if>
+        <if test="firstLetter != null  and firstLetter != '' ">
+            and first_letter = #{firstLetter,jdbcType=CHAR}
+        </if>
+        <if test="sort != null ">
+            and sort = #{sort,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_brand
+        where 1=1
+                <if test="brandId != null ">
+                    and brand_id = #{brandId,jdbcType=BIGINT}
+                </if>
+                <if test="name != null  and name != '' ">
+                    and name like CONCAT('%',#{name},'%' )
+                </if>
+                <if test="logo != null  and logo != '' ">
+                    and logo = #{logo,jdbcType=VARCHAR}
+                </if>
+                <if test="descript != null  and descript != '' ">
+                    and descript = #{descript,jdbcType=VARCHAR}
+                </if>
+                <if test="showStatus != null ">
+                    and show_status = #{showStatus,jdbcType=INTEGER}
+                </if>
+                <if test="firstLetter != null  and firstLetter != '' ">
+                    and first_letter = #{firstLetter,jdbcType=CHAR}
+                </if>
+                <if test="sort != null ">
+                    and sort = #{sort,jdbcType=INTEGER}
+                </if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_brand
+        where 1=1
+                <if test="record.brandId != null ">
+                    and brand_id = #{record.brandId,jdbcType=BIGINT}
+                </if>
+                <if test="record.name != null  and record.name != '' ">
+                    and name like CONCAT('%',#{record.name},'%' )
+                </if>
+                <if test="record.logo != null  and record.logo != '' ">
+                    and logo = #{record.logo,jdbcType=VARCHAR}
+                </if>
+                <if test="record.descript != null  and record.descript != '' ">
+                    and descript = #{record.descript,jdbcType=VARCHAR}
+                </if>
+                <if test="record.showStatus != null ">
+                    and show_status = #{record.showStatus,jdbcType=INTEGER}
+                </if>
+                <if test="record.firstLetter != null  and record.firstLetter != '' ">
+                    and first_letter = #{record.firstLetter,jdbcType=CHAR}
+                </if>
+                <if test="record.sort != null ">
+                    and sort = #{record.sort,jdbcType=INTEGER}
+                </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultType="Brand">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_brand
+        where brand_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from pms_brand
+        where 1=1
+                <if test="brandId != null ">
+                    and brand_id = #{brandId,jdbcType=BIGINT}
+                </if>
+                <if test="name != null  and name != '' ">
+                    and name like CONCAT('%','#{name}','%' )
+                </if>
+                <if test="logo != null  and logo != '' ">
+                    and logo = #{logo,jdbcType=VARCHAR}
+                </if>
+                <if test="descript != null  and descript != '' ">
+                    and descript = #{descript,jdbcType=VARCHAR}
+                </if>
+                <if test="showStatus != null ">
+                    and show_status = #{showStatus,jdbcType=INTEGER}
+                </if>
+                <if test="firstLetter != null  and firstLetter != '' ">
+                    and first_letter = #{firstLetter,jdbcType=CHAR}
+                </if>
+                <if test="sort != null ">
+                    and sort = #{sort,jdbcType=INTEGER}
+                </if>
+    </select>
+
+    <insert id="insert" parameterType="Brand"             useGeneratedKeys="true" keyProperty="brandId">
+        insert into pms_brand (
+            brand_id,
+            name,
+            logo,
+            descript,
+            show_status,
+            first_letter,
+            sort
+    )
+        values
+        (         #{brandId,jdbcType=BIGINT},         #{name,jdbcType=CHAR},         #{logo,jdbcType=VARCHAR},         #{descript,jdbcType=VARCHAR},         #{showStatus,jdbcType=INTEGER},         #{firstLetter,jdbcType=CHAR},         #{sort,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="Brand"            useGeneratedKeys="true" keyProperty="brandId">
+        insert into pms_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">name,</if>
+                    <if test="logo != null  and logo != ''  ">logo,</if>
+                    <if test="descript != null  and descript != ''  ">descript,</if>
+                    <if test="showStatus != null  ">show_status,</if>
+                    <if test="firstLetter != null  and firstLetter != ''  ">first_letter,</if>
+                    <if test="sort != null  ">sort,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">#{name,jdbcType=CHAR},</if>
+                    <if test="logo != null  and logo != ''  ">#{logo,jdbcType=VARCHAR},</if>
+                    <if test="descript != null  and descript != ''  ">#{descript,jdbcType=VARCHAR},</if>
+                    <if test="showStatus != null  ">#{showStatus,jdbcType=INTEGER},</if>
+                    <if test="firstLetter != null  and firstLetter != ''  ">#{firstLetter,jdbcType=CHAR},</if>
+                    <if test="sort != null  ">#{sort,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="brandId">
+        insert into  pms_brand (
+            brand_id,
+            name,
+            logo,
+            descript,
+            show_status,
+            first_letter,
+            sort
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.brandId,jdbcType=BIGINT},
+                #{record.name,jdbcType=CHAR},
+                #{record.logo,jdbcType=VARCHAR},
+                #{record.descript,jdbcType=VARCHAR},
+                #{record.showStatus,jdbcType=INTEGER},
+                #{record.firstLetter,jdbcType=CHAR},
+                #{record.sort,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="Brand">
+        update pms_brand set
+                brand_id =#{brandId,jdbcType=BIGINT} ,
+                name =#{name,jdbcType=CHAR} ,
+                logo =#{logo,jdbcType=VARCHAR} ,
+                descript =#{descript,jdbcType=VARCHAR} ,
+                show_status =#{showStatus,jdbcType=INTEGER} ,
+                first_letter =#{firstLetter,jdbcType=CHAR} ,
+                sort =#{sort,jdbcType=INTEGER}
+        where brand_id = #{brandId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBySelective" parameterType="Brand">
+        update pms_brand
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">name = #{name,jdbcType=CHAR},</if>
+                    <if test="logo != null  and logo != ''  ">logo = #{logo,jdbcType=VARCHAR},</if>
+                    <if test="descript != null  and descript != ''  ">descript = #{descript,jdbcType=VARCHAR},</if>
+                    <if test="showStatus != null  ">show_status = #{showStatus,jdbcType=INTEGER},</if>
+                    <if test="firstLetter != null  and firstLetter != ''  ">first_letter = #{firstLetter,jdbcType=CHAR},</if>
+                    <if test="sort != null  ">sort = #{sort,jdbcType=INTEGER},</if>
+        </trim>
+        where brand_id = #{brandId,jdbcType=BIGINT}
+    </update>
+
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update pms_brand
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.name,jdbcType=CHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="logo = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.logo,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="descript = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.descript,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="show_status = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.showStatus,jdbcType=INTEGER}
+                        </foreach>
+                    </trim>
+                    <trim prefix="first_letter = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.firstLetter,jdbcType=CHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="sort = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.sort,jdbcType=INTEGER}
+                        </foreach>
+                    </trim>
+        </trim>
+        where brand_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.brandId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update pms_brand
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.name != null  and records.name != ''  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.name,jdbcType=CHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="logo = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.logo != null  and records.logo != ''  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.logo,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="descript = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.descript != null  and records.descript != ''  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.descript,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="show_status = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.showStatus != null  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.showStatus,jdbcType=INTEGER}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="first_letter = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.firstLetter != null  and records.firstLetter != ''  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.firstLetter,jdbcType=CHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="sort = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.sort != null  " >
+                            when brand_id = #{records.brandId,jdbcType=BIGINT} then #{records.sort,jdbcType=INTEGER}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where brand_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.brandId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from pms_brand where brand_id = #{brandId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from pms_brand where brand_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

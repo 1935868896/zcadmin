@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 图书 服务层实现
  *
- * @author ruoyi
- * @date 2021-08-10
+ * @author zhangc
+ * @date 2021-08-26
  */
 @Service
 @RequiredArgsConstructor
@@ -48,6 +48,17 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
     @Override
     public List<BookInfo> selectListBySelective(BookInfo record) {
         return bookInfoMapper.selectListBySelective(record);
+    }
+
+    /**
+     * 根据条件,查询第一个图书对象(一般用于条件可以确定唯一数据)
+     *
+     * @param record 图书信息
+     * @return 图书
+     */
+    @Override
+    public BookInfo selectOneBySelective(BookInfo record) {
+        return bookInfoMapper.selectOneBySelective(record);
     }
 
     /**
@@ -138,9 +149,10 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKey(BookInfo record) {
-        return bookInfoMapper.updateByPrimaryKey(record);
+    public int update(BookInfo record) {
+        return bookInfoMapper.update(record);
     }
+
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
@@ -148,9 +160,24 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
      * @return 修改数量
      */
     @Override
-    public int updateByPrimaryKeySelective(BookInfo record) {
-        return bookInfoMapper.updateByPrimaryKeySelective(record);
+    public int updateSelective(BookInfo record) {
+        return bookInfoMapper.updateSelective(record);
     }
+
+
+    /**
+     * 根据条件修改某些参数,仅修改存在数值的属性
+     *
+     * @param  params  需要修改的信息
+     * @param  record  根据的条件信息
+     * @return 修改数量
+     */
+    @Override
+    public int updateParamsBySelective(BookInfo params,BookInfo record) {
+        return bookInfoMapper.updateParamsBySelective(params, record);
+    }
+
+
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -171,6 +198,7 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
         }
         return result;
     }
+
     /**
      * 修改多条数据,仅修改存在数值的属性
      *
@@ -179,7 +207,7 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
      */
     @Override
     @Transactional
-    public int updateBatchSelective(List<BookInfo> recordList) {
+    public int updateBatchBySelective(List<BookInfo> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
@@ -191,6 +219,18 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
         }
         return result;
     }
+
+    /**
+     * 根据条件删除数据
+     *
+     * @param record  删除的条件
+     * @return 删除数量
+     */
+    public int deleteBySelective(BookInfo record){
+        return bookInfoMapper.deleteBySelective(record);
+    }
+
+
     /**
      * 根据主键删除数据
      *
@@ -201,6 +241,7 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
     public int deleteByPrimaryKey(Integer id) {
         return bookInfoMapper.deleteByPrimaryKey(id);
     }
+
     /**
      * 根据主键集合删除数据
      *
