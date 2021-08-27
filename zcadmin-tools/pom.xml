@@ -24,6 +24,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.zc</groupId>
             <artifactId>zcadmin-logging</artifactId>
