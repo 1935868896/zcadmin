@@ -12,11 +12,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,27 +49,29 @@ public class LoginController {
     @Log("刷新token")
     @ResponseBody
     @PostMapping("/system/refresh/token")
-    public ResultResponse refresh(@RequestBody String token){
+    public ResultResponse refresh(HttpServletRequest request){
         //第一步验证密码的正确性
         log.info("刷新Token");
+        String token=(String) request.getAttribute("X-Token");
         jwtUtil.canTokenBeRefreshed(token);
         String newToken = jwtUtil.refreshToken(token);
+        log.info("全新的token:{}",newToken);
         return ResultResponse.success(newToken);
+    }
+    @Log("返回过期错误")
+    @ResponseBody
+    @RequestMapping("/error/expire")
+    public ResultResponse expire(){
+        log.info("给前端返回expire 接口");
+        return new ResultResponse(1234,"token过期或者错误",null);
     }
 
 
 
-
-    @Log("登录")
+    @Log("获取信息")
     @ResponseBody
     @GetMapping("/system/userinfo")
     public ResultResponse getInfo(){
-//  'admin-token': {
-//        roles: ['admin'],
-//        introduction: 'I am a super administrator',
-//                avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-//                name: 'Super Admin'
-//    },
 
         Map<String,Object> map=new HashMap();
         map.put("roles",new String[]{"admin"});
