@@ -6,6 +6,7 @@ import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.zc.entity.ResultResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class OssController {
     String accessKey;
     @Value("${oss.endpoint}")
     String endpoint;
-    @Value("{oss.bucket}")
+    @Value("${oss.bucket}")
     String bucket;
 
     @GetMapping
@@ -43,6 +44,8 @@ public class OssController {
 
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
         String dir = request.getParameter("pathPre"); // 用户上传文件时指定的前缀。
+
+
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, accessKey);
         try {
@@ -59,7 +62,7 @@ public class OssController {
             String encodedPolicy = BinaryUtil.toBase64String(binaryData);
             String postSignature = ossClient.calculatePostSignature(postPolicy);
 
-            respMap.put("accessid", accessId);
+            respMap.put("accessId", accessId);
             respMap.put("policy", encodedPolicy);
             respMap.put("signature", postSignature);
             respMap.put("dir", dir);
