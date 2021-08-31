@@ -4,6 +4,8 @@ import com.zc.annotation.*;
 import com.zc.entity.ResultResponse;
 import com.zc.jwt.JwtUtil;
 import com.zc.modules.security.entity.User;
+import com.zc.modules.system.mapper.SysUserMapper;
+import com.zc.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ZhangC
@@ -29,6 +34,8 @@ public class LoginController {
     AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
     JwtUtil jwtUtil;
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     @Log("登录")
     @ResponseBody
@@ -72,9 +79,12 @@ public class LoginController {
     @ResponseBody
     @GetMapping("/system/userinfo")
     public ResultResponse getInfo(){
+        String username = SecurityUtils.getCurrentUsername();
+        Set<String> rolesSet = sysUserMapper.selectRolesByUsername(username);
+
 
         Map<String,Object> map=new HashMap();
-        map.put("roles",new String[]{"admin"});
+        map.put("roles",rolesSet);
         map.put("introduction","I am a super administrator");
         map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         map.put("name","Super Admin");
@@ -82,7 +92,15 @@ public class LoginController {
     }
 
 
-
+    @Log("登出")
+    @ResponseBody
+    @PostMapping("/user/logout")
+    public ResultResponse logout(){
+        /**
+         * 此处处理登出逻辑
+         */
+        return ResultResponse.success("success");
+    }
     @ResponseBody
     @GetMapping("/hello")
     @Log("测试")

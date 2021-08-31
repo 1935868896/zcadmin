@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
@@ -21,7 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserDetails userDetails = userMapper.selectUserByUserName(s);
 
         //查permission
-        ((UserDto) userDetails).setPermission(userMapper.selectPermissionByUsername(s));
+        Set<String> permissionSet = userMapper.selectPermissionByUsername(s);
+        Set<String> roleSet = userMapper.selectRolesByUsername(s);
+        permissionSet.addAll(roleSet);
+        ((UserDto) userDetails).setPermission(permissionSet);
+
         return userDetails;
     }
 }

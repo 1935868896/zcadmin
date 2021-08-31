@@ -29,4 +29,11 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
             "left join sys_user as u on u.user_id=ur.user_id " +
             "where username=#{username}")
     Set<String> selectPermissionByUsername(String username);
+
+    @Select("SELECT NAME FROM sys_role AS sr\n" +
+            "LEFT JOIN sys_users_roles AS sur ON sr.role_id = sur.role_id\n" +
+            "LEFT JOIN sys_user AS su ON su.user_id = sur.user_id \n" +
+            "WHERE su.username = \"admin\"")
+    Set<String> selectRolesByUsername(String username);
+
 }
