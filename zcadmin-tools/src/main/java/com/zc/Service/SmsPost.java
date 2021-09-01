@@ -55,7 +55,8 @@ public class SmsPost {
              * 相应的依赖请参照
              * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
              */
-            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+            // 这里不再发送短信,需要的时候去掉注释即可
+//            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
 
             //获取response的body
             //System.out.println(EntityUtils.toString(response.getEntity()));
@@ -67,14 +68,24 @@ public class SmsPost {
         String verifyCode = CodeUtil.generateVerifyCode(4);
         try {
             sendSms(phone,verifyCode);
-            log.info("将验证码 {} 发送到手机号: {},且将键值对存入redis",verifyCode,phone);
+            log.info("将注册验证码 {} 发送到手机号: {},且将键值对存入redis",verifyCode,phone);
             RedisUtil.StringOps.setEx("sms:register:"+phone,verifyCode,5, TimeUnit.MINUTES);
         }catch (Exception e){
             e.printStackTrace();
             log.error("短信服务调用失败: 将验证码 {} 发送到手机号: {}",verifyCode,phone);
         }
-
     }
-
+    public void smsToLogin(String phone){
+        // 生成4位验证码
+        String verifyCode = CodeUtil.generateVerifyCode(4);
+        try {
+            sendSms(phone,verifyCode);
+            log.info("将登录验证码 {} 发送到手机号: {},且将键值对存入redis",verifyCode,phone);
+            RedisUtil.StringOps.setEx("sms:login:"+phone,verifyCode,5, TimeUnit.MINUTES);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("短信服务调用失败: 将验证码 {} 发送到手机号: {}",verifyCode,phone);
+        }
+    }
 
 }

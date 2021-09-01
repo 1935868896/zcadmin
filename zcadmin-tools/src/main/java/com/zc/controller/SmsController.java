@@ -25,8 +25,13 @@ public class SmsController {
     @Autowired
     SmsPost smsPost;
 
-    @GetMapping
-    public void sms(String phone){
+    @GetMapping("register")
+    public void register(String phone){
+        smsPost.smsToRegister(phone);
+    }
+
+    @GetMapping("login")
+    public void login(String phone){
         smsPost.smsToRegister(phone);
     }
 }

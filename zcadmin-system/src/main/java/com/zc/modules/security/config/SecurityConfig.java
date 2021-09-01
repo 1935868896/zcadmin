@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final WebApplicationContext applicationContext;
+
     /**
      * 对swagger进行放行
      * https://stackoverflow.com/questions/37671125/how-to-configure-spring-security-to-allow-swagger-url-to-be-accessed-without-aut
@@ -146,6 +147,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
 
         return anonymousUrls;
+    }
+
+    //关于动态加载自定义bean的源码位置,还需要具体去了解
+    @Bean
+    MyAuthenticationProvider myAuthenticationProvider() {
+        MyAuthenticationProvider myAuthenticationProvider = new MyAuthenticationProvider();
+        myAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        myAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return myAuthenticationProvider;
     }
 
 }
