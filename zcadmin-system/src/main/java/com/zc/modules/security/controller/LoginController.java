@@ -5,29 +5,26 @@ import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
 import com.zc.annoation.Anonymous;
-import com.zc.annotation.*;
+import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
 import com.zc.exception.BadRequestException;
 import com.zc.jwt.JwtUtil;
 import com.zc.modules.security.entity.User;
-import com.zc.modules.system.mapper.SysUserMapper;
+import com.zc.modules.system.mapper.UserMapper;
 import com.zc.utils.RedisUtil;
 import com.zc.utils.SecurityUtils;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +42,7 @@ public class LoginController {
     @Autowired
     JwtUtil jwtUtil;
     @Autowired
-    SysUserMapper sysUserMapper;
+    UserMapper userMapper;
 
     @Log("登录")
     @PostMapping("/system/login")
@@ -83,7 +80,7 @@ public class LoginController {
     }
 
     @Log("刷新token")
-    @GetMapping("/system/refresh/token")
+    @PostMapping("/system/refresh/token")
     public ResultResponse refresh(HttpServletRequest request) {
         //第一步验证密码的正确性
         log.info("刷新Token");
@@ -106,7 +103,7 @@ public class LoginController {
     @GetMapping("/system/userinfo")
     public ResultResponse getInfo() {
         String username = SecurityUtils.getCurrentUsername();
-        Set<String> rolesSet = sysUserMapper.selectRolesByUsername(username);
+        Set<String> rolesSet = userMapper.selectRolesByUsername(username);
 
 
         Map<String, Object> map = new HashMap();
@@ -140,7 +137,7 @@ public class LoginController {
     public ResultResponse getCode() {
         ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 45, 4, 4);
         // 自定义验证码内容为四则运算方式
-        captcha.setGenerator(new MathGenerator());
+        captcha.setGenerator(new MathGenerator(1));
         // 重新生成code
         captcha.createCode();
 

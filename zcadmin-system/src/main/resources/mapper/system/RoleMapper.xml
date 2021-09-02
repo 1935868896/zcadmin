@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.system.mapper.RoleMapper">
+    <resultMap type="Role" id="BaseResultMap">
+            <result property="roleId" jdbcType="BIGINT" column="role_id"/>
+            <result property="name" jdbcType="VARCHAR" column="name"/>
+            <result property="level" jdbcType="INTEGER" column="level"/>
+            <result property="description" jdbcType="VARCHAR" column="description"/>
+            <result property="dataScope" jdbcType="VARCHAR" column="data_scope"/>
+            <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+            <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+role_id,name,level,description,data_scope,create_by,update_by,create_time,update_time
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where 1=1
+        <if test="roleId != null ">
+            and role_id = #{roleId,jdbcType=BIGINT}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="level != null ">
+            and level = #{level,jdbcType=INTEGER}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="dataScope != null  and dataScope != '' ">
+            and data_scope = #{dataScope,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+    <if test="beginTime!= null and beginTime != ''">AND create_time <![CDATA[>=]]> #{beginTime}</if>
+    <if test="afterTime!= null and afterTime != ''">AND create_time <![CDATA[<=]]>#{afterTIme}</if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where 1=1
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+                <if test="name != null  and name != '' ">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="level != null ">
+                    and level = #{level,jdbcType=INTEGER}
+                </if>
+                <if test="description != null  and description != '' ">
+                    and description = #{description,jdbcType=VARCHAR}
+                </if>
+                <if test="dataScope != null  and dataScope != '' ">
+                    and data_scope = #{dataScope,jdbcType=VARCHAR}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND create_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND create_time <![CDATA[<=]]>#{afterTIme}</if>
+                <if test="updateTime != null ">
+                    and update_time = #{updateTime,jdbcType=TIMESTAMP}
+                </if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where 1=1
+                <if test="record.roleId != null ">
+                    and role_id = #{record.roleId,jdbcType=BIGINT}
+                </if>
+                <if test="record.name != null  and record.name != '' ">
+                    and name = #{record.name,jdbcType=VARCHAR}
+                </if>
+                <if test="record.level != null ">
+                    and level = #{record.level,jdbcType=INTEGER}
+                </if>
+                <if test="record.description != null  and record.description != '' ">
+                    and description = #{record.description,jdbcType=VARCHAR}
+                </if>
+                <if test="record.dataScope != null  and record.dataScope != '' ">
+                    and data_scope = #{record.dataScope,jdbcType=VARCHAR}
+                </if>
+                <if test="record.createBy != null  and record.createBy != '' ">
+                    and create_by = #{record.createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.updateBy != null  and record.updateBy != '' ">
+                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND create_time <![CDATA[>=]]> #{record.beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND create_time <![CDATA[<=]]>#{record.afterTIme}</if>
+                <if test="record.updateTime != null ">
+                    and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+                </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where role_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_role
+        where 1=1
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+                <if test="name != null  and name != '' ">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="level != null ">
+                    and level = #{level,jdbcType=INTEGER}
+                </if>
+                <if test="description != null  and description != '' ">
+                    and description = #{description,jdbcType=VARCHAR}
+                </if>
+                <if test="dataScope != null  and dataScope != '' ">
+                    and data_scope = #{dataScope,jdbcType=VARCHAR}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND create_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND create_time <![CDATA[<=]]>#{afterTIme}</if>
+                <if test="updateTime != null ">
+                    and update_time = #{updateTime,jdbcType=TIMESTAMP}
+                </if>
+    </select>
+
+    <insert id="insert" parameterType="Role"             useGeneratedKeys="true" keyProperty="roleId">
+        insert into sys_role (
+            role_id,
+            name,
+            level,
+            description,
+            data_scope,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+    )
+        values
+        (         #{roleId,jdbcType=BIGINT},         #{name,jdbcType=VARCHAR},         #{level,jdbcType=INTEGER},         #{description,jdbcType=VARCHAR},         #{dataScope,jdbcType=VARCHAR},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="Role"            useGeneratedKeys="true" keyProperty="roleId">
+        insert into sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">name,</if>
+                    <if test="level != null  ">level,</if>
+                    <if test="description != null  and description != ''  ">description,</if>
+                    <if test="dataScope != null  and dataScope != ''  ">data_scope,</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by,</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+                    <if test="createTime != null  ">create_time,</if>
+                    <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">#{name,jdbcType=VARCHAR},</if>
+                    <if test="level != null  ">#{level,jdbcType=INTEGER},</if>
+                    <if test="description != null  and description != ''  ">#{description,jdbcType=VARCHAR},</if>
+                    <if test="dataScope != null  and dataScope != ''  ">#{dataScope,jdbcType=VARCHAR},</if>
+                    <if test="createBy != null  and createBy != ''  ">#{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">#{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="roleId">
+        insert into  sys_role (
+            role_id,
+            name,
+            level,
+            description,
+            data_scope,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.roleId,jdbcType=BIGINT},
+                #{record.name,jdbcType=VARCHAR},
+                #{record.level,jdbcType=INTEGER},
+                #{record.description,jdbcType=VARCHAR},
+                #{record.dataScope,jdbcType=VARCHAR},
+                #{record.createBy,jdbcType=VARCHAR},
+                #{record.updateBy,jdbcType=VARCHAR},
+                #{record.createTime,jdbcType=TIMESTAMP},
+                #{record.updateTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="Role">
+        update sys_role set
+                role_id =#{roleId,jdbcType=BIGINT} ,
+                name =#{name,jdbcType=VARCHAR} ,
+                level =#{level,jdbcType=INTEGER} ,
+                description =#{description,jdbcType=VARCHAR} ,
+                data_scope =#{dataScope,jdbcType=VARCHAR} ,
+                create_by =#{createBy,jdbcType=VARCHAR} ,
+                update_by =#{updateBy,jdbcType=VARCHAR} ,
+                create_time =#{createTime,jdbcType=TIMESTAMP} ,
+                update_time =#{updateTime,jdbcType=TIMESTAMP}
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSelective" parameterType="Role">
+        update sys_role
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="name != null  and name != ''  ">name = #{name,jdbcType=VARCHAR},</if>
+                    <if test="level != null  ">level = #{level,jdbcType=INTEGER},</if>
+                    <if test="description != null  and description != ''  ">description = #{description,jdbcType=VARCHAR},</if>
+                    <if test="dataScope != null  and dataScope != ''  ">data_scope = #{dataScope,jdbcType=VARCHAR},</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by = #{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="createTime != null  ">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateParamsBySelective" parameterType="Role">
+        update sys_role
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="params.name != null  and params.name != ''  ">name = #{params.name,jdbcType=VARCHAR},</if>
+                    <if test="params.level != null  ">level = #{params.level,jdbcType=INTEGER},</if>
+                    <if test="params.description != null  and params.description != ''  ">description = #{params.description,jdbcType=VARCHAR},</if>
+                    <if test="params.dataScope != null  and params.dataScope != ''  ">data_scope = #{params.dataScope,jdbcType=VARCHAR},</if>
+                    <if test="params.createBy != null  and params.createBy != ''  ">create_by = #{params.createBy,jdbcType=VARCHAR},</if>
+                    <if test="params.updateBy != null  and params.updateBy != ''  ">update_by = #{params.updateBy,jdbcType=VARCHAR},</if>
+                    <if test="params.createTime != null  ">create_time = #{params.createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="params.updateTime != null  ">update_time = #{params.updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where 1=1
+                <if test="record.roleId != null ">
+                    and role_id = #{record.roleId,jdbcType=BIGINT}
+                </if>
+                <if test="record.name != null  and record.name != '' ">
+                    and name = #{record.name,jdbcType=VARCHAR}
+                </if>
+                <if test="record.level != null ">
+                    and level = #{record.level,jdbcType=INTEGER}
+                </if>
+                <if test="record.description != null  and record.description != '' ">
+                    and description = #{record.description,jdbcType=VARCHAR}
+                </if>
+                <if test="record.dataScope != null  and record.dataScope != '' ">
+                    and data_scope = #{record.dataScope,jdbcType=VARCHAR}
+                </if>
+                <if test="record.createBy != null  and record.createBy != '' ">
+                    and create_by = #{record.createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.updateBy != null  and record.updateBy != '' ">
+                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND create_time <![CDATA[>=]]> #{record.beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND create_time <![CDATA[<=]]>#{record.afterTIme}</if>
+                <if test="record.updateTime != null ">
+                    and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+                </if>
+
+
+    </update>
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update sys_role
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.name,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="level = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.level,jdbcType=INTEGER}
+                        </foreach>
+                    </trim>
+                    <trim prefix="description = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.description,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="data_scope = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.dataScope,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+        </trim>
+        where role_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.roleId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update sys_role
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.name != null  and records.name != ''  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.name,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="level = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.level != null  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.level,jdbcType=INTEGER}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="description = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.description != null  and records.description != ''  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.description,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="data_scope = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.dataScope != null  and records.dataScope != ''  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.dataScope,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createBy != null  and records.createBy != ''  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateBy != null  and records.updateBy != ''  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createTime != null  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateTime != null  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where role_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.roleId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBySelective" parameterType="java.lang.Long">
+        delete
+        from sys_role where 1=1
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+                <if test="name != null  and name != '' ">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="level != null ">
+                    and level = #{level,jdbcType=INTEGER}
+                </if>
+                <if test="description != null  and description != '' ">
+                    and description = #{description,jdbcType=VARCHAR}
+                </if>
+                <if test="dataScope != null  and dataScope != '' ">
+                    and data_scope = #{dataScope,jdbcType=VARCHAR}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="beginTime!= null and beginTime != ''">AND create_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="afterTime!= null and afterTime != ''">AND create_time <![CDATA[<=]]>#{afterTIme}</if>
+                <if test="updateTime != null ">
+                    and update_time = #{updateTime,jdbcType=TIMESTAMP}
+                </if>
+    </delete>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sys_role where role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from sys_role where role_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.system.mapper.UsersRolesMapper">
+    <resultMap type="UsersRoles" id="BaseResultMap">
+            <result property="userId" jdbcType="BIGINT" column="user_id"/>
+            <result property="roleId" jdbcType="BIGINT" column="role_id"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+user_id,role_id
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users_roles
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users_roles
+        where 1=1
+        <if test="userId != null ">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="roleId != null ">
+            and role_id = #{roleId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users_roles
+        where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users_roles
+        where 1=1
+                <if test="record.userId != null ">
+                    and user_id = #{record.userId,jdbcType=BIGINT}
+                </if>
+                <if test="record.roleId != null ">
+                    and role_id = #{record.roleId,jdbcType=BIGINT}
+                </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users_roles
+        where role_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_users_roles
+        where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+    </select>
+
+    <insert id="insert" parameterType="UsersRoles" >
+        insert into sys_users_roles (
+            user_id,
+            role_id
+    )
+        values
+        (         #{userId,jdbcType=BIGINT},         #{roleId,jdbcType=BIGINT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="UsersRoles">
+        insert into sys_users_roles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="userId != null  ">user_id,</if>
+                    <if test="roleId != null  ">role_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="userId != null  ">#{userId,jdbcType=BIGINT},</if>
+                    <if test="roleId != null  ">#{roleId,jdbcType=BIGINT},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List" >
+        insert into  sys_users_roles (
+            user_id,
+            role_id
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.userId,jdbcType=BIGINT},
+                #{record.roleId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="UsersRoles">
+        update sys_users_roles set
+                user_id =#{userId,jdbcType=BIGINT} ,
+                role_id =#{roleId,jdbcType=BIGINT} 
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSelective" parameterType="UsersRoles">
+        update sys_users_roles
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="userId != null  ">user_id = #{userId,jdbcType=BIGINT},</if>
+        </trim>
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateParamsBySelective" parameterType="UsersRoles">
+        update sys_users_roles
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="params.userId != null  ">user_id = #{params.userId,jdbcType=BIGINT},</if>
+        </trim>
+        where 1=1
+                <if test="record.userId != null ">
+                    and user_id = #{record.userId,jdbcType=BIGINT}
+                </if>
+                <if test="record.roleId != null ">
+                    and role_id = #{record.roleId,jdbcType=BIGINT}
+                </if>
+
+
+    </update>
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update sys_users_roles
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="user_id = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.userId,jdbcType=BIGINT}
+                        </foreach>
+                    </trim>
+        </trim>
+        where role_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.roleId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update sys_users_roles
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="user_id = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.userId != null  " >
+                            when role_id = #{records.roleId,jdbcType=BIGINT} then #{records.userId,jdbcType=BIGINT}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where role_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.roleId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBySelective" parameterType="java.lang.Long">
+        delete
+        from sys_users_roles where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="roleId != null ">
+                    and role_id = #{roleId,jdbcType=BIGINT}
+                </if>
+    </delete>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sys_users_roles where role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from sys_users_roles where role_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

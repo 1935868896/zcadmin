@@ -33,8 +33,8 @@
                 and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
             </if>
 #elseif($column.queryType=='between')
-    <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
-    <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+    <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+    <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
 #elseif($column.queryType=='not null')
         and $column.columnName not null
 #else
@@ -56,8 +56,8 @@
                     and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
                 </if>
             #elseif($column.queryType=='between')
-                <if test="record.beginTime!= null and record.beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
-                <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+                <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
             #else

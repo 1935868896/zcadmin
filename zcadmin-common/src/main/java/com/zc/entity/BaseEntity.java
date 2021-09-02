@@ -1,5 +1,6 @@
 package com.zc.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zc.constant.Constants;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,6 +45,18 @@ public class BaseEntity implements Serializable {
 
     @ApiModelProperty(value="备注",name="remark")
     private String remark;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value="查询的时候使用: 开始时间",name="beginTime")
+    @TableField(exist = false)
+    private Date beginTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value="查询的时候使用: 结束时间",name="afterTime")
+    @TableField(exist = false)
+    private Date afterTime;
 
 //    @ApiModelProperty(value="请求参数",name="params")
 //    private transient Map<String, Object> params;

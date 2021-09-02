@@ -5,9 +5,9 @@
             <!--  类型1 : input 查询功能 -->
 #foreach($column in $columns)
 #if(${column.searchShow})
-    #if($column.dataType=="data" ||$column.dataType=="datetime")
+    #if($column.columnType=="data" ||$column.columnType=="datetime")
         <el-date-picker
-                v-model="dataTime"
+                v-model="dateTime"
                 class="filter-item"
                 type="datetimerange"
                 style="margin-left: 10px"

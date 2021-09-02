@@ -15,6 +15,7 @@
  */
 package com.zc.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -35,7 +36,7 @@ import java.sql.Timestamp;
 public class SysLog implements Serializable {
 
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long logId;
 
     /** 操作用户 */

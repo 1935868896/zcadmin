@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.system.mapper.UserMapper">
+    <resultMap type="User" id="BaseResultMap">
+            <result property="userId" jdbcType="BIGINT" column="user_id"/>
+            <result property="username" jdbcType="VARCHAR" column="username"/>
+            <result property="nickName" jdbcType="VARCHAR" column="nick_name"/>
+            <result property="gender" jdbcType="VARCHAR" column="gender"/>
+            <result property="phone" jdbcType="VARCHAR" column="phone"/>
+            <result property="email" jdbcType="VARCHAR" column="email"/>
+            <result property="region" jdbcType="VARCHAR" column="region"/>
+            <result property="serviceLife" jdbcType="VARCHAR" column="service_life"/>
+            <result property="avatarName" jdbcType="VARCHAR" column="avatar_name"/>
+            <result property="avatarPath" jdbcType="VARCHAR" column="avatar_path"/>
+            <result property="starRating" jdbcType="VARCHAR" column="star_rating"/>
+            <result property="password" jdbcType="VARCHAR" column="password"/>
+            <result property="enabled" jdbcType="INTEGER" column="enabled"/>
+            <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+            <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+            <result property="pwdResetTime" jdbcType="TIMESTAMP" column="pwd_reset_time"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+user_id,username,nick_name,gender,phone,email,region,service_life,avatar_name,avatar_path,star_rating,password,enabled,create_by,update_by,pwd_reset_time,create_time,update_time
+    </sql>
+        <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where 1=1
+        <if test="userId != null ">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="username != null  and username != '' ">
+            and username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="nickName != null  and nickName != '' ">
+            and nick_name = #{nickName,jdbcType=VARCHAR}
+        </if>
+        <if test="gender != null  and gender != '' ">
+            and gender = #{gender,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null  and phone != '' ">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="email != null  and email != '' ">
+            and email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="region != null  and region != '' ">
+            and region = #{region,jdbcType=VARCHAR}
+        </if>
+        <if test="serviceLife != null  and serviceLife != '' ">
+            and service_life = #{serviceLife,jdbcType=VARCHAR}
+        </if>
+        <if test="avatarName != null  and avatarName != '' ">
+            and avatar_name = #{avatarName,jdbcType=VARCHAR}
+        </if>
+        <if test="avatarPath != null  and avatarPath != '' ">
+            and avatar_path = #{avatarPath,jdbcType=VARCHAR}
+        </if>
+        <if test="starRating != null  and starRating != '' ">
+            and star_rating = #{starRating,jdbcType=VARCHAR}
+        </if>
+        <if test="password != null  and password != '' ">
+            and password = #{password,jdbcType=VARCHAR}
+        </if>
+        <if test="enabled != null ">
+            and enabled = #{enabled,jdbcType=INTEGER}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="pwdResetTime != null ">
+            and pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+    <if test="beginTime!= null and beginTime != ''">AND update_time <![CDATA[>=]]> #{beginTime}</if>
+    <if test="afterTime!= null and afterTime != ''">AND update_time <![CDATA[<=]]>#{afterTIme}</if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="username != null  and username != '' ">
+                    and username = #{username,jdbcType=VARCHAR}
+                </if>
+                <if test="nickName != null  and nickName != '' ">
+                    and nick_name = #{nickName,jdbcType=VARCHAR}
+                </if>
+                <if test="gender != null  and gender != '' ">
+                    and gender = #{gender,jdbcType=VARCHAR}
+                </if>
+                <if test="phone != null  and phone != '' ">
+                    and phone = #{phone,jdbcType=VARCHAR}
+                </if>
+                <if test="email != null  and email != '' ">
+                    and email = #{email,jdbcType=VARCHAR}
+                </if>
+                <if test="region != null  and region != '' ">
+                    and region = #{region,jdbcType=VARCHAR}
+                </if>
+                <if test="serviceLife != null  and serviceLife != '' ">
+                    and service_life = #{serviceLife,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarName != null  and avatarName != '' ">
+                    and avatar_name = #{avatarName,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarPath != null  and avatarPath != '' ">
+                    and avatar_path = #{avatarPath,jdbcType=VARCHAR}
+                </if>
+                <if test="starRating != null  and starRating != '' ">
+                    and star_rating = #{starRating,jdbcType=VARCHAR}
+                </if>
+                <if test="password != null  and password != '' ">
+                    and password = #{password,jdbcType=VARCHAR}
+                </if>
+                <if test="enabled != null ">
+                    and enabled = #{enabled,jdbcType=INTEGER}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="pwdResetTime != null ">
+                    and pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="createTime != null ">
+                    and create_time = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="beginTime!= null and beginTime != ''">AND update_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="afterTime!= null and afterTime != ''">AND update_time <![CDATA[<=]]>#{afterTIme}</if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where 1=1
+                <if test="record.userId != null ">
+                    and user_id = #{record.userId,jdbcType=BIGINT}
+                </if>
+                <if test="record.username != null  and record.username != '' ">
+                    and username = #{record.username,jdbcType=VARCHAR}
+                </if>
+                <if test="record.nickName != null  and record.nickName != '' ">
+                    and nick_name = #{record.nickName,jdbcType=VARCHAR}
+                </if>
+                <if test="record.gender != null  and record.gender != '' ">
+                    and gender = #{record.gender,jdbcType=VARCHAR}
+                </if>
+                <if test="record.phone != null  and record.phone != '' ">
+                    and phone = #{record.phone,jdbcType=VARCHAR}
+                </if>
+                <if test="record.email != null  and record.email != '' ">
+                    and email = #{record.email,jdbcType=VARCHAR}
+                </if>
+                <if test="record.region != null  and record.region != '' ">
+                    and region = #{record.region,jdbcType=VARCHAR}
+                </if>
+                <if test="record.serviceLife != null  and record.serviceLife != '' ">
+                    and service_life = #{record.serviceLife,jdbcType=VARCHAR}
+                </if>
+                <if test="record.avatarName != null  and record.avatarName != '' ">
+                    and avatar_name = #{record.avatarName,jdbcType=VARCHAR}
+                </if>
+                <if test="record.avatarPath != null  and record.avatarPath != '' ">
+                    and avatar_path = #{record.avatarPath,jdbcType=VARCHAR}
+                </if>
+                <if test="record.starRating != null  and record.starRating != '' ">
+                    and star_rating = #{record.starRating,jdbcType=VARCHAR}
+                </if>
+                <if test="record.password != null  and record.password != '' ">
+                    and password = #{record.password,jdbcType=VARCHAR}
+                </if>
+                <if test="record.enabled != null ">
+                    and enabled = #{record.enabled,jdbcType=INTEGER}
+                </if>
+                <if test="record.createBy != null  and record.createBy != '' ">
+                    and create_by = #{record.createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.updateBy != null  and record.updateBy != '' ">
+                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.pwdResetTime != null ">
+                    and pwd_reset_time = #{record.pwdResetTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.createTime != null ">
+                    and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND update_time <![CDATA[>=]]> #{record.beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND update_time <![CDATA[<=]]>#{record.afterTIme}</if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where user_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_user
+        where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="username != null  and username != '' ">
+                    and username = #{username,jdbcType=VARCHAR}
+                </if>
+                <if test="nickName != null  and nickName != '' ">
+                    and nick_name = #{nickName,jdbcType=VARCHAR}
+                </if>
+                <if test="gender != null  and gender != '' ">
+                    and gender = #{gender,jdbcType=VARCHAR}
+                </if>
+                <if test="phone != null  and phone != '' ">
+                    and phone = #{phone,jdbcType=VARCHAR}
+                </if>
+                <if test="email != null  and email != '' ">
+                    and email = #{email,jdbcType=VARCHAR}
+                </if>
+                <if test="region != null  and region != '' ">
+                    and region = #{region,jdbcType=VARCHAR}
+                </if>
+                <if test="serviceLife != null  and serviceLife != '' ">
+                    and service_life = #{serviceLife,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarName != null  and avatarName != '' ">
+                    and avatar_name = #{avatarName,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarPath != null  and avatarPath != '' ">
+                    and avatar_path = #{avatarPath,jdbcType=VARCHAR}
+                </if>
+                <if test="starRating != null  and starRating != '' ">
+                    and star_rating = #{starRating,jdbcType=VARCHAR}
+                </if>
+                <if test="password != null  and password != '' ">
+                    and password = #{password,jdbcType=VARCHAR}
+                </if>
+                <if test="enabled != null ">
+                    and enabled = #{enabled,jdbcType=INTEGER}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="pwdResetTime != null ">
+                    and pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="createTime != null ">
+                    and create_time = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND update_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND update_time <![CDATA[<=]]>#{afterTIme}</if>
+    </select>
+
+    <insert id="insert" parameterType="User"             useGeneratedKeys="true" keyProperty="userId">
+        insert into sys_user (
+            user_id,
+            username,
+            nick_name,
+            gender,
+            phone,
+            email,
+            region,
+            service_life,
+            avatar_name,
+            avatar_path,
+            star_rating,
+            password,
+            enabled,
+            create_by,
+            update_by,
+            pwd_reset_time,
+            create_time,
+            update_time
+    )
+        values
+        (         #{userId,jdbcType=BIGINT},         #{username,jdbcType=VARCHAR},         #{nickName,jdbcType=VARCHAR},         #{gender,jdbcType=VARCHAR},         #{phone,jdbcType=VARCHAR},         #{email,jdbcType=VARCHAR},         #{region,jdbcType=VARCHAR},         #{serviceLife,jdbcType=VARCHAR},         #{avatarName,jdbcType=VARCHAR},         #{avatarPath,jdbcType=VARCHAR},         #{starRating,jdbcType=VARCHAR},         #{password,jdbcType=VARCHAR},         #{enabled,jdbcType=INTEGER},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{pwdResetTime,jdbcType=TIMESTAMP},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="User"            useGeneratedKeys="true" keyProperty="userId">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="username != null  and username != ''  ">username,</if>
+                    <if test="nickName != null  and nickName != ''  ">nick_name,</if>
+                    <if test="gender != null  and gender != ''  ">gender,</if>
+                    <if test="phone != null  and phone != ''  ">phone,</if>
+                    <if test="email != null  and email != ''  ">email,</if>
+                    <if test="region != null  and region != ''  ">region,</if>
+                    <if test="serviceLife != null  and serviceLife != ''  ">service_life,</if>
+                    <if test="avatarName != null  and avatarName != ''  ">avatar_name,</if>
+                    <if test="avatarPath != null  and avatarPath != ''  ">avatar_path,</if>
+                    <if test="starRating != null  and starRating != ''  ">star_rating,</if>
+                    <if test="password != null  and password != ''  ">password,</if>
+                    <if test="enabled != null  ">enabled,</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by,</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+                    <if test="pwdResetTime != null  ">pwd_reset_time,</if>
+                    <if test="createTime != null  ">create_time,</if>
+                    <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="username != null  and username != ''  ">#{username,jdbcType=VARCHAR},</if>
+                    <if test="nickName != null  and nickName != ''  ">#{nickName,jdbcType=VARCHAR},</if>
+                    <if test="gender != null  and gender != ''  ">#{gender,jdbcType=VARCHAR},</if>
+                    <if test="phone != null  and phone != ''  ">#{phone,jdbcType=VARCHAR},</if>
+                    <if test="email != null  and email != ''  ">#{email,jdbcType=VARCHAR},</if>
+                    <if test="region != null  and region != ''  ">#{region,jdbcType=VARCHAR},</if>
+                    <if test="serviceLife != null  and serviceLife != ''  ">#{serviceLife,jdbcType=VARCHAR},</if>
+                    <if test="avatarName != null  and avatarName != ''  ">#{avatarName,jdbcType=VARCHAR},</if>
+                    <if test="avatarPath != null  and avatarPath != ''  ">#{avatarPath,jdbcType=VARCHAR},</if>
+                    <if test="starRating != null  and starRating != ''  ">#{starRating,jdbcType=VARCHAR},</if>
+                    <if test="password != null  and password != ''  ">#{password,jdbcType=VARCHAR},</if>
+                    <if test="enabled != null  ">#{enabled,jdbcType=INTEGER},</if>
+                    <if test="createBy != null  and createBy != ''  ">#{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">#{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="pwdResetTime != null  ">#{pwdResetTime,jdbcType=TIMESTAMP},</if>
+                    <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="userId">
+        insert into  sys_user (
+            user_id,
+            username,
+            nick_name,
+            gender,
+            phone,
+            email,
+            region,
+            service_life,
+            avatar_name,
+            avatar_path,
+            star_rating,
+            password,
+            enabled,
+            create_by,
+            update_by,
+            pwd_reset_time,
+            create_time,
+            update_time
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+                #{record.userId,jdbcType=BIGINT},
+                #{record.username,jdbcType=VARCHAR},
+                #{record.nickName,jdbcType=VARCHAR},
+                #{record.gender,jdbcType=VARCHAR},
+                #{record.phone,jdbcType=VARCHAR},
+                #{record.email,jdbcType=VARCHAR},
+                #{record.region,jdbcType=VARCHAR},
+                #{record.serviceLife,jdbcType=VARCHAR},
+                #{record.avatarName,jdbcType=VARCHAR},
+                #{record.avatarPath,jdbcType=VARCHAR},
+                #{record.starRating,jdbcType=VARCHAR},
+                #{record.password,jdbcType=VARCHAR},
+                #{record.enabled,jdbcType=INTEGER},
+                #{record.createBy,jdbcType=VARCHAR},
+                #{record.updateBy,jdbcType=VARCHAR},
+                #{record.pwdResetTime,jdbcType=TIMESTAMP},
+                #{record.createTime,jdbcType=TIMESTAMP},
+                #{record.updateTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="User">
+        update sys_user set
+                user_id =#{userId,jdbcType=BIGINT} ,
+                username =#{username,jdbcType=VARCHAR} ,
+                nick_name =#{nickName,jdbcType=VARCHAR} ,
+                gender =#{gender,jdbcType=VARCHAR} ,
+                phone =#{phone,jdbcType=VARCHAR} ,
+                email =#{email,jdbcType=VARCHAR} ,
+                region =#{region,jdbcType=VARCHAR} ,
+                service_life =#{serviceLife,jdbcType=VARCHAR} ,
+                avatar_name =#{avatarName,jdbcType=VARCHAR} ,
+                avatar_path =#{avatarPath,jdbcType=VARCHAR} ,
+                star_rating =#{starRating,jdbcType=VARCHAR} ,
+                password =#{password,jdbcType=VARCHAR} ,
+                enabled =#{enabled,jdbcType=INTEGER} ,
+                create_by =#{createBy,jdbcType=VARCHAR} ,
+                update_by =#{updateBy,jdbcType=VARCHAR} ,
+                pwd_reset_time =#{pwdResetTime,jdbcType=TIMESTAMP} ,
+                create_time =#{createTime,jdbcType=TIMESTAMP} ,
+                update_time =#{updateTime,jdbcType=TIMESTAMP}
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSelective" parameterType="User">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="username != null  and username != ''  ">username = #{username,jdbcType=VARCHAR},</if>
+                    <if test="nickName != null  and nickName != ''  ">nick_name = #{nickName,jdbcType=VARCHAR},</if>
+                    <if test="gender != null  and gender != ''  ">gender = #{gender,jdbcType=VARCHAR},</if>
+                    <if test="phone != null  and phone != ''  ">phone = #{phone,jdbcType=VARCHAR},</if>
+                    <if test="email != null  and email != ''  ">email = #{email,jdbcType=VARCHAR},</if>
+                    <if test="region != null  and region != ''  ">region = #{region,jdbcType=VARCHAR},</if>
+                    <if test="serviceLife != null  and serviceLife != ''  ">service_life = #{serviceLife,jdbcType=VARCHAR},</if>
+                    <if test="avatarName != null  and avatarName != ''  ">avatar_name = #{avatarName,jdbcType=VARCHAR},</if>
+                    <if test="avatarPath != null  and avatarPath != ''  ">avatar_path = #{avatarPath,jdbcType=VARCHAR},</if>
+                    <if test="starRating != null  and starRating != ''  ">star_rating = #{starRating,jdbcType=VARCHAR},</if>
+                    <if test="password != null  and password != ''  ">password = #{password,jdbcType=VARCHAR},</if>
+                    <if test="enabled != null  ">enabled = #{enabled,jdbcType=INTEGER},</if>
+                    <if test="createBy != null  and createBy != ''  ">create_by = #{createBy,jdbcType=VARCHAR},</if>
+                    <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy,jdbcType=VARCHAR},</if>
+                    <if test="pwdResetTime != null  ">pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP},</if>
+                    <if test="createTime != null  ">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="updateTime != null  ">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateParamsBySelective" parameterType="User">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="params.username != null  and params.username != ''  ">username = #{params.username,jdbcType=VARCHAR},</if>
+                    <if test="params.nickName != null  and params.nickName != ''  ">nick_name = #{params.nickName,jdbcType=VARCHAR},</if>
+                    <if test="params.gender != null  and params.gender != ''  ">gender = #{params.gender,jdbcType=VARCHAR},</if>
+                    <if test="params.phone != null  and params.phone != ''  ">phone = #{params.phone,jdbcType=VARCHAR},</if>
+                    <if test="params.email != null  and params.email != ''  ">email = #{params.email,jdbcType=VARCHAR},</if>
+                    <if test="params.region != null  and params.region != ''  ">region = #{params.region,jdbcType=VARCHAR},</if>
+                    <if test="params.serviceLife != null  and params.serviceLife != ''  ">service_life = #{params.serviceLife,jdbcType=VARCHAR},</if>
+                    <if test="params.avatarName != null  and params.avatarName != ''  ">avatar_name = #{params.avatarName,jdbcType=VARCHAR},</if>
+                    <if test="params.avatarPath != null  and params.avatarPath != ''  ">avatar_path = #{params.avatarPath,jdbcType=VARCHAR},</if>
+                    <if test="params.starRating != null  and params.starRating != ''  ">star_rating = #{params.starRating,jdbcType=VARCHAR},</if>
+                    <if test="params.password != null  and params.password != ''  ">password = #{params.password,jdbcType=VARCHAR},</if>
+                    <if test="params.enabled != null  ">enabled = #{params.enabled,jdbcType=INTEGER},</if>
+                    <if test="params.createBy != null  and params.createBy != ''  ">create_by = #{params.createBy,jdbcType=VARCHAR},</if>
+                    <if test="params.updateBy != null  and params.updateBy != ''  ">update_by = #{params.updateBy,jdbcType=VARCHAR},</if>
+                    <if test="params.pwdResetTime != null  ">pwd_reset_time = #{params.pwdResetTime,jdbcType=TIMESTAMP},</if>
+                    <if test="params.createTime != null  ">create_time = #{params.createTime,jdbcType=TIMESTAMP},</if>
+                    <if test="params.updateTime != null  ">update_time = #{params.updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where 1=1
+                <if test="record.userId != null ">
+                    and user_id = #{record.userId,jdbcType=BIGINT}
+                </if>
+                <if test="record.username != null  and record.username != '' ">
+                    and username = #{record.username,jdbcType=VARCHAR}
+                </if>
+                <if test="record.nickName != null  and record.nickName != '' ">
+                    and nick_name = #{record.nickName,jdbcType=VARCHAR}
+                </if>
+                <if test="record.gender != null  and record.gender != '' ">
+                    and gender = #{record.gender,jdbcType=VARCHAR}
+                </if>
+                <if test="record.phone != null  and record.phone != '' ">
+                    and phone = #{record.phone,jdbcType=VARCHAR}
+                </if>
+                <if test="record.email != null  and record.email != '' ">
+                    and email = #{record.email,jdbcType=VARCHAR}
+                </if>
+                <if test="record.region != null  and record.region != '' ">
+                    and region = #{record.region,jdbcType=VARCHAR}
+                </if>
+                <if test="record.serviceLife != null  and record.serviceLife != '' ">
+                    and service_life = #{record.serviceLife,jdbcType=VARCHAR}
+                </if>
+                <if test="record.avatarName != null  and record.avatarName != '' ">
+                    and avatar_name = #{record.avatarName,jdbcType=VARCHAR}
+                </if>
+                <if test="record.avatarPath != null  and record.avatarPath != '' ">
+                    and avatar_path = #{record.avatarPath,jdbcType=VARCHAR}
+                </if>
+                <if test="record.starRating != null  and record.starRating != '' ">
+                    and star_rating = #{record.starRating,jdbcType=VARCHAR}
+                </if>
+                <if test="record.password != null  and record.password != '' ">
+                    and password = #{record.password,jdbcType=VARCHAR}
+                </if>
+                <if test="record.enabled != null ">
+                    and enabled = #{record.enabled,jdbcType=INTEGER}
+                </if>
+                <if test="record.createBy != null  and record.createBy != '' ">
+                    and create_by = #{record.createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.updateBy != null  and record.updateBy != '' ">
+                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.pwdResetTime != null ">
+                    and pwd_reset_time = #{record.pwdResetTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.createTime != null ">
+                    and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.beginTime!= null and record.beginTime != ''">AND update_time <![CDATA[>=]]> #{record.beginTime}</if>
+                <if test="record.afterTime!= null and record.afterTime != ''">AND update_time <![CDATA[<=]]>#{record.afterTIme}</if>
+
+
+    </update>
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="username = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.username,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="nick_name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.nickName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="gender = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.gender,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="phone = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.phone,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="email = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.email,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="region = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.region,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="service_life = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.serviceLife,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="avatar_name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.avatarName,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="avatar_path = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.avatarPath,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="star_rating = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.starRating,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="password = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.password,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="enabled = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.enabled,jdbcType=INTEGER}
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                        </foreach>
+                    </trim>
+                    <trim prefix="pwd_reset_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.pwdResetTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                        </foreach>
+                    </trim>
+        </trim>
+        where user_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.userId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+                    <trim prefix="username = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.username != null  and records.username != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.username,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="nick_name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.nickName != null  and records.nickName != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.nickName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="gender = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.gender != null  and records.gender != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.gender,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="phone = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.phone != null  and records.phone != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.phone,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="email = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.email != null  and records.email != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.email,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="region = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.region != null  and records.region != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.region,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="service_life = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.serviceLife != null  and records.serviceLife != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.serviceLife,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="avatar_name = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.avatarName != null  and records.avatarName != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.avatarName,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="avatar_path = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.avatarPath != null  and records.avatarPath != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.avatarPath,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="star_rating = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.starRating != null  and records.starRating != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.starRating,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="password = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.password != null  and records.password != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.password,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="enabled = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.enabled != null  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.enabled,jdbcType=INTEGER}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createBy != null  and records.createBy != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_by = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateBy != null  and records.updateBy != ''  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="pwd_reset_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.pwdResetTime != null  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.pwdResetTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.createTime != null  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_time = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.updateTime != null  " >
+                            when user_id = #{records.userId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                            </if>
+                        </foreach>
+                    </trim>
+        </trim>
+        where user_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.userId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBySelective" parameterType="java.lang.Long">
+        delete
+        from sys_user where 1=1
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="username != null  and username != '' ">
+                    and username = #{username,jdbcType=VARCHAR}
+                </if>
+                <if test="nickName != null  and nickName != '' ">
+                    and nick_name = #{nickName,jdbcType=VARCHAR}
+                </if>
+                <if test="gender != null  and gender != '' ">
+                    and gender = #{gender,jdbcType=VARCHAR}
+                </if>
+                <if test="phone != null  and phone != '' ">
+                    and phone = #{phone,jdbcType=VARCHAR}
+                </if>
+                <if test="email != null  and email != '' ">
+                    and email = #{email,jdbcType=VARCHAR}
+                </if>
+                <if test="region != null  and region != '' ">
+                    and region = #{region,jdbcType=VARCHAR}
+                </if>
+                <if test="serviceLife != null  and serviceLife != '' ">
+                    and service_life = #{serviceLife,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarName != null  and avatarName != '' ">
+                    and avatar_name = #{avatarName,jdbcType=VARCHAR}
+                </if>
+                <if test="avatarPath != null  and avatarPath != '' ">
+                    and avatar_path = #{avatarPath,jdbcType=VARCHAR}
+                </if>
+                <if test="starRating != null  and starRating != '' ">
+                    and star_rating = #{starRating,jdbcType=VARCHAR}
+                </if>
+                <if test="password != null  and password != '' ">
+                    and password = #{password,jdbcType=VARCHAR}
+                </if>
+                <if test="enabled != null ">
+                    and enabled = #{enabled,jdbcType=INTEGER}
+                </if>
+                <if test="createBy != null  and createBy != '' ">
+                    and create_by = #{createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="updateBy != null  and updateBy != '' ">
+                    and update_by = #{updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="pwdResetTime != null ">
+                    and pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="createTime != null ">
+                    and create_time = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="beginTime!= null and beginTime != ''">AND update_time <![CDATA[>=]]> #{beginTime}</if>
+                <if test="afterTime!= null and afterTime != ''">AND update_time <![CDATA[<=]]>#{afterTIme}</if>
+    </delete>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sys_user where user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from sys_user where user_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>
