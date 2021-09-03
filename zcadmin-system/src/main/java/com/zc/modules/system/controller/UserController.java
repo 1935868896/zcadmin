@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
     import com.zc.modules.system.entity.UsersRoles;
     import com.zc.modules.system.service.UsersRolesService;
     import com.zc.modules.system.vo.UserVO;
+    import com.zc.modules.system.vo.UsersRolesVO;
     import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,34 @@ public class UserController {
     private final UserService userService;
     private final UsersRolesService usersRolesService;
 
+
+    @ApiOperationSupport(order = 1)
+    @ApiOperation("更新用户数据以及拥有的角色")
+    @PutMapping
+    @Log("系统用户信息管理:更新用户数据以及拥有的角色")
+    @PreAuthorize("@el.check('user:update')")
+    public ResultResponse update(@RequestBody UserVO record) {
+        User user=record.getUser();
+        Set<Long> roles = record.getRoles();
+        List<UsersRoles> usersRolesList=new ArrayList<>();
+        if (roles!=null&&roles.size()>0&&user!=null){
+            for (Long roleId : roles) {
+                UsersRoles usersRoles=new UsersRoles();
+                usersRoles.setUserId(user.getUserId());
+                usersRoles.setRoleId(roleId);
+                usersRolesList.add(usersRoles);
+            }
+            usersRolesService.deleteBySelective(UsersRoles.builder().userId(user.getUserId()).build());
+            usersRolesService.insertBatch(usersRolesList);
+        }
+
+        int result = userService.update(record.getUser());
+        if (result > 0) {
+            return ResultResponse.success();
+        }
+        return ResultResponse.error();
+    }
+
     @ApiOperationSupport(order = 1)
     @GetMapping("/id")
     @ApiOperation("根据主键获得对象数据")
@@ -61,32 +90,7 @@ public class UserController {
         return ResultResponse.error();
     }
 
-    @ApiOperationSupport(order = 3)
-    @GetMapping("/single")
-    @ApiOperation("根据条件查询得到单个对象")
-    @Log("系统用户信息管理:根据条件查询得到单个对象")
-    @PreAuthorize("@el.check('user:getOneByParam')")
-    public ResultResponse getOneByParam(User record) {
-        User result = userService.selectOneBySelective(record);
-        if (result != null) {
-            return ResultResponse.success(result);
-        }
-        return ResultResponse.error();
-    }
 
-
-    @ApiOperationSupport(order = 4)
-    @GetMapping("/ids")
-    @ApiOperation("根据id集合获得目标数据集合")
-    @Log("系统用户信息管理:根据id集合获得目标数据集合")
-    @PreAuthorize("@el.check('user:getListByIds')")
-    public ResultResponse getListByIds(@RequestParam(value = "ids", required = false) List<Long> ids) {
-        List<User> result = userService.selectByPrimaryKeys(ids);
-        if (result != null && result.size() > 0) {
-            return ResultResponse.success(result);
-        }
-        return ResultResponse.error();
-    }
 
     @ApiOperationSupport(order = 5)
     @ApiOperation("分页获得目标数据集合")
@@ -130,74 +134,6 @@ public class UserController {
         int result = userService.insertBatch(records);
         if (result > 0) {
             return ResultResponse.success(records);
-        }
-        return ResultResponse.error();
-    }
-
-    @ApiOperationSupport(order = 9)
-    @ApiOperation("修改数据")
-    @PutMapping
-    @Log("系统用户信息管理:修改数据")
-    @PreAuthorize("@el.check('user:update')")
-    public ResultResponse update(@RequestBody UserVO record) {
-        User user=record.getUser();
-        Set<Long> roles = record.getRoles();
-        List<UsersRoles> usersRolesList=new ArrayList<>();
-        if (roles!=null&&roles.size()>0&&user!=null){
-            for (Long roleId : roles) {
-                UsersRoles usersRoles=new UsersRoles();
-                usersRoles.setUserId(user.getUserId());
-                usersRoles.setRoleId(roleId);
-                usersRolesList.add(usersRoles);
-            }
-            usersRolesService.deleteBySelective(UsersRoles.builder().userId(user.getUserId()).build());
-            usersRolesService.insertBatch(usersRolesList);
-        }
-
-        int result = userService.update(record.getUser());
-        if (result > 0) {
-            return ResultResponse.success();
-        }
-        return ResultResponse.error();
-    }
-
-    @ApiOperationSupport(order = 10)
-    @ApiOperation("修改数据,仅修改不为null的数据")
-    @PutMapping("/selective")
-    @Log("系统用户信息管理:修改部分数据")
-    @PreAuthorize("@el.check('user:updateBySelective')")
-    public ResultResponse updateSelective(@RequestBody User record) {
-        int result = userService.updateSelective(record);
-        if (result > 0) {
-            return ResultResponse.success();
-        }
-        return ResultResponse.error();
-    }
-
-
-    @ApiOperationSupport(order = 11)
-    @ApiOperation("批量修改数据")
-    @PutMapping("batch")
-    @Log("系统用户信息管理:批量修改数据")
-    @PreAuthorize("@el.check('user:updateBatch')")
-    public ResultResponse updateBatch(@RequestBody List<User> records) {
-        int result = userService.updateBatch(records);
-        if (result > 0) {
-            return ResultResponse.success();
-        }
-        return ResultResponse.error();
-    }
-
-    //如果某批数据中,有一个数据属性存在值,其他数据的属性不存在值,那么最终修改结果为其他数据的该属性将设为null值
-    @ApiOperationSupport(order = 12)
-    @ApiOperation("批量修改数据,仅修改部分属性")
-    @PutMapping("batch/selective")
-    @Log("系统用户信息管理:批量修改数据的部分属性")
-    @PreAuthorize("@el.check('user:updateBatchBySelective')")
-    public ResultResponse updateBatchBySelective(@RequestBody List<User> records) {
-        int result = userService.updateBatchBySelective(records);
-        if (result > 0) {
-            return ResultResponse.success();
         }
         return ResultResponse.error();
     }

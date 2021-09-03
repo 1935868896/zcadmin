@@ -2,6 +2,7 @@ package com.zc.controller;
 
 import com.zc.Service.SmsPost;
 import com.zc.utils.HttpUtils;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import java.util.Map;
 @RestController
 @Configuration
 @RequestMapping("/sms")
+@Api(tags = "三方服务")
 public class SmsController {
     String phone="17862905520";
 

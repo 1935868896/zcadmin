@@ -2,6 +2,7 @@ package com.zc.controller;
 
 import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.system.SystemUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import java.io.IOException;
 @Controller
 @Slf4j
 @Configuration
+@Api(tags = "三方服务")
 public class UploadController {
     @Value("${upload.win.path}")
     String winPath;

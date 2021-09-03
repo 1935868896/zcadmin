@@ -1,6 +1,7 @@
 package com.zc.controller;
 
 import com.xkcoding.http.config.HttpConfig;
+import io.swagger.annotations.Api;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
@@ -29,6 +30,7 @@ import java.net.Proxy;
 @RestController
 @RequestMapping("/oauth")
 @Configuration
+@Api(tags = "三方服务")
 public class JustAuthController {
     @Value("${oauth.github.clientId}")
     String githubClientId;
@@ -45,13 +47,13 @@ public class JustAuthController {
     String giteeRedirectUri;
 
 
-    @RequestMapping("/gitee/render")
+    @GetMapping("/gitee/render")
     public void renderAuth(HttpServletResponse response) throws IOException {
         AuthRequest authRequest = getGiteeAuthRequest();
         response.sendRedirect(authRequest.authorize(AuthStateUtils.createState()));
     }
 
-    @RequestMapping("/gitee/callback")
+    @GetMapping("/gitee/callback")
     public Object giteeLogin(AuthCallback callback) {
         AuthRequest authRequest = getGiteeAuthRequest();
         return authRequest.login(callback);
@@ -59,13 +61,13 @@ public class JustAuthController {
 
 
 
-    @RequestMapping("/github/render")
+    @GetMapping("/github/render")
     public void renderGithubAuth(HttpServletResponse response) throws IOException {
         AuthRequest authRequest = getGithubAuthRequest();
         response.sendRedirect(authRequest.authorize(AuthStateUtils.createState()));
     }
 
-    @RequestMapping("/github/callback")
+    @GetMapping("/github/callback")
     public Object login(AuthCallback callback) {
         AuthRequest authRequest = getGithubAuthRequest();
         return authRequest.login(callback);
