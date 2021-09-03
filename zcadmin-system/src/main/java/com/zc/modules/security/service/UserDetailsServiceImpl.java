@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -26,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //此处为从数据库获取UserDetails
 
-        String redisUserString = (String) RedisUtil.HashOps.hGet("userDetails", username);
+        String redisUserString = RedisUtil.StringOps.get("userDetails:"+username);
         if (redisUserString!=null){
             UserDto parse =JSON.parseObject(redisUserString, UserDto.class);
             return parse;
@@ -37,8 +38,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Set<String> roleSet = userMapper.selectRolesByUsername(username);
         permissionSet.addAll(roleSet);
         ((UserDto) userDetails).setPermission(permissionSet);
-        RedisUtil.HashOps.hPutIfAbsent("userDetails",username, JSONObject.toJSONString(userDetails));
-
+        //这里需要考虑缓存的问题,当用户在数据库的数据改变的时候,应该清空缓存
+        RedisUtil.StringOps.setEx("userDetails:"+username,
+                JSONObject.toJSONString(userDetails),1, TimeUnit.DAYS);
         return userDetails;
     }
 }
