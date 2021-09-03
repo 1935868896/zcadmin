@@ -24,7 +24,6 @@ import java.io.IOException;
  * @author ZhangC
  * @create 2021-08-10-14:44
  */
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class TokenFilter extends OncePerRequestFilter /*GenericFilterBean*/ {
