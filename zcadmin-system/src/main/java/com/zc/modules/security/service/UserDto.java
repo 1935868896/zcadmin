@@ -17,6 +17,8 @@ import java.util.Set;
  */
 @Data
 public class UserDto implements UserDetails {
+
+
     /**
      * userDetails 有几个方法分别对应着:
      * 用户的权限集， 默认需要添加ROLE_ 前缀
@@ -31,6 +33,11 @@ public class UserDto implements UserDetails {
     String username;
     String password;
     Set<String> permission;
+    List<GrantedAuthority> authorities;
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = null;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -44,6 +51,8 @@ public class UserDto implements UserDetails {
 
         return list;
     }
+
+
 
     @Override
     public String getPassword() {
