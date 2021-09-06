@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.tool.mapper.LocalStorageMapper">
+    <resultMap type="LocalStorage" id="BaseResultMap">
+        <result property="storageId" jdbcType="BIGINT" column="storage_id"/>
+        <result property="realName" jdbcType="VARCHAR" column="real_name"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+        <result property="suffix" jdbcType="VARCHAR" column="suffix"/>
+        <result property="path" jdbcType="VARCHAR" column="path"/>
+        <result property="type" jdbcType="VARCHAR" column="type"/>
+        <result property="fileSize" jdbcType="VARCHAR" column="file_size"/>
+        <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+        <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        storage_id,real_name,name,suffix,path,type,file_size,create_by,update_by,create_time,update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tool_local_storage
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tool_local_storage
+        where 1=1
+        <if test="storageId != null ">
+            and storage_id = #{storageId,jdbcType=BIGINT}
+        </if>
+        <if test="realName != null  and realName != '' ">
+            and real_name = #{realName,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name like CONCAT('%',#{name},'%' )
+        </if>
+        <if test="suffix != null  and suffix != '' ">
+            and suffix = #{suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null  and type != '' ">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="fileSize != null  and fileSize != '' ">
+            and file_size = #{fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tool_local_storage
+        where 1=1
+        <if test="storageId != null ">
+            and storage_id = #{storageId,jdbcType=BIGINT}
+        </if>
+        <if test="realName != null  and realName != '' ">
+            and real_name = #{realName,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name like CONCAT('%',#{name},'%' )
+        </if>
+        <if test="suffix != null  and suffix != '' ">
+            and suffix = #{suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null  and type != '' ">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="fileSize != null  and fileSize != '' ">
+            and file_size = #{fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tool_local_storage
+        where 1=1
+        <if test="record.storageId != null ">
+            and storage_id = #{record.storageId,jdbcType=BIGINT}
+        </if>
+        <if test="record.realName != null  and record.realName != '' ">
+            and real_name = #{record.realName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.name != null  and record.name != '' ">
+            and name like CONCAT('%',#{record.name},'%' )
+        </if>
+        <if test="record.suffix != null  and record.suffix != '' ">
+            and suffix = #{record.suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="record.path != null  and record.path != '' ">
+            and path = #{record.path,jdbcType=VARCHAR}
+        </if>
+        <if test="record.type != null  and record.type != '' ">
+            and type = #{record.type,jdbcType=VARCHAR}
+        </if>
+        <if test="record.fileSize != null  and record.fileSize != '' ">
+            and file_size = #{record.fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createBy != null  and record.createBy != '' ">
+            and create_by = #{record.createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.updateBy != null  and record.updateBy != '' ">
+            and update_by = #{record.updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createTime != null ">
+            and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="record.updateTime != null ">
+            and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tool_local_storage
+        where storage_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from tool_local_storage
+        where 1=1
+        <if test="storageId != null ">
+            and storage_id = #{storageId,jdbcType=BIGINT}
+        </if>
+        <if test="realName != null  and realName != '' ">
+            and real_name = #{realName,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name like CONCAT('%',#{name},'%' )
+        </if>
+        <if test="suffix != null  and suffix != '' ">
+            and suffix = #{suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null  and type != '' ">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="fileSize != null  and fileSize != '' ">
+            and file_size = #{fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="LocalStorage"             useGeneratedKeys="true" keyProperty="storageId">
+        insert into tool_local_storage (
+            storage_id,
+            real_name,
+            name,
+            suffix,
+            path,
+            type,
+            file_size,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+        )
+        values
+        (         #{storageId,jdbcType=BIGINT},         #{realName,jdbcType=VARCHAR},         #{name,jdbcType=VARCHAR},         #{suffix,jdbcType=VARCHAR},         #{path,jdbcType=VARCHAR},         #{type,jdbcType=VARCHAR},         #{fileSize,jdbcType=VARCHAR},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="LocalStorage"            useGeneratedKeys="true" keyProperty="storageId">
+        insert into tool_local_storage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="realName != null  and realName != ''  ">real_name,</if>
+            <if test="name != null  and name != ''  ">name,</if>
+            <if test="suffix != null  and suffix != ''  ">suffix,</if>
+            <if test="path != null  and path != ''  ">path,</if>
+            <if test="type != null  and type != ''  ">type,</if>
+            <if test="fileSize != null  and fileSize != ''  ">file_size,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="realName != null  and realName != ''  ">#{realName,jdbcType=VARCHAR},</if>
+            <if test="name != null  and name != ''  ">#{name,jdbcType=VARCHAR},</if>
+            <if test="suffix != null  and suffix != ''  ">#{suffix,jdbcType=VARCHAR},</if>
+            <if test="path != null  and path != ''  ">#{path,jdbcType=VARCHAR},</if>
+            <if test="type != null  and type != ''  ">#{type,jdbcType=VARCHAR},</if>
+            <if test="fileSize != null  and fileSize != ''  ">#{fileSize,jdbcType=VARCHAR},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null  ">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List"             useGeneratedKeys="true" keyProperty="storageId">
+        insert into  tool_local_storage (
+        storage_id,
+        real_name,
+        name,
+        suffix,
+        path,
+        type,
+        file_size,
+        create_by,
+        update_by,
+        create_time,
+        update_time
+        )
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            (
+            #{record.storageId,jdbcType=BIGINT},
+            #{record.realName,jdbcType=VARCHAR},
+            #{record.name,jdbcType=VARCHAR},
+            #{record.suffix,jdbcType=VARCHAR},
+            #{record.path,jdbcType=VARCHAR},
+            #{record.type,jdbcType=VARCHAR},
+            #{record.fileSize,jdbcType=VARCHAR},
+            #{record.createBy,jdbcType=VARCHAR},
+            #{record.updateBy,jdbcType=VARCHAR},
+            #{record.createTime,jdbcType=TIMESTAMP},
+            #{record.updateTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="LocalStorage">
+        update tool_local_storage set
+                                      storage_id =#{storageId,jdbcType=BIGINT} ,
+                                      real_name =#{realName,jdbcType=VARCHAR} ,
+                                      name =#{name,jdbcType=VARCHAR} ,
+                                      suffix =#{suffix,jdbcType=VARCHAR} ,
+                                      path =#{path,jdbcType=VARCHAR} ,
+                                      type =#{type,jdbcType=VARCHAR} ,
+                                      file_size =#{fileSize,jdbcType=VARCHAR} ,
+                                      create_by =#{createBy,jdbcType=VARCHAR} ,
+                                      update_by =#{updateBy,jdbcType=VARCHAR} ,
+                                      create_time =#{createTime,jdbcType=TIMESTAMP} ,
+                                      update_time =#{updateTime,jdbcType=TIMESTAMP}
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSelective" parameterType="LocalStorage">
+        update tool_local_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="realName != null  and realName != ''  ">real_name = #{realName,jdbcType=VARCHAR},</if>
+            <if test="name != null  and name != ''  ">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="suffix != null  and suffix != ''  ">suffix = #{suffix,jdbcType=VARCHAR},</if>
+            <if test="path != null  and path != ''  ">path = #{path,jdbcType=VARCHAR},</if>
+            <if test="type != null  and type != ''  ">type = #{type,jdbcType=VARCHAR},</if>
+            <if test="fileSize != null  and fileSize != ''  ">file_size = #{fileSize,jdbcType=VARCHAR},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null  ">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateParamsBySelective" parameterType="LocalStorage">
+        update tool_local_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="params.realName != null  and params.realName != ''  ">real_name = #{params.realName,jdbcType=VARCHAR},</if>
+            <if test="params.name != null  and params.name != ''  ">name = #{params.name,jdbcType=VARCHAR},</if>
+            <if test="params.suffix != null  and params.suffix != ''  ">suffix = #{params.suffix,jdbcType=VARCHAR},</if>
+            <if test="params.path != null  and params.path != ''  ">path = #{params.path,jdbcType=VARCHAR},</if>
+            <if test="params.type != null  and params.type != ''  ">type = #{params.type,jdbcType=VARCHAR},</if>
+            <if test="params.fileSize != null  and params.fileSize != ''  ">file_size = #{params.fileSize,jdbcType=VARCHAR},</if>
+            <if test="params.createBy != null  and params.createBy != ''  ">create_by = #{params.createBy,jdbcType=VARCHAR},</if>
+            <if test="params.updateBy != null  and params.updateBy != ''  ">update_by = #{params.updateBy,jdbcType=VARCHAR},</if>
+            <if test="params.createTime != null  ">create_time = #{params.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="params.updateTime != null  ">update_time = #{params.updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+        where 1=1
+        <if test="record.storageId != null ">
+            and storage_id = #{record.storageId,jdbcType=BIGINT}
+        </if>
+        <if test="record.realName != null  and record.realName != '' ">
+            and real_name = #{record.realName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.name != null  and record.name != '' ">
+            and name like CONCAT('%',#{record.name},'%' )
+        </if>
+        <if test="record.suffix != null  and record.suffix != '' ">
+            and suffix = #{record.suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="record.path != null  and record.path != '' ">
+            and path = #{record.path,jdbcType=VARCHAR}
+        </if>
+        <if test="record.type != null  and record.type != '' ">
+            and type = #{record.type,jdbcType=VARCHAR}
+        </if>
+        <if test="record.fileSize != null  and record.fileSize != '' ">
+            and file_size = #{record.fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createBy != null  and record.createBy != '' ">
+            and create_by = #{record.createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.updateBy != null  and record.updateBy != '' ">
+            and update_by = #{record.updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createTime != null ">
+            and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="record.updateTime != null ">
+            and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        </if>
+
+
+    </update>
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update tool_local_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="real_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.realName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.name,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="suffix = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.suffix,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="path = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.path,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.type,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="file_size = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.fileSize,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="create_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="update_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+        </trim>
+        where storage_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.storageId}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update tool_local_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="real_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.realName != null  and records.realName != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.realName,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.name != null  and records.name != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.name,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="suffix = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.suffix != null  and records.suffix != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.suffix,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="path = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.path != null  and records.path != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.path,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="type = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.type != null  and records.type != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.type,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_size = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.fileSize != null  and records.fileSize != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.fileSize,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.createBy != null  and records.createBy != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.createBy,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_by = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.updateBy != null  and records.updateBy != ''  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.updateBy,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.createTime != null  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.createTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.updateTime != null  " >
+                        when storage_id = #{records.storageId,jdbcType=BIGINT} then #{records.updateTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where storage_id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.storageId}
+        </foreach>
+    </update>
+
+    <delete id="deleteBySelective" parameterType="java.lang.Long">
+        delete
+        from tool_local_storage where 1=1
+        <if test="storageId != null ">
+            and storage_id = #{storageId,jdbcType=BIGINT}
+        </if>
+        <if test="realName != null  and realName != '' ">
+            and real_name = #{realName,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name like CONCAT('%',#{name},'%' )
+        </if>
+        <if test="suffix != null  and suffix != '' ">
+            and suffix = #{suffix,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null  and path != '' ">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null  and type != '' ">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="fileSize != null  and fileSize != '' ">
+            and file_size = #{fileSize,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </delete>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from tool_local_storage where storage_id = #{storageId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from tool_local_storage where storage_id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+</mapper>

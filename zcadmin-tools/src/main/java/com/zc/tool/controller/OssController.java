@@ -1,4 +1,4 @@
-package com.zc.controller;
+package com.zc.tool.controller;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;

@@ -1,14 +1,11 @@
-package com.zc.Service;
+package com.zc.tool.service;
 
-import com.zc.entity.SmsConfig;
+import com.zc.tool.entity.SmsConfig;
 import com.zc.utils.CodeUtil;
-import com.zc.utils.HttpUtils;
 import com.zc.utils.RedisUtil;
 import com.zc.utils.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

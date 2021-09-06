@@ -1,4 +1,4 @@
-package com.zc.entity;
+package com.zc.tool.entity;
 
 import lombok.Data;
 import lombok.Value;

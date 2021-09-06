@@ -1,4 +1,4 @@
-package com.zc.controller;
+package com.zc.tool.controller;
 
 import com.xkcoding.http.config.HttpConfig;
 import io.swagger.annotations.Api;

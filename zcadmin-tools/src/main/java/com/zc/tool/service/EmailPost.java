@@ -1,4 +1,4 @@
-package com.zc.Service;
+package com.zc.tool.service;
 
 import com.zc.entity.EmailEntity;
 import lombok.extern.slf4j.Slf4j;

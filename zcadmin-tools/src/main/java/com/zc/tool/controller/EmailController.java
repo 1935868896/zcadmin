@@ -1,6 +1,6 @@
-package com.zc.controller;
+package com.zc.tool.controller;
 
-import com.zc.Service.EmailPost;
+import com.zc.tool.service.EmailPost;
 import com.zc.entity.EmailEntity;
 import com.zc.entity.ResultResponse;
 import io.swagger.annotations.Api;

@@ -1,17 +1,12 @@
-package com.zc.controller;
+package com.zc.tool.controller;
 
-import com.zc.Service.SmsPost;
-import com.zc.utils.HttpUtils;
+import com.zc.tool.service.SmsPost;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author ZhangC

@@ -35,6 +35,20 @@ public class RoleController {
     private final RoleService roleService;
     private final RolesMenusService rolesMenusService;
 
+    @ApiOperationSupport(order = 1)
+    @GetMapping("/getMenuByRoleId")
+    @ApiOperation("根据角色id获取菜单id")
+    @Log("角色菜单关联信息管理:根据角色id获取菜单id的集合")
+    @PreAuthorize("@el.check('rolesMenus:getMenuByRoleId')")
+    public ResultResponse getMenuByRoleId(Long id) {
+
+        List<RolesMenus> rolesMenus = rolesMenusService.selectListBySelective(RolesMenus.builder().roleId(id).build());
+        if (rolesMenus != null) {
+            List<Long> collect = rolesMenus.stream().map(RolesMenus::getMenuId).collect(Collectors.toList());
+            return ResultResponse.success(collect);
+        }
+        return ResultResponse.error();
+    }
 
     @ApiOperationSupport(order = 2)
     @ApiOperation("修改角色拥有的菜单权限")
