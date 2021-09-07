@@ -2,6 +2,7 @@ package com.zc.tool.service;
 
 import com.zc.entity.EmailEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -52,9 +53,10 @@ public class EmailPost {
             helper.setTo(emailEntity.getTo());        //接收人的邮箱
             helper.setSubject(emailEntity.getTitle());//标题
             helper.setText(emailEntity.getContent(), true);//内容
-            FileSystemResource file = new FileSystemResource(new File(emailEntity.getFilePath()));
-            helper.addAttachment(emailEntity.getFileName(), file);
-
+            if (StringUtils.isNotBlank(emailEntity.getFileName())&&StringUtils.isNotBlank(emailEntity.getFilePath())) {
+                FileSystemResource file = new FileSystemResource(new File(emailEntity.getFilePath()));
+                helper.addAttachment(emailEntity.getFileName(), file);
+            }
             javaMailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();

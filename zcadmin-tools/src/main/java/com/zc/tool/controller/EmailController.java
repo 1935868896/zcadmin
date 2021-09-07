@@ -5,9 +5,7 @@ import com.zc.entity.EmailEntity;
 import com.zc.entity.ResultResponse;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author ZhangC
@@ -19,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     @Autowired
     EmailPost emailPost;
-    @GetMapping
-    public ResultResponse sendEmail(EmailEntity emailEntity){
-        emailPost.sendMail(emailEntity);
+    @PostMapping
+    public ResultResponse sendEmail(@RequestBody EmailEntity emailEntity){
+        emailPost.sendAttachmentsMail(emailEntity);
         return ResultResponse.success();
     }
 
