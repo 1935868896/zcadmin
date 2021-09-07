@@ -41,6 +41,7 @@ public class TokenFilter extends OncePerRequestFilter /*GenericFilterBean*/ {
         if (token != null) {
             if (RedisUtil.StringOps.get("jwt-black:list:"+token)!=null){
                 httpServletRequest.getRequestDispatcher("/error/jwt/black").forward(httpServletRequest, httpServletResponse);
+
             return;
             }
 

@@ -80,36 +80,8 @@ public class LoginController {
         return ResultResponse.success(map);
     }
 
-    @Log("刷新token")
-    @PostMapping("/system/refresh/token")
-    public ResultResponse refresh(HttpServletRequest request) {
-        //第一步验证密码的正确性
-        log.info("刷新Token");
-        String token = (String) request.getAttribute("X-Token");
-        if (jwtUtil.canTokenBeRefreshed(token)){
-            String newToken = jwtUtil.refreshToken(token);
-            log.info("全新的token:{}", newToken);
-            return ResultResponse.success(newToken);
-        }else {
-            return ResultResponse.error();
-        }
 
 
-    }
-
-    @Log("返回过期错误")
-    @GetMapping("/error/expire")
-    public ResultResponse expire() {
-        log.info("给前端返回expire 接口");
-        return new ResultResponse(1234, "token过期或者错误", null);
-    }
-
-    @Log("返回jwt错误")
-    @GetMapping("/error/jwt/black")
-    public ResultResponse jwtBlack() {
-        log.info("该jwt已经进入黑名单,无法登录");
-        return new ResultResponse(400, "jwt已经进入黑名单,无法登录", null);
-    }
 
 
     @Log("获取信息")
