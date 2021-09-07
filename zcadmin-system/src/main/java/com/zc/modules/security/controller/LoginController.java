@@ -14,6 +14,7 @@ import com.zc.modules.system.mapper.UserMapper;
 import com.zc.utils.RedisUtil;
 import com.zc.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -85,10 +86,15 @@ public class LoginController {
         //第一步验证密码的正确性
         log.info("刷新Token");
         String token = (String) request.getAttribute("X-Token");
-        jwtUtil.canTokenBeRefreshed(token);
-        String newToken = jwtUtil.refreshToken(token);
-        log.info("全新的token:{}", newToken);
-        return ResultResponse.success(newToken);
+        if (jwtUtil.canTokenBeRefreshed(token)){
+            String newToken = jwtUtil.refreshToken(token);
+            log.info("全新的token:{}", newToken);
+            return ResultResponse.success(newToken);
+        }else {
+            return ResultResponse.error();
+        }
+
+
     }
 
     @Log("返回过期错误")
@@ -96,6 +102,13 @@ public class LoginController {
     public ResultResponse expire() {
         log.info("给前端返回expire 接口");
         return new ResultResponse(1234, "token过期或者错误", null);
+    }
+
+    @Log("返回jwt错误")
+    @GetMapping("/error/jwt/black")
+    public ResultResponse jwtBlack() {
+        log.info("该jwt已经进入黑名单,无法登录");
+        return new ResultResponse(400, "jwt已经进入黑名单,无法登录", null);
     }
 
 
@@ -117,10 +130,14 @@ public class LoginController {
 
     @Log("登出")
     @PostMapping("/user/logout")
-    public ResultResponse logout() {
+    public ResultResponse logout(HttpServletRequest request) {
         /**
          * 此处处理登出逻辑
          */
+        String token = request.getHeader("X-Token");
+        if (StringUtils.isNotEmpty(token)) {
+            RedisUtil.StringOps.setEx("jwt-black:list:" + token, "黑名单值", 8, TimeUnit.DAYS);
+        }
         return ResultResponse.success("success");
     }
 

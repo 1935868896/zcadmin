@@ -4,6 +4,7 @@ package com.zc.jwt;
  * @author ZhangC
  * @create 2021-08-10-14:37
  */
+import cn.hutool.core.date.DateUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -148,9 +149,12 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
+
     //JWT是否可以被刷新(过期就可以被刷新)
     public Boolean canTokenBeRefreshed(String token) {
-        return isTokenExpired(token);
+        Date expiration = getExpirationDateFromToken(token);
+        long l = DateUtil.betweenDay(expiration, new Date(), true);
+        return l<SecurityConstant.EXPIRATION_TIME;
     }
 
     //刷新JWT

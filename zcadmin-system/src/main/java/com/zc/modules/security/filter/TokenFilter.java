@@ -1,6 +1,7 @@
 package com.zc.modules.security.filter;
 
 import com.zc.jwt.JwtUtil;
+import com.zc.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class TokenFilter extends OncePerRequestFilter /*GenericFilterBean*/ {
         String token = httpServletRequest.getHeader("X-Token");
         String requestURI = httpServletRequest.getRequestURI();
         if (token != null) {
+            if (RedisUtil.StringOps.get("jwt-black:list:"+token)!=null){
+                httpServletRequest.getRequestDispatcher("/error/jwt/black").forward(httpServletRequest, httpServletResponse);
+            return;
+            }
+
             String usernameFromToken = jwtUtil.getUsernameFromToken(token);
             //此处可以通过redis缓存解决每次都要请求数据库的问题
             UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromToken);
