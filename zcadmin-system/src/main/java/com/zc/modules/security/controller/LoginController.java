@@ -4,18 +4,27 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.zc.annoation.Anonymous;
 import com.zc.annotation.Log;
+import com.zc.entity.JwtAuthentication;
 import com.zc.entity.ResultResponse;
 import com.zc.exception.BadRequestException;
 import com.zc.jwt.JwtUtil;
+import com.zc.modules.security.entity.OnlineUserDto;
 import com.zc.modules.security.entity.User;
+import com.zc.modules.security.service.OnlineUserService;
+import com.zc.modules.security.service.UserDto;
 import com.zc.modules.system.mapper.UserMapper;
 import com.zc.utils.RedisUtil;
 import com.zc.utils.SecurityUtils;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +55,8 @@ public class LoginController {
     JwtUtil jwtUtil;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    OnlineUserService onlineUserService;
 
     @Log("登录")
     @PostMapping("/system/login")
@@ -71,16 +84,41 @@ public class LoginController {
         log.info("user信息:" + user.toString());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        com.zc.modules.system.entity.User userInfo = userMapper.selectSysUserByUserName(user.getUsername());
+        if (userInfo==null){
+            return ResultResponse.error("没有该用户");
+        }
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //第二步:生成jwt字符串,并返回
-        String s = jwtUtil.JWTCreator(authentication);
+        JwtAuthentication jwtAuthentication=new JwtAuthentication(
+             authenticationToken
+        );
+        jwtAuthentication.setNickName(userInfo.getNickName());
+        String token = jwtUtil.JWTCreator(jwtAuthentication);
+        OnlineUserDto build = OnlineUserDto.builder()
+                .username(userInfo.getUsername())
+                .nickName(userInfo.getNickName())
+                .address(com.zc.utils.StringUtils.getAddress(request))
+                .ip(com.zc.utils.StringUtils.getIp(request))
+                .browser(com.zc.utils.StringUtils.getBrowser(request))
+                .token(token)
+                .loginTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
+                .build();
+        RedisUtil.StringOps.setEx(
+                "online:user:"+token, JSONObject.toJSONString(build),3, TimeUnit.MINUTES
+        );
+
         Map<String, Object> map = new HashMap();
-        map.put("token", s);
+        map.put("token", token);
         return ResultResponse.success(map);
     }
 
-
+    @ApiOperation("查询在线用户")
+    @GetMapping("online/user")
+    public ResultResponse query(Pageable pageable){
+        return ResultResponse.success(onlineUserService.getAll(pageable));
+    }
 
 
 
@@ -113,12 +151,16 @@ public class LoginController {
         return ResultResponse.success("success");
     }
 
-    @GetMapping("/hello")
-    @Log("测试")
-    public String hello() {
-
-        return "hello zcAdmin";
+    @Log("强退")
+    @PostMapping("/user/kickOut")
+    public ResultResponse kickOut(@RequestBody OnlineUserDto onlineUserDto) {
+        if (onlineUserDto.getToken()==null){
+            return ResultResponse.error("失败:传来的数据不全");
+        }
+        onlineUserService.kickOut(onlineUserDto.getToken());
+        return ResultResponse.success("success");
     }
+
 
 
     @GetMapping("auth/code")

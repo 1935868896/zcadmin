@@ -5,6 +5,7 @@ package com.zc.jwt;
  * @create 2021-08-10-14:37
  */
 import cn.hutool.core.date.DateUtil;
+import com.zc.entity.JwtAuthentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,9 +31,10 @@ import java.util.Map;
 public class JwtUtil {
     private static final String CLAIM_KEY_CREATED = "created";
     private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_NICKNAME = "nick";
 
     //生成JWT
-    public String JWTCreator(Authentication authResult) {
+    public String JWTCreator(JwtAuthentication authResult) {
         //获取登录用户的角色
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         StringBuffer stringBuffer = new StringBuffer();
@@ -48,6 +50,7 @@ public class JwtUtil {
         claims.put(CLAIM_KEY_CREATED, new Date());
         //自定义属性, 放入主题, 即用户名
         claims.put(CLAIM_KEY_USERNAME, username);
+        claims.put(CLAIM_KEY_NICKNAME,authResult.getNickName());
 
         return Jwts.builder()
                 //自定义属性
@@ -118,6 +121,18 @@ public class JwtUtil {
 //        }
     }
 
+
+    //从JWT中获取创建nickName ==> 在自定义区域内
+    public String getNickNameFromToken(String token) {
+        String created;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            created =  (String) claims.get(CLAIM_KEY_NICKNAME);
+        } catch (Exception e) {
+            created = null;
+        }
+        return created;
+    }
     //从JWT中获取创建时间 ==> 在自定义区域内
     public Date getCreatedDateFromToken(String token) {
         Date created;

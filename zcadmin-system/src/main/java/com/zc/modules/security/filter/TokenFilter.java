@@ -1,7 +1,11 @@
 package com.zc.modules.security.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zc.jwt.JwtUtil;
+import com.zc.modules.security.entity.OnlineUserDto;
 import com.zc.utils.RedisUtil;
+import com.zc.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ZhangC
@@ -53,6 +60,20 @@ public class TokenFilter extends OncePerRequestFilter /*GenericFilterBean*/ {
                 //此处当jwt有效的时候,我们将user实体类和用户的权限传入,放置到上下文当中
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                //在此处将用户写入redis
+                OnlineUserDto build = OnlineUserDto.builder()
+                        .username(userDetails.getUsername())
+                        .nickName(jwtUtil.getNickNameFromToken(token))
+                        .address(StringUtils.getAddress(httpServletRequest))
+                        .ip(StringUtils.getIp(httpServletRequest))
+                        .browser(StringUtils.getBrowser(httpServletRequest))
+                        .token(token)
+                        .loginTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
+                        .build();
+                RedisUtil.StringOps.setEx(
+                        "online:user:"+token, JSONObject.toJSONString(build),3, TimeUnit.MINUTES
+                );
+
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } else {
 //                httpServletRequest.setAttribute("filter.error", e);

@@ -75,16 +75,7 @@ public class LogAspect {
         currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
         String ip = StringUtils.getIp(request);
-        if ("localhost".equals(ip)){
-            try {
-                ip = InetAddress.getLocalHost().getHostAddress();
-                sysLog.setAddress("内网ip");
-            } catch (UnknownHostException e) {
-                log.error(e.getMessage(), e);
-            }
-        }else {
-            sysLog.setAddress(StringUtils.getHttpCityInfo(ip));
-        }
+        sysLog.setAddress(StringUtils.getAddress(request));
 
         logService.save(getUsername(), StringUtils.getBrowser(request), ip,joinPoint, sysLog);
         return result;

@@ -23,6 +23,9 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from sys_user where username=#{name}")
     UserDto selectUserByUserName(String name);
 
+    @Select("select * from sys_user where username=#{name}")
+    User selectSysUserByUserName(String name);
+
     @Select("SELECT  m.permission FROM sys_roles_menus AS rm " +
             "LEFT JOIN sys_menu AS m ON m.menu_id = rm.menu_id " +
             "LEFT JOIN  sys_role AS r ON r.role_id = rm.role_id " +

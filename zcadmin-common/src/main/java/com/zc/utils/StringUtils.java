@@ -53,6 +53,18 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 获取ip地址
      */
     public static String getIp(HttpServletRequest request) {
+        String ipPre = getIpPre(request);
+        if ("localhost".equals(ipPre)){
+            try {
+                ipPre = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return ipPre;
+    }
+
+    public static String getIpPre(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -71,12 +83,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         if (localhost.equals(ip)||remote.equals(ip)) {
             // 获取本机真正的ip地址
-return "localhost";
+            return "localhost";
         }
         return ip;
     }
-
-
 
     /**
      * 根据ip获取详细地址
@@ -93,6 +103,15 @@ return "localhost";
             return province + " " + city;
         }
         return "";
+    }
+
+    public static String getAddress(HttpServletRequest request) {
+        String ip = getIpPre(request);
+        if ("localhost".equals(ip)){
+               return "内网ip";
+        }
+        return getHttpCityInfo(ip);
+
     }
 
     /**

@@ -35,7 +35,7 @@ public class FilterController {
     @RequestMapping("/error/jwt/black")
     public ResultResponse jwtBlack() {
         log.info("该jwt已经进入黑名单,无法登录");
-        return new ResultResponse(400, "jwt已经进入黑名单,无法登录", null);
+        return new ResultResponse(50016,"jwt进入黑名单","jwt进入黑名单");
     }
 
     @Log("刷新token")
