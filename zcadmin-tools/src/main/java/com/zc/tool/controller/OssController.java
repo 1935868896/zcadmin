@@ -7,6 +7,7 @@ import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.zc.entity.ResultResponse;
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/zcadmin/oss")
 @Api(tags = "三方服务")
+@Slf4j
 public class OssController {
     @Value("${oss.accessId}")
     String accessId;
@@ -46,8 +48,10 @@ public class OssController {
 
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
         String dir = request.getParameter("pathPre"); // 用户上传文件时指定的前缀。
+        String fileName=request.getParameter("fileName");
+//        https://zc-go-fit.oss-cn-beijing.aliyuncs.com/test1630381920935panda.jpg
 
-
+        log.info("文件上传:{}",host+"/"+dir+"/"+fileName);
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, accessKey);
         try {

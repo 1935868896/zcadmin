@@ -6,6 +6,7 @@ import cn.hutool.system.SystemUtil;
 import com.zc.entity.ResultResponse;
 import com.zc.tool.entity.LocalStorage;
 import com.zc.tool.service.LocalStorageService;
+import com.zc.tool.util.MultipartFileHandle;
 import com.zc.utils.HandleFileUtil;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,6 @@ import java.net.URLEncoder;
  */
 @RestController
 @Slf4j
-@Configuration
 @Api(tags = "三方服务")
 @RequiredArgsConstructor
 public class UploadController {
@@ -37,6 +37,7 @@ public class UploadController {
     String linuxPath;
 
     private final LocalStorageService localStorageService;
+    private final MultipartFileHandle multipartFileHandle;
 
     @PostMapping("/upload")
     public ResultResponse upload(@RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName) {
@@ -50,44 +51,16 @@ public class UploadController {
         if (file.isEmpty()) {
             ResultResponse.error("上传文件失败");
         }
+        LocalStorage localStorage = multipartFileHandle.getLocalStorage(file, fileName);
 
-
-        String path = "";
-        if (SystemUtil.getOsInfo().isLinux()) {
-            path = linuxPath;
-        } else {
-            path = winPath;
-        }
-        String realName = file.getOriginalFilename();
-        log.info("name:" + realName);
-
-        // 获取后缀 获取名字 获取文件
-        String suffix = "";
-        int j = realName.lastIndexOf(".");
-        if (j >= 0) {
-            suffix = realName.substring(j+1, realName.length());
-        }
-        String size = HandleFileUtil.getPrintSize(file.getSize());
-        String storagePath = path + File.separator + file.getOriginalFilename();
-        String type = "";
-
-        try {
-            type = FileTypeUtil.getType(new ByteArrayInputStream(file.getBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File dest = new File(storagePath);
-
-        log.info("文件存储位置: " + storagePath);
+        File dest = new File(localStorage.getPath());
         try {
             file.transferTo(dest);
             log.info("文件名: {},真实名称: {} ,文件大小:{} ,文件路径:{} ,文件后缀:{},文件类型{}",
-                    file, realName, size, storagePath, suffix, type
+                    localStorage.getName(), localStorage.getRealName(), localStorage.getFileSize(),
+                    localStorage.getPath(), localStorage.getSuffix(), localStorage.getType()
             );
-            LocalStorage build = LocalStorage.builder()
-                    .name(fileName).realName(realName).fileSize(size).path(storagePath).suffix(suffix).type(type)
-                    .build();
-            localStorageService.insert(build);
+            localStorageService.insert(localStorage);
 
         } catch (IOException e) {
             e.printStackTrace();

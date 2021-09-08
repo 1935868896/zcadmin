@@ -97,6 +97,8 @@ public interface LocalStorageService extends IService<LocalStorage> {
      */
     int update(LocalStorage record);
 
+    int selectCountName(LocalStorage record);
+
     /**
      * 修改单条数据,仅修改存在数值的属性
      *

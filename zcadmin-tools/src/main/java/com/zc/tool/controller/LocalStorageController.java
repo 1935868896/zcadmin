@@ -134,6 +134,10 @@ public class LocalStorageController {
     @Log("本地存储信息管理:修改数据")
     @PreAuthorize("@el.check('localStorage:update')")
     public ResultResponse update(@RequestBody LocalStorage record) {
+        int i = localStorageService.selectCountName(record);
+        if (i>0){
+         return ResultResponse.error("文件名字重复");
+        }
         int result = localStorageService.update(record);
         if (result > 0) {
             return ResultResponse.success();

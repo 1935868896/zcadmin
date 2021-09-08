@@ -1,10 +1,14 @@
 package com.zc.tool.service.impl;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import com.zc.tool.entity.LocalStorage;
 import com.zc.tool.mapper.LocalStorageMapper;
 import com.zc.tool.service.LocalStorageService;
+import com.zc.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LocalStorageServiceImpl extends ServiceImpl<LocalStorageMapper, LocalStorage> implements LocalStorageService {
 
     private final LocalStorageMapper localStorageMapper;
@@ -105,6 +110,8 @@ public class LocalStorageServiceImpl extends ServiceImpl<LocalStorageMapper, Loc
      */
     @Override
     public int insert(LocalStorage record) {
+        record.setCreateBy(SecurityUtils.getCurrentUsername());
+        record.setCreateTime(new Date());
         return localStorageMapper.insert(record);
     }
 
@@ -148,7 +155,15 @@ public class LocalStorageServiceImpl extends ServiceImpl<LocalStorageMapper, Loc
      */
     @Override
     public int update(LocalStorage record) {
+        //需要查询不包含自己
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
+        record.setUpdateTime(new Date());
         return localStorageMapper.update(record);
+    }
+
+    @Override
+    public int selectCountName(LocalStorage record) {
+        return localStorageMapper.selectCountName(record.getStorageId(),record.getName());
     }
 
     /**
@@ -237,6 +252,12 @@ public class LocalStorageServiceImpl extends ServiceImpl<LocalStorageMapper, Loc
      */
     @Override
     public int deleteByPrimaryKey(Long id) {
+        LocalStorage localStorage = localStorageMapper.selectByPrimaryKey(id);
+        File file = new File(localStorage.getPath());
+        log.info("删除本地文件:{}",localStorage.getPath());
+        if (file.exists()){//文件是否存在
+            file.delete();//删除文件
+        }
         return localStorageMapper.deleteByPrimaryKey(id);
     }
 
