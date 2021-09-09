@@ -14,15 +14,17 @@
         <result property="cover" jdbcType="VARCHAR" column="cover"/>
         <result property="countWord" jdbcType="VARCHAR" column="count_word"/>
         <result property="updateAt" jdbcType="TIMESTAMP" column="update_at"/>
+        <result property="isDelete" jdbcType="BIT" column="is_delete"/>
     </resultMap>
     <sql id="Base_Column_List">
-        book_id,status,tags,score,score_count,title,author,cover,count_word,update_at
+        book_id,status,tags,score,score_count,title,author,cover,count_word,update_at,is_delete
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from book_info
         where book_id = #{bookId,jdbcType=INTEGER}
+        and is_delete =0
     </select>
 
     <select id="selectListBySelective" resultMap="BaseResultMap">
@@ -30,6 +32,7 @@
         <include refid="Base_Column_List"/>
         from book_info
         where 1=1
+        and is_delete =0
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -49,7 +52,7 @@
             and title = #{title,jdbcType=VARCHAR}
         </if>
         <if test="author != null  and author != '' ">
-            and author = #{author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{author},'%' )
         </if>
         <if test="cover != null  and cover != '' ">
             and cover = #{cover,jdbcType=VARCHAR}
@@ -67,6 +70,7 @@
         <include refid="Base_Column_List"/>
         from book_info
         where 1=1
+        and is_delete =0
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -86,7 +90,7 @@
             and title = #{title,jdbcType=VARCHAR}
         </if>
         <if test="author != null  and author != '' ">
-            and author = #{author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{author},'%' )
         </if>
         <if test="cover != null  and cover != '' ">
             and cover = #{cover,jdbcType=VARCHAR}
@@ -106,6 +110,7 @@
         <include refid="Base_Column_List"/>
         from book_info
         where 1=1
+        and is_delete =0
         <if test="record.bookId != null ">
             and book_id = #{record.bookId,jdbcType=INTEGER}
         </if>
@@ -125,7 +130,7 @@
             and title = #{record.title,jdbcType=VARCHAR}
         </if>
         <if test="record.author != null  and record.author != '' ">
-            and author = #{record.author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{record.author},'%' )
         </if>
         <if test="record.cover != null  and record.cover != '' ">
             and cover = #{record.cover,jdbcType=VARCHAR}
@@ -147,6 +152,7 @@
         <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
             #{ids}
         </foreach>
+        and is_delete =0
     </select>
 
     <select id="selectCountBySelective" resultType="java.lang.Integer">
@@ -154,6 +160,7 @@
         count(1)
         from book_info
         where 1=1
+        and is_delete =0
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -173,7 +180,7 @@
             and title = #{title,jdbcType=VARCHAR}
         </if>
         <if test="author != null  and author != '' ">
-            and author = #{author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{author},'%' )
         </if>
         <if test="cover != null  and cover != '' ">
             and cover = #{cover,jdbcType=VARCHAR}
@@ -187,20 +194,16 @@
     </select>
 
     <insert id="insert" parameterType="BookInfo" useGeneratedKeys="true" keyProperty="bookId">
-        insert into book_info (book_id,
-                               status,
-                               tags,
-                               score,
-                               score_count,
-                               title,
-                               author,
-                               cover,
-                               count_word,
-                               update_at)
-        values (#{bookId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
-                #{score,jdbcType=VARCHAR}, #{scoreCount,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
-                #{author,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR}, #{countWord,jdbcType=VARCHAR},
-                #{updateAt,jdbcType=TIMESTAMP})
+        insert into book_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            book_id, status, tags, score, score_count, title, author, cover, count_word, update_at,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{bookId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR},
+        #{scoreCount,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR},
+        #{cover,jdbcType=VARCHAR}, #{countWord,jdbcType=VARCHAR}, #{updateAt,jdbcType=TIMESTAMP},
+        </trim>
     </insert>
 
     <insert id="insertSelective" parameterType="BookInfo" useGeneratedKeys="true" keyProperty="bookId">
@@ -231,47 +234,28 @@
 
 
     <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="bookId">
-        insert into book_info (
-        book_id,
-        status,
-        tags,
-        score,
-        score_count,
-        title,
-        author,
-        cover,
-        count_word,
-        update_at
-        )
+        insert into book_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            book_id,status,tags,score,score_count,title,author,cover,count_word,update_at,
+        </trim>
         values
         <foreach collection="recordList" item="record" index="index" separator=",">
-            (
-            #{record.bookId,jdbcType=INTEGER},
-            #{record.status,jdbcType=VARCHAR},
-            #{record.tags,jdbcType=VARCHAR},
-            #{record.score,jdbcType=VARCHAR},
-            #{record.scoreCount,jdbcType=VARCHAR},
-            #{record.title,jdbcType=VARCHAR},
-            #{record.author,jdbcType=VARCHAR},
-            #{record.cover,jdbcType=VARCHAR},
-            #{record.countWord,jdbcType=VARCHAR},
-            #{record.updateAt,jdbcType=TIMESTAMP}
-            )
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{record.bookId,jdbcType=INTEGER}, #{record.status,jdbcType=VARCHAR}, #{record.tags,jdbcType=VARCHAR},
+                #{record.score,jdbcType=VARCHAR}, #{record.scoreCount,jdbcType=VARCHAR},
+                #{record.title,jdbcType=VARCHAR}, #{record.author,jdbcType=VARCHAR}, #{record.cover,jdbcType=VARCHAR},
+                #{record.countWord,jdbcType=VARCHAR}, #{record.updateAt,jdbcType=TIMESTAMP},</trim>>
         </foreach>
     </insert>
 
     <update id="update" parameterType="BookInfo">
         update book_info
-        set book_id     =#{bookId,jdbcType=INTEGER},
-            status      =#{status,jdbcType=VARCHAR},
-            tags        =#{tags,jdbcType=VARCHAR},
-            score       =#{score,jdbcType=VARCHAR},
-            score_count =#{scoreCount,jdbcType=VARCHAR},
-            title       =#{title,jdbcType=VARCHAR},
-            author      =#{author,jdbcType=VARCHAR},
-            cover       =#{cover,jdbcType=VARCHAR},
-            count_word  =#{countWord,jdbcType=VARCHAR},
-            update_at   =#{updateAt,jdbcType=TIMESTAMP}
+        <trim prefix="SET" suffixOverrides=",">
+            book_id =#{bookId,jdbcType=INTEGER}, status =#{status,jdbcType=VARCHAR}, tags =#{tags,jdbcType=VARCHAR},
+            score =#{score,jdbcType=VARCHAR}, score_count =#{scoreCount,jdbcType=VARCHAR}, title
+            =#{title,jdbcType=VARCHAR}, author =#{author,jdbcType=VARCHAR}, cover =#{cover,jdbcType=VARCHAR}, count_word
+            =#{countWord,jdbcType=VARCHAR}, update_at =#{updateAt,jdbcType=TIMESTAMP},
+        </trim>
         where book_id = #{bookId,jdbcType=INTEGER}
     </update>
 
@@ -328,7 +312,7 @@
             and title = #{record.title,jdbcType=VARCHAR}
         </if>
         <if test="record.author != null  and record.author != '' ">
-            and author = #{record.author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{record.author},'%' )
         </if>
         <if test="record.cover != null  and record.cover != '' ">
             and cover = #{record.cover,jdbcType=VARCHAR}
@@ -471,10 +455,10 @@
             #{records.bookId}
         </foreach>
     </update>
-
-    <delete id="deleteBySelective" parameterType="java.lang.Integer">
-        delete
-        from book_info where 1=1
+    <update id="deleteBySelective" parameterType="java.lang.Integer">
+        update book_info
+        set is_delete = 1
+        where 1=1
         <if test="bookId != null ">
             and book_id = #{bookId,jdbcType=INTEGER}
         </if>
@@ -494,7 +478,7 @@
             and title = #{title,jdbcType=VARCHAR}
         </if>
         <if test="author != null  and author != '' ">
-            and author = #{author,jdbcType=VARCHAR}
+            and author like CONCAT('%',#{author},'%' )
         </if>
         <if test="cover != null  and cover != '' ">
             and cover = #{cover,jdbcType=VARCHAR}
@@ -505,19 +489,19 @@
         <if test="updateAt != null ">
             and update_at = #{updateAt,jdbcType=TIMESTAMP}
         </if>
-    </delete>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete
-        from book_info
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        update book_info
+        set is_delete = 1
         where book_id = #{bookId,jdbcType=INTEGER}
-    </delete>
-
-    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
-        delete from book_info where book_id in
+    </update>
+    <update id="deleteByPrimaryKeys" parameterType="java.util.List">
+        update book_info set is_delete = 1
+        where book_id in
         <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
             #{ids}
         </foreach>
-    </delete>
+    </update>
+
 
 </mapper>

@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 图书 数据层
  *
  * @author zhangc
- * @date 2021-08-26
+ * @date 2021-09-09
  */
 @Mapper
 public interface BookInfoMapper extends BaseMapper<BookInfo> {
@@ -39,7 +39,7 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
      * @param record 图书信息
      * @return 图书
      */
-    BookInfo selectOneBySelective(BookInfo record);
+     BookInfo selectOneBySelective(BookInfo record);
 
     /**
      * 根据条件,分页查询图书列表
@@ -128,14 +128,14 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
     int updateBatchSelective(List<BookInfo> recordList);
     /**
      * 根据条件删除数据
-     *
-     * @param record  删除的条件
+     * 逻辑删除      *
+     * @param record 删除的条件
      * @return 删除数量
      */
     int deleteBySelective(BookInfo record);
     /**
      * 根据数据值删除数据
-     *
+     * 逻辑删除      *
      * @param id 图书 主键
      * @return 删除数量
      */
@@ -144,8 +144,7 @@ public interface BookInfoMapper extends BaseMapper<BookInfo> {
 
     /**
      * 根据主键集合删除数据
-     *
-     * @param ids 图书 主键集合
+     * 逻辑删除      * @param ids 图书 主键集合
      * @return 删除数量
      */
     int deleteByPrimaryKeys(List<Integer> ids);

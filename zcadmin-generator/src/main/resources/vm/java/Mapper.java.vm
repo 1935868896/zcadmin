@@ -150,6 +150,7 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * 根据主键集合删除数据
         #if($logicDelete)
      * 逻辑删除 #end
+     *
      * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */

@@ -43,6 +43,7 @@
     <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
 #elseif($column.queryType=='not null')
         and $column.columnName not null
+#elseif($logicDelete&&$logicField==$column.columnName)
 #else
         <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
             and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
@@ -69,6 +70,7 @@
                 <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
@@ -97,6 +99,7 @@
                 <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{record.afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="record.$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and record.$column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
@@ -115,7 +118,7 @@
             #{ids}
         </foreach>
         #if($logicDelete)
-        and $logicField =1
+        and $logicField =0
         #end
     </select>
 
@@ -125,7 +128,7 @@
         from ${tableName}
         where 1=1
         #if($logicDelete)
-        and $logicField =1
+        and $logicField =0
         #end
         #foreach($column in $columns)
             #if($column.queryType=='like')
@@ -137,6 +140,7 @@
                 <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=${column.columnJdbcType}}
@@ -147,13 +151,17 @@
 
     <insert id="insert" parameterType="${className}" #if($primaryKey.extra == 'auto_increment')
             useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
-        insert into ${tableName} (
+        insert into $tableName
+    <trim prefix="(" suffix=")" suffixOverrides=",">
 #foreach ($column in $columns)
-            $column.columnName#if($foreach.count != $columns.size()),#end
-#end    )
+#if($logicDelete&&$logicField==$column.columnName)#else $column.columnName,#end#end
+</trim>
         values
-        (#foreach ($column in $columns)
-         #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}#if($foreach.count != $columns.size()),#end#end)
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        #foreach ($column in $columns)
+#if($logicDelete&&$logicField==$column.columnName)#else
+         #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},#end#end
+        </trim>
     </insert>
 
     <insert id="insertSelective" parameterType="${className}"#if($primaryKey.extra == 'auto_increment')
@@ -161,18 +169,20 @@
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
+            #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
                     <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
                         'String' ) and $column.attrNameFirstToLow != '' #end ">$column.columnName,</if>
-                #end
+                #end#end
             #end
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
                     <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
                         'String' ) and $column.attrNameFirstToLow != '' #end ">#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
-                #end
+                #end#end
             #end
         </trim>
     </insert>
@@ -180,26 +190,31 @@
 
     <insert id="insertBatch" parameterType="java.util.List" #if($primaryKey.extra == 'auto_increment')
             useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
-        insert into  ${tableName} (
+        insert into  $tableName
+        <trim prefix="(" suffix=")" suffixOverrides=",">
 #foreach ($column in $columns)
-            $column.columnName#if($foreach.count != $columns.size()),#end
+#if($logicDelete&&$logicField==$column.columnName)#else
+$column.columnName,#end
 #end
-        )
+        </trim>
         values
         <foreach collection="recordList" item="record" index="index" separator=",">
-            (
+            <trim prefix="(" suffix=")" suffixOverrides=",">
 #foreach ($column in $columns)
-                #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}#if($foreach.count != $columns.size()),#end
+#if($logicDelete&&$logicField==$column.columnName)#else
+                #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},#end
 #end
-            )
+            </trim>>
         </foreach>
     </insert>
 
     <update id="update" parameterType="${className}">
-        update ${tableName} set
+        update ${tableName}
+        <trim prefix="SET" suffixOverrides=",">
             #foreach ($column in $columns)
-                $column.columnName =#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType} #if($foreach.count != $columns.size()),#end
-            #end
+#if($logicDelete&&$logicField==$column.columnName)#else
+ $column.columnName =#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},#end#end
+        </trim>
         where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </update>
 
@@ -207,10 +222,11 @@
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
+    #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName)
                     <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
                         'String' ) and $column.attrNameFirstToLow != '' #end ">$column.columnName = #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
-                #end
+                #end#end
 #end
         </trim>
         where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
@@ -220,10 +236,11 @@
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName)
                     <if test="params.$column.attrNameFirstToLow != null #if($column.columnJavaType ==
                         'String' ) and params.$column.attrNameFirstToLow != '' #end ">$column.columnName = #{params.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
-                #end
+                #end#end
             #end
         </trim>
         where 1=1
@@ -237,6 +254,7 @@
                 <if test="record.afterTime!= null and record.afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{record.afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="record.$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and record.$column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
@@ -252,13 +270,14 @@
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName)
                     <trim prefix="$column.columnName = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
                             when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
                         </foreach>
                     </trim>
-                #end
+                #end#end
             #end
         </trim>
         where ${primaryKey.columnName} in
@@ -271,6 +290,7 @@
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName)
                     <trim prefix="$column.columnName = case" suffix="end,">
                         <foreach collection="list" index="index" item="records">
@@ -279,7 +299,7 @@
                             </if>
                         </foreach>
                     </trim>
-                #end
+                #end#end
             #end
         </trim>
         where ${primaryKey.columnName} in
@@ -302,6 +322,7 @@
                 <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
@@ -334,6 +355,7 @@
                 <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
             #elseif($column.queryType=='not null')
                 and $column.columnName not null
+            #elseif($logicDelete&&$logicField==$column.columnName)
             #else
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
                     and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}

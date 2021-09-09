@@ -1,28 +1,27 @@
 package com.zc.modules.project.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Date;
-
 /**
  * 图书表 book_info
  *
- * @author ruoyi
- * @date 2021-08-10
+ * @author zhangc
+ * @date 2021-09-09
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description="图书",parent=BaseEntity.class)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class BookInfo extends BaseEntity{
 
     private static final long serialVersionUID=1L;
@@ -59,14 +58,8 @@ public class BookInfo extends BaseEntity{
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value="更新时间",name="updateAt")
     private Date updateAt;
-
-
-    @TableField(exist = false)
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date beginTime;
-
-    @TableField(exist = false)
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date AfterTime;
+    @TableLogic
+    @ApiModelProperty(value="逻辑删除",name="isDelete")
+    private Boolean isDelete;
 
 }

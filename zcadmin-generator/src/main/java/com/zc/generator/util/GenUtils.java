@@ -91,6 +91,7 @@ public class GenUtils {
         codeGenConfig.setPack(packageName);
         codeGenConfig.setPrefix(null);
         codeGenConfig.setApiAlias(codeGenConfig.getTableComment());
+        codeGenConfig.setLogicDelete(false);
 
         int lastIndex = packageName.lastIndexOf('.');
         int nameLength = packageName.length();

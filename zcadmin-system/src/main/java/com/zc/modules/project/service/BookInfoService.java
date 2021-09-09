@@ -11,7 +11,7 @@ import java.util.List;
  * 图书 服务层
  *
  * @author zhangc
- * @date 2021-08-26
+ * @date 2021-09-09
  */
 public interface BookInfoService extends IService<BookInfo> {
     /**
@@ -20,7 +20,7 @@ public interface BookInfoService extends IService<BookInfo> {
      * @param id 图书ID
      * @return 图书信息
      */
-    BookInfo selectByPrimaryKey(Integer id);
+        BookInfo selectByPrimaryKey(Integer id);
 
 
     /**
@@ -37,7 +37,7 @@ public interface BookInfoService extends IService<BookInfo> {
      * @param record 图书信息
      * @return 图书
      */
-    BookInfo selectOneBySelective(BookInfo record);
+        BookInfo selectOneBySelective(BookInfo record);
 
     /**
      * 根据条件,分页查询图书列表
@@ -106,12 +106,12 @@ public interface BookInfoService extends IService<BookInfo> {
     int updateSelective(BookInfo record);
 
     /**
-     * 根据条件修改某些参数,仅修改存在数值的属性
+    * 根据条件修改某些参数,仅修改存在数值的属性
      *
-     * @param params  需要修改的信息
-     * @param record  根据的条件信息
-     *  @return 修改数量
-     */
+    * @param params  需要修改的信息
+    * @param record  根据的条件信息
+    *  @return 修改数量
+    */
     int updateParamsBySelective(BookInfo params,BookInfo record);
 
 
@@ -134,8 +134,8 @@ public interface BookInfoService extends IService<BookInfo> {
     /**
      * 根据条件删除数据
      *
-     * @param record  删除的条件
-     * @return 删除数量
+    * @param record  删除的条件
+    * @return 删除数量
      */
     int deleteBySelective(BookInfo record);
 

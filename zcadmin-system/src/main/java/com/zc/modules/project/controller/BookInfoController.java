@@ -1,8 +1,6 @@
 package com.zc.modules.project.controller;
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
+    import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zc.annoation.Anonymous;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -11,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.zc.annotation.Log;
+    import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.zc.modules.project.entity.BookInfo;
+    import com.zc.modules.project.entity.BookInfo;
 import com.zc.modules.project.service.BookInfoService;
 
 /**
  * 图书 信息操作处理
  *
  * @author zhangc
- * @date 2021-08-26
+ * @date 2021-09-09
  */
 
 @RestController
@@ -188,8 +186,7 @@ public class BookInfoController {
     @ApiOperation("根据条件删除数据")
     @DeleteMapping("bySelective")
     @Log("图书信息管理:根据条件删除数据")
-//    @PreAuthorize("@el.check('bookInfo:deleteBySelectice')")
-    @Anonymous
+    @PreAuthorize("@el.check('bookInfo:deleteBySelective')")
     public ResultResponse deleteBySelective(@RequestBody BookInfo record) {
         int result = bookInfoService.deleteBySelective(record);
         if (result > 0) {

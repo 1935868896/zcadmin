@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 图书 服务层实现
  *
  * @author zhangc
- * @date 2021-08-26
+ * @date 2021-09-09
  */
 @Service
 @RequiredArgsConstructor
@@ -166,12 +166,12 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
 
 
     /**
-     * 根据条件修改某些参数,仅修改存在数值的属性
-     *
-     * @param  params  需要修改的信息
-     * @param  record  根据的条件信息
-     * @return 修改数量
-     */
+    * 根据条件修改某些参数,仅修改存在数值的属性
+    *
+    * @param  params  需要修改的信息
+    * @param  record  根据的条件信息
+    * @return 修改数量
+    */
     @Override
     public int updateParamsBySelective(BookInfo params,BookInfo record) {
         return bookInfoMapper.updateParamsBySelective(params, record);
@@ -221,11 +221,11 @@ public class BookInfoServiceImpl extends ServiceImpl<BookInfoMapper, BookInfo> i
     }
 
     /**
-     * 根据条件删除数据
-     *
-     * @param record  删除的条件
-     * @return 删除数量
-     */
+    * 根据条件删除数据
+    *
+    * @param record  删除的条件
+    * @return 删除数量
+    */
     public int deleteBySelective(BookInfo record){
         return bookInfoMapper.deleteBySelective(record);
     }
