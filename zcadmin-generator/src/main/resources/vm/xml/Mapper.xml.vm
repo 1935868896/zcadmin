@@ -20,13 +20,19 @@
         <include refid="Base_Column_List"/>
         from ${tableName}
         where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
-    </select>
+#if($logicDelete)
+        and $logicField =0
+#end
+</select>
 
     <select id="selectListBySelective" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
         where 1=1
+        #if($logicDelete)
+        and $logicField =0
+        #end
 #foreach($column in $columns)
     #if($column.queryType=='like')
             <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
@@ -50,6 +56,9 @@
         <include refid="Base_Column_List"/>
         from ${tableName}
         where 1=1
+        #if($logicDelete)
+        and $logicField =0
+        #end
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
@@ -75,6 +84,9 @@
         <include refid="Base_Column_List"/>
         from ${tableName}
         where 1=1
+        #if($logicDelete)
+        and $logicField =0
+        #end
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="record.$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and record.$column.attrNameFirstToLow.trim() != '' #end">
@@ -102,6 +114,9 @@
         <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
             #{ids}
         </foreach>
+        #if($logicDelete)
+        and $logicField =1
+        #end
     </select>
 
     <select id="selectCountBySelective" resultType="java.lang.Integer">
@@ -109,6 +124,9 @@
         count(1)
         from ${tableName}
         where 1=1
+        #if($logicDelete)
+        and $logicField =1
+        #end
         #foreach($column in $columns)
             #if($column.queryType=='like')
                 <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
@@ -269,7 +287,40 @@
             #{records.${primaryKey.attrNameFirstToLow}}
         </foreach>
     </update>
-
+#if($logicDelete)
+    <update id="deleteBySelective" parameterType="java.lang.${primaryKey.columnJavaType}">
+        update ${tableName}
+        set $logicField = 1
+        where 1=1
+        #foreach($column in $columns)
+            #if($column.queryType=='like')
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
+                </if>
+            #elseif($column.queryType=='between')
+                <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+            #elseif($column.queryType=='not null')
+                and $column.columnName not null
+            #else
+                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                    and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
+                </if>
+            #end
+        #end
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}">
+        update ${tableName} set $logicField = 1
+        where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
+    </update>
+    <update id="deleteByPrimaryKeys" parameterType="java.util.List">
+       update ${tableName} set $logicField = 1
+       where ${primaryKey.columnName} in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </update>
+#else
     <delete id="deleteBySelective" parameterType="java.lang.${primaryKey.columnJavaType}">
         delete
         from ${tableName} where 1=1
@@ -290,17 +341,17 @@
             #end
         #end
     </delete>
-
     <delete id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}">
         delete
         from ${tableName} where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </delete>
-
     <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
         delete from ${tableName} where ${primaryKey.columnName} in
         <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
             #{ids}
         </foreach>
     </delete>
+#end
+
 
 </mapper>

@@ -6,8 +6,9 @@ import com.zc.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-
-
+#if($logicDelete)
+import com.baomidou.mybatisplus.annotation.TableLogic;
+#end
 #foreach ($column in $columns)
 #if($column.columnJavaType == 'Date')
 import java.util.Date;
@@ -49,6 +50,10 @@ public class ${className} extends BaseEntity{
     #elseif($column.attrNameFirstToLow==$primaryKey.attrNameFirstToLow)
 
     @TableId(value = "$primaryKey.columnName",type = IdType.AUTO)
+    @ApiModelProperty(value="$column.remark",name="$column.attrNameFirstToLow")
+    private $column.columnJavaType $column.attrNameFirstToLow;
+    #elseif($logicDelete &&$logicField == $column.columnName)
+    @TableLogic
     @ApiModelProperty(value="$column.remark",name="$column.attrNameFirstToLow")
     private $column.columnJavaType $column.attrNameFirstToLow;
     #else

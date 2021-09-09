@@ -128,13 +128,17 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
     int updateBatchSelective(List<${className}> recordList);
     /**
      * 根据条件删除数据
+     #if($logicDelete)
+     * 逻辑删除 #end
      *
-     * @param record  删除的条件
+     * @param record 删除的条件
      * @return 删除数量
      */
     int deleteBySelective(${className} record);
     /**
      * 根据数据值删除数据
+     #if($logicDelete)
+     * 逻辑删除 #end
      *
      * @param id ${tableComment} 主键
      * @return 删除数量
@@ -144,7 +148,8 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 
     /**
      * 根据主键集合删除数据
-     *
+        #if($logicDelete)
+     * 逻辑删除 #end
      * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */

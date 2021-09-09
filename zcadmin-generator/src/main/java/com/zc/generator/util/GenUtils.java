@@ -6,6 +6,9 @@ import cn.hutool.core.util.StrUtil;
 
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 
 import java.util.*;
@@ -15,7 +18,7 @@ import java.util.*;
  *
  * @author ruoyi
  */
-
+@Slf4j
 public class GenUtils {
 
 
@@ -120,18 +123,8 @@ public class GenUtils {
 
 
 
-
-
-
-
-
-
-
-
-
-
     /**
-     * 获取模板信息
+     * 模板信息传递
      *
      * @return 模板列表
      */
@@ -151,8 +144,14 @@ public class GenUtils {
         velocityContext.put("datetime" , DateUtil.today());
         velocityContext.put("vueTableName" , table.getVueTableName());
         velocityContext.put("vueModuleName" , table.getVueModuleName());
-        //以上为通用
-        //下面为
+        if (table.getLogicDelete()&& !StringUtils.isNotBlank(table.getLogicField())){
+            log.error("代码生成过程中,显示需要逻辑删除但是没有提供逻辑删除的相应字段");
+            velocityContext.put("logicDelete",false);
+        }else {
+            velocityContext.put("logicDelete",table.getLogicDelete());
+            velocityContext.put("logicField",table.getLogicField());
+        }
+
         return velocityContext;
     }
 
