@@ -1,4 +1,4 @@
-package com.zc.consts;
+package com.zc.constant;
 
 /**
  * @author ZhangC
@@ -20,7 +20,11 @@ public enum ResultCode  {
 
     /* 用户错误：20001-29999*/
     USER_HAS_EXISTED(20001, "用户名已存在"),
-    USER_NOT_FIND(20002, "用户名不存在");
+    USER_NOT_FIND(20002, "用户名不存在"),
+
+    VERIFICATION_CODE_ERROR(20003,"验证码错误,请重新填写"),
+    VERIFICATION_CODE_EXPIRE(20004,"验证码过期,请重新填写");
+
 
 
 

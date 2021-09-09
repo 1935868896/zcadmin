@@ -15,6 +15,8 @@
  */
 package com.zc.exception.handler;
 
+import com.zc.constant.ResultCode;
+import com.zc.entity.ResultResponse;
 import com.zc.exception.BadRequestException;
 import com.zc.exception.EntityExistException;
 import com.zc.exception.EntityNotFoundException;
@@ -44,57 +46,57 @@ public class GlobalExceptionHandler {
      * 处理所有不可知的异常
      */
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ApiError> handleException(Throwable e){
+    public ResultResponse handleException(Throwable e){
         // 打印堆栈信息
         e.printStackTrace();
 
-        return buildResponseEntity(ApiError.error(e.getMessage()));
+        return new ResultResponse(400,e.getMessage(),null);
     }
 
     /**
      * BadCredentialsException
      */
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiError> badCredentialsException(BadCredentialsException e){
+    public ResultResponse badCredentialsException(BadCredentialsException e){
         // 打印堆栈信息
         String message = "坏的凭证".equals(e.getMessage()) ? "用户名或密码不正确" : e.getMessage();
         log.error(message);
-        return buildResponseEntity(ApiError.error(message));
+        return new ResultResponse(400,message,null);
     }
 
     /**
      * 处理自定义异常
      */
 	@ExceptionHandler(value = BadRequestException.class)
-	public ResponseEntity<ApiError> badRequestException(BadRequestException e) {
+	public ResultResponse badRequestException(BadRequestException e) {
         // 打印堆栈信息
         e.printStackTrace();
-        return buildResponseEntity(ApiError.error(e.getStatus(),e.getMessage()));
+        return new ResultResponse(e.getStatus(),e.getMessage(),null);
 	}
 
     /**
      * 处理 EntityExist
      */
     @ExceptionHandler(value = EntityExistException.class)
-    public ResponseEntity<ApiError> entityExistException(EntityExistException e) {
+    public ResultResponse entityExistException(EntityExistException e) {
         // 打印堆栈信息
-        return buildResponseEntity(ApiError.error(e.getMessage()));
+        return ResultResponse.error(e.getMessage());
     }
 
     /**
      * 处理 EntityNotFound
      */
     @ExceptionHandler(value = EntityNotFoundException.class)
-    public ResponseEntity<ApiError> entityNotFoundException(EntityNotFoundException e) {
+    public ResultResponse entityNotFoundException(EntityNotFoundException e) {
         // 打印堆栈信息
-        return buildResponseEntity(ApiError.error(NOT_FOUND.value(),e.getMessage()));
+        return ResultResponse.error(e.getMessage());
     }
 
     /**
      * 处理所有接口数据验证异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ResultResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         e.printStackTrace();
         // 打印堆栈信息
         String[] str = Objects.requireNonNull(e.getBindingResult().getAllErrors().get(0).getCodes())[1].split("\\.");
@@ -103,13 +105,8 @@ public class GlobalExceptionHandler {
         if(msg.equals(message)){
             message = str[1] + ":" + message;
         }
-        return buildResponseEntity(ApiError.error(message));
+        return ResultResponse.error(message);
     }
 
-    /**
-     * 统一返回
-     */
-    private ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {
-        return new ResponseEntity<>(apiError, HttpStatus.valueOf(apiError.getStatus()));
-    }
+
 }

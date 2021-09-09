@@ -1,6 +1,6 @@
 package com.zc.entity;
 
-import com.zc.consts.ResultCode;
+import com.zc.constant.ResultCode;
 import lombok.Data;
 
 /**
@@ -40,6 +40,10 @@ public class ResultResponse {
 
     public static ResultResponse error(Object data) {
         return new ResultResponse(ResultCode.ERROR, data);
+    }
+
+    public static ResultResponse error(String message){
+        return new ResultResponse(400,message,null);
     }
 
 

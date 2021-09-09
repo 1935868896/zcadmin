@@ -15,6 +15,7 @@
  */
 package com.zc.exception;
 
+import com.zc.constant.ResultCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -37,5 +38,9 @@ public class BadRequestException extends RuntimeException{
     public BadRequestException(HttpStatus status,String msg){
         super(msg);
         this.status = status.value();
+    }
+    public BadRequestException(ResultCode resultCode){
+        super(resultCode.message());
+        this.status = resultCode.code();
     }
 }

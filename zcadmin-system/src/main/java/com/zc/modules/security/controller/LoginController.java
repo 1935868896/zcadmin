@@ -7,6 +7,7 @@ import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.zc.annoation.Anonymous;
 import com.zc.annotation.Log;
+import com.zc.constant.ResultCode;
 import com.zc.entity.JwtAuthentication;
 import com.zc.entity.ResultResponse;
 import com.zc.exception.BadRequestException;
@@ -76,7 +77,8 @@ public class LoginController {
             MathGenerator mathGenerator = new MathGenerator();
             boolean verify = mathGenerator.verify(code, user.getVerifyCode());
             if (!verify) {
-                throw new BadRequestException("验证码填写错误,请重新填写");
+                // 验证码填写错误
+                throw new BadRequestException(ResultCode.VERIFICATION_CODE_ERROR);
             }
 
         }
