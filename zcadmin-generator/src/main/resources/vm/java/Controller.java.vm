@@ -7,17 +7,31 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-    ##此处引用自己编写的jar包
+##此处引用自己编写的jar包
 import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-    ##此处引用实体类
+##此处引用实体类
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
+### 此处为
+#foreach ($column in $columns)
+    #if($column.columnName == 'create_by'||$column.columnName == 'update_by')
+import com.zc.utils.SecurityUtils;
+        #break
+    #end
+#end
+###
+#foreach ($column in $columns)
+    #if($column.columnName == 'create_time'||$column.columnName == 'update_time')
+import cn.hutool.core.date.DateTime;
+        #break
+    #end
+#end
+
 
 /**
  * ${tableComment} 信息操作处理
@@ -112,6 +126,16 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:插入单条数据")
     @PreAuthorize("@el.check('${classname}:insert')")
     public ResultResponse insert(@RequestBody ${className} record) {
+        if (record==null){
+            throw new BadRequestException("插入数据为空");
+        }
+#foreach ($column in $columns)
+    #if($column.columnName == 'create_by')
+        record.setCreateBy(SecurityUtils.getCurrentUsername());
+    #elseif($column.columnName == 'create_time')
+        record.setCreateTime(new DateTime());
+    #end
+#end
         int result = ${classname}Service.insert(record);
         if (result > 0) {
             return ResultResponse.success(record);
@@ -125,6 +149,23 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:批量插入数据")
     @PreAuthorize("@el.check('${classname}:insertBatch')")
     public ResultResponse insertBatch(@RequestBody List<${className}> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量插入数据为空");
+        }
+#foreach ($column in $columns)
+#if($column.columnName == 'create_by'||$column.columnName == 'create_time')
+        for (BookInfo record : records) {
+#foreach ($column in $columns)
+    #if($column.columnName == 'create_by')
+            record.setCreateBy(SecurityUtils.getCurrentUsername());
+    #elseif($column.columnName == 'create_time')
+            record.setCreateTime(new DateTime());
+    #end
+#end
+        }
+#break
+#end
+#end
         int result = ${classname}Service.insertBatch(records);
         if (result > 0) {
             return ResultResponse.success(records);
@@ -138,6 +179,16 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:修改数据")
     @PreAuthorize("@el.check('${classname}:update')")
     public ResultResponse update(@RequestBody ${className} record) {
+        if (record==null){
+            throw new BadRequestException("修改数据为空");
+        }
+#foreach ($column in $columns)
+    #if($column.columnName == 'update_by')
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
+    #elseif($column.columnName == 'update_time')
+        record.setUpdateTime(new DateTime());
+        #end
+#end
         int result = ${classname}Service.update(record);
         if (result > 0) {
             return ResultResponse.success();
@@ -151,6 +202,16 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:修改部分数据")
     @PreAuthorize("@el.check('${classname}:updateBySelective')")
     public ResultResponse updateSelective(@RequestBody ${className} record) {
+        if (record==null){
+            throw new BadRequestException("修改数据为空");
+        }
+#foreach ($column in $columns)
+    #if($column.columnName == 'update_by')
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
+    #elseif($column.columnName == 'update_time')
+        record.setUpdateTime(new DateTime());
+    #end
+#end
         int result = ${classname}Service.updateSelective(record);
         if (result > 0) {
             return ResultResponse.success();
@@ -165,6 +226,23 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:批量修改数据")
     @PreAuthorize("@el.check('${classname}:updateBatch')")
     public ResultResponse updateBatch(@RequestBody List<${className}> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量修改数据为空");
+        }
+#foreach ($column in $columns)
+#if($column.columnName == 'update_by'||$column.columnName == 'update_time')
+        for (BookInfo record : records) {
+#foreach ($column in $columns)
+    #if($column.columnName == 'update_by')
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
+        #elseif($column.columnName == 'update_time')
+            record.setUpdateTime(new DateTime());
+    #end
+#end
+        }
+#break
+#end
+#end
         int result = ${classname}Service.updateBatch(records);
         if (result > 0) {
             return ResultResponse.success();
@@ -179,6 +257,24 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:批量修改数据的部分属性")
     @PreAuthorize("@el.check('${classname}:updateBatchBySelective')")
     public ResultResponse updateBatchBySelective(@RequestBody List<${className}> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量修改数据为空");
+        }
+#foreach ($column in $columns)
+#if($column.columnName == 'update_by'||$column.columnName == 'update_time')
+        for (BookInfo record : records) {
+#foreach ($column in $columns)
+    #if($column.columnName == 'update_by')
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
+        #elseif($column.columnName == 'update_time')
+            record.setUpdateTime(new DateTime());
+    #end
+#end
+        }
+#break
+#end
+
+#end
         int result = ${classname}Service.updateBatchBySelective(records);
         if (result > 0) {
             return ResultResponse.success();

@@ -1,6 +1,9 @@
 package com.zc.modules.project.controller;
-    import com.baomidou.mybatisplus.core.metadata.IPage;
+
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zc.exception.BadRequestException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-    import com.zc.annotation.Log;
+import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-    import com.zc.modules.project.entity.BookInfo;
+import com.zc.modules.project.entity.BookInfo;
 import com.zc.modules.project.service.BookInfoService;
 
+
+import cn.hutool.core.date.DateTime;
+import com.zc.utils.SecurityUtils;
 /**
  * 图书 信息操作处理
  *
@@ -108,6 +114,12 @@ public class BookInfoController {
     @Log("图书信息管理:插入单条数据")
     @PreAuthorize("@el.check('bookInfo:insert')")
     public ResultResponse insert(@RequestBody BookInfo record) {
+        if (record==null){
+            throw new BadRequestException("插入数据为空");
+        }
+        record.setCreateTime(new DateTime());
+        record.setCreateBy(SecurityUtils.getCurrentUsername());
+
         int result = bookInfoService.insert(record);
         if (result > 0) {
             return ResultResponse.success(record);
@@ -121,6 +133,14 @@ public class BookInfoController {
     @Log("图书信息管理:批量插入数据")
     @PreAuthorize("@el.check('bookInfo:insertBatch')")
     public ResultResponse insertBatch(@RequestBody List<BookInfo> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量插入数据为空");
+        }
+        for (BookInfo record : records) {
+            record.setCreateTime(new DateTime());
+            record.setCreateBy(SecurityUtils.getCurrentUsername());
+        }
+
         int result = bookInfoService.insertBatch(records);
         if (result > 0) {
             return ResultResponse.success(records);
@@ -134,6 +154,11 @@ public class BookInfoController {
     @Log("图书信息管理:修改数据")
     @PreAuthorize("@el.check('bookInfo:update')")
     public ResultResponse update(@RequestBody BookInfo record) {
+        if (record==null){
+            throw new BadRequestException("修改数据为空");
+        }
+        record.setUpdateTime(new DateTime());
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
         int result = bookInfoService.update(record);
         if (result > 0) {
             return ResultResponse.success();
@@ -147,6 +172,11 @@ public class BookInfoController {
     @Log("图书信息管理:修改部分数据")
     @PreAuthorize("@el.check('bookInfo:updateBySelective')")
     public ResultResponse updateSelective(@RequestBody BookInfo record) {
+        if (record==null){
+            throw new BadRequestException("修改数据为空");
+        }
+        record.setUpdateTime(new DateTime());
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
         int result = bookInfoService.updateSelective(record);
         if (result > 0) {
             return ResultResponse.success();
@@ -161,6 +191,13 @@ public class BookInfoController {
     @Log("图书信息管理:批量修改数据")
     @PreAuthorize("@el.check('bookInfo:updateBatch')")
     public ResultResponse updateBatch(@RequestBody List<BookInfo> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量修改数据为空");
+        }
+        for (BookInfo record : records) {
+            record.setUpdateTime(new DateTime());
+            record.setUpdateBy(SecurityUtils.getCurrentUsername());
+        }
         int result = bookInfoService.updateBatch(records);
         if (result > 0) {
             return ResultResponse.success();
@@ -175,6 +212,13 @@ public class BookInfoController {
     @Log("图书信息管理:批量修改数据的部分属性")
     @PreAuthorize("@el.check('bookInfo:updateBatchBySelective')")
     public ResultResponse updateBatchBySelective(@RequestBody List<BookInfo> records) {
+        if (records.isEmpty()){
+            throw new BadRequestException("批量修改数据为空");
+        }
+        for (BookInfo record : records) {
+            record.setUpdateTime(new DateTime());
+            record.setUpdateBy(SecurityUtils.getCurrentUsername());
+        }
         int result = bookInfoService.updateBatchBySelective(records);
         if (result > 0) {
             return ResultResponse.success();
