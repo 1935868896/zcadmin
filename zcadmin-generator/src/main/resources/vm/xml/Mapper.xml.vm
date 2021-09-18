@@ -204,7 +204,7 @@ $column.columnName,#end
 #if($logicDelete&&$logicField==$column.columnName)#else
                 #{record.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},#end
 #end
-            </trim>>
+            </trim>
         </foreach>
     </insert>
 
