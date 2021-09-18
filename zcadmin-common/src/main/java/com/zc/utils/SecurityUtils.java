@@ -18,6 +18,7 @@ package com.zc.utils;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.zc.entity.UserDto;
 import com.zc.exception.BadRequestException;
 import com.zc.utils.enums.DataScopeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -74,8 +75,9 @@ public class SecurityUtils {
      * @return 系统用户ID
      */
     public static Long getCurrentUserId() {
-        UserDetails userDetails = getCurrentUser();
-        return new JSONObject(new JSONObject(userDetails).get("user")).get("id", Long.class);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userDto=(UserDto) principal;
+        return userDto.getUserId();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.zc.modules.security.service;
+package com.zc.entity;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +30,7 @@ public class UserDto implements UserDetails {
      * 用户是否可用
      */
 
+    Long userId;
     String username;
     String password;
     Set<String> permission;

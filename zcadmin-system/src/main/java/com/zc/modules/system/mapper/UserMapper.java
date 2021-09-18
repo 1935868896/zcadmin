@@ -1,6 +1,6 @@
 package com.zc.modules.system.mapper;
 
-import com.zc.modules.security.service.UserDto;
+import com.zc.entity.UserDto;
 import com.zc.modules.system.entity.User;
 import java.util.List;
 import java.util.Set;
