@@ -1,9 +1,11 @@
 package com.zc.modules.system.controller;
+    import cn.hutool.core.date.DateTime;
     import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
     import com.zc.modules.system.entity.RolesMenus;
     import com.zc.modules.system.service.RolesMenusService;
     import com.zc.modules.system.vo.RolesMenusVO;
+    import com.zc.utils.SecurityUtils;
     import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +120,8 @@ public class RoleController {
     @Log("角色信息管理:插入单条数据")
     @PreAuthorize("@el.check('role:insert')")
     public ResultResponse insert(@RequestBody Role record) {
+        record.setCreateTime(new DateTime());
+        record.setCreateBy(SecurityUtils.getCurrentUsername());
         int result = roleService.insert(record);
         if (result > 0) {
             return ResultResponse.success(record);
@@ -133,6 +137,8 @@ public class RoleController {
     @Log("角色信息管理:修改数据")
     @PreAuthorize("@el.check('role:update')")
     public ResultResponse update(@RequestBody Role record) {
+        record.setUpdateTime(new DateTime());
+        record.setUpdateBy(SecurityUtils.getCurrentUsername());
         int result = roleService.update(record);
         if (result > 0) {
             return ResultResponse.success();
