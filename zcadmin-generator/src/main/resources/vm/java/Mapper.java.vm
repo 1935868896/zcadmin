@@ -16,14 +16,17 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ${className}Mapper extends BaseMapper<${className}> {
 
+#foreach($method in $codeMethodConfigs)
+#if($method.methodName=='getObjectById')
     /**
      * 查询${tableComment}信息
      *
      * @param id ${tableComment}ID
      * @return ${tableComment}信息
      */
-    ${className} selectByPrimaryKey(${primaryKey.columnJavaType} id);
+    ${className} selectObjectById(${primaryKey.columnJavaType} id);
 
+#elseif($method.methodName=='getListByParam')
 
     /**
      * 根据条件,查询${tableComment}列表
@@ -31,16 +34,25 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param record ${tableComment}信息
      * @return ${tableComment}集合
      */
-    List<${className}> selectListBySelective(${className} record);
+    List<${className}> selectListByParam(${className} record);
 
+#elseif($method.methodName=='getOneByParam')
     /**
      * 根据条件,查询第一个${tableComment}对象(一般用于条件可以确定唯一数据)
      *
      * @param record ${tableComment}信息
      * @return ${tableComment}
      */
-     ${className} selectOneBySelective(${className} record);
-
+     ${className} selectOneByParam(${className} record);
+#elseif($method.methodName=='getListByIds')
+    /**
+     * 根据主键集合,批量查询${tableComment}列表
+     *
+     * @param ids ${tableComment}主键List集合
+     * @return ${tableComment}集合
+     */
+    List<${className}> selectListByIds(List<${primaryKey.columnJavaType}> ids);
+#elseif($method.methodName=='getPageByParam')
     /**
      * 根据条件,分页查询${tableComment}列表
      *
@@ -48,31 +60,26 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param page mybatis-plus 分页对象
      * @return ${tableComment}集合
      */
-    IPage<${className}> selectPageBySelective(${className} record, Page page);
-    /**
-     * 根据主键集合,批量查询${tableComment}列表
-     *
-     * @param ids ${tableComment}主键List集合
-     * @return ${tableComment}集合
-     */
-    List<${className}> selectByPrimaryKeys(List<${primaryKey.columnJavaType}> ids);
+    IPage<${className}> selectPageByParam(${className} record, Page page);
 
+#elseif($method.methodName=='getCountByParam')
     /**
      * 查询符合条件的语句数量
      *
      * @param record ${tableComment} 信息
      * @return 查询结果数量
      */
-    int selectCountBySelective(${className} record);
+    int selectCountByParam(${className} record);
 
-
+#elseif($method.methodName=='insertOne')
     /**
      * 插入单条数据
      *
      * @param record ${tableComment} 信息
      * @return 插入数量
      */
-    int insert(${className} record);
+    int insertOne(${className} record);
+
     /**
      * 条件插入单条数据
      *
@@ -80,38 +87,31 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @return 插入数量
      */
     int insertSelective(${className} record);
-    /**
-     * 批量插入多条数据
-     *
-     * @param recordList ${tableComment}集合
-     * @return 插入数量
-     */
-    int insertBatch(List<${className}> recordList);
-    /**
+#elseif($method.methodName=='insertBatch')
+     /**
+      * 批量插入多条数据
+      *
+      * @param recordList ${tableComment}集合
+      * @return 插入数量
+      */
+     int insertBatch(List<${className}> recordList);
+#elseif($method.methodName=='updateById')
+        /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int update(${className} record);
+    int updateById(${className} record);
+#elseif($method.methodName=='updateByParam')
     /**
      * 根据主键修改单条数据,仅修改存在数值的属性
      *
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int updateSelective(${className} record);
-
-    /**
-     * 根据条件修改某些参数,仅修改存在数值的属性
-     *
-     * @param params  需要修改的信息
-     * @param record  根据的条件信息
-     * @return 修改数量
-     */
-    int updateParamsBySelective(${className} params,${className} record);
-
-
+    int updateByParam(${className} record);
+#elseif($method.methodName=='updateBatch')
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -119,6 +119,16 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @return 修改数量
      */
     int updateBatch(List<${className}> recordList);
+#elseif($method.methodName=='updateBatchByParam')
+    /**
+     * 根据条件修改某些参数,仅修改存在数值的属性
+     *
+     * @param params  需要修改的信息
+     * @param record  根据的条件信息
+     * @return 修改数量
+     */
+    int updateParamsByParam(${className} params,${className} record);
+
     /**
      * 修改多条数据,仅修改存在数值的属性
      *
@@ -126,7 +136,19 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @return 修改数量
      */
     int updateBatchSelective(List<${className}> recordList);
+
+#elseif($method.methodName=='deleteById')
     /**
+     * 根据数据值删除数据
+        #if($logicDelete)
+         * 逻辑删除 #end
+     *
+     * @param id ${tableComment} 主键
+     * @return 删除数量
+     */
+    int deleteById(${primaryKey.columnJavaType} id);
+#elseif($method.methodName=='deleteListByParam')
+        /**
      * 根据条件删除数据
      #if($logicDelete)
      * 逻辑删除 #end
@@ -134,18 +156,9 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param record 删除的条件
      * @return 删除数量
      */
-    int deleteBySelective(${className} record);
-    /**
-     * 根据数据值删除数据
-     #if($logicDelete)
-     * 逻辑删除 #end
-     *
-     * @param id ${tableComment} 主键
-     * @return 删除数量
-     */
-    int deleteByPrimaryKey(${primaryKey.columnJavaType} id);
+    int deleteListByParam(${className} record);
 
-
+#elseif($method.methodName=='deleteListByIds')
     /**
      * 根据主键集合删除数据
         #if($logicDelete)
@@ -154,6 +167,8 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      * @param ids ${tableComment} 主键集合
      * @return 删除数量
      */
-    int deleteByPrimaryKeys(List<${primaryKey.columnJavaType}> ids);
+    int deleteListByIds(List<${primaryKey.columnJavaType}> ids);
 
+#end
+#end
 }

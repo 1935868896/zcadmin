@@ -15,7 +15,9 @@
 
     </sql>
     ## 1. 主键属性名  2. 主键类型  3. 主键column名 4. 主键类型
-    <select id="selectByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}" resultMap="BaseResultMap">
+#foreach($method in $codeMethodConfigs)
+#if($method.methodName=='getObjectById')
+    <select id="selectObjectById" parameterType="java.lang.${primaryKey.columnJavaType}" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
@@ -24,8 +26,8 @@
         and $logicField =0
 #end
 </select>
-
-    <select id="selectListBySelective" resultMap="BaseResultMap">
+#elseif($method.methodName=='getListByParam')
+    <select id="selectListByParam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
@@ -51,8 +53,8 @@
 #end
     #end
     </select>
-
-    <select id="selectOneBySelective" resultMap="BaseResultMap">
+#elseif($method.methodName=='getOneByParam')
+    <select id="selectOneByParam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
@@ -80,8 +82,8 @@
         limit 1
     </select>
 
-
-    <select id="selectPageBySelective" resultMap="BaseResultMap">
+#elseif($method.methodName=='getPageByParam')
+    <select id="selectPageByParam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
@@ -107,8 +109,8 @@
             #end
         #end
     </select>
-
-    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+#elseif($method.methodName=='getListByIds')
+    <select id="selectListByIds" parameterType="java.util.List"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -121,8 +123,8 @@
         and $logicField =0
         #end
     </select>
-
-    <select id="selectCountBySelective" resultType="java.lang.Integer">
+#elseif($method.methodName=='getCountByParam')
+    <select id="selectCountByParam" resultType="java.lang.Integer">
         select
         count(1)
         from ${tableName}
@@ -148,8 +150,8 @@
             #end
         #end
     </select>
-
-    <insert id="insert" parameterType="${className}" #if($primaryKey.extra == 'auto_increment')
+#elseif($method.methodName=='insertOne')
+    <insert id="insertOne" parameterType="${className}" #if($primaryKey.extra == 'auto_increment')
             useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
         insert into $tableName
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -187,7 +189,7 @@
         </trim>
     </insert>
 
-
+#elseif($method.methodName=='insertBatch')
     <insert id="insertBatch" parameterType="java.util.List" #if($primaryKey.extra == 'auto_increment')
             useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
         insert into  $tableName
@@ -207,8 +209,8 @@ $column.columnName,#end
             </trim>
         </foreach>
     </insert>
-
-    <update id="update" parameterType="${className}">
+#elseif($method.methodName=='updateById')
+    <update id="updateById" parameterType="${className}">
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
             #foreach ($column in $columns)
@@ -217,8 +219,8 @@ $column.columnName,#end
         </trim>
         where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </update>
-
-    <update id="updateSelective" parameterType="${className}">
+#elseif($method.methodName=='updateByParam')
+    <update id="updateByParam" parameterType="${className}">
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
@@ -232,15 +234,59 @@ $column.columnName,#end
         where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
     </update>
 
-    <update id="updateParamsBySelective" parameterType="${className}">
+
+
+#elseif($method.methodName=='updateBatch')
+    <update id="updateBatch" parameterType="java.util.List">
         update ${tableName}
         <trim prefix="SET" suffixOverrides=",">
             #foreach($column in $columns)
                 #if($logicDelete&&$logicField==$column.columnName)#else
                 #if($column.columnName != $primaryKey.columnName)
-                    <if test="params.$column.attrNameFirstToLow != null #if($column.columnJavaType ==
-                        'String' ) and params.$column.attrNameFirstToLow != '' #end ">$column.columnName = #{params.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
+                    <trim prefix="$column.columnName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
+                        </foreach>
+                    </trim>
                 #end#end
+            #end
+        </trim>
+        where ${primaryKey.columnName} in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.${primaryKey.attrNameFirstToLow}}
+        </foreach>
+    </update>
+#elseif($method.methodName=='updateBatchByParam')
+    <update id="updateBatchByParam" parameterType="java.util.List">
+        update ${tableName}
+        <trim prefix="SET" suffixOverrides=",">
+            #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
+                #if($column.columnName != $primaryKey.columnName)
+                    <trim prefix="$column.columnName = case" suffix="end,">
+                        <foreach collection="list" index="index" item="records">
+                            <if test="records.$column.attrNameFirstToLow != null #if($column.columnJavaType == 'String' ) and records.$column.attrNameFirstToLow != '' #end " >
+                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
+                            </if>
+                        </foreach>
+                    </trim>
+                #end#end
+            #end
+        </trim>
+        where ${primaryKey.columnName} in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.${primaryKey.attrNameFirstToLow}}
+        </foreach>
+    </update>
+    <update id="updateParamsBySelective" parameterType="${className}">
+        update ${tableName}
+        <trim prefix="SET" suffixOverrides=",">
+            #foreach($column in $columns)
+                #if($logicDelete&&$logicField==$column.columnName)#else
+                    #if($column.columnName != $primaryKey.columnName)
+                        <if test="params.$column.attrNameFirstToLow != null #if($column.columnJavaType ==
+                            'String' ) and params.$column.attrNameFirstToLow != '' #end ">$column.columnName = #{params.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
+                    #end#end
             #end
         </trim>
         where 1=1
@@ -262,117 +308,86 @@ $column.columnName,#end
             #end
         #end
 
-
     </update>
 
-
-    <update id="updateBatch" parameterType="java.util.List">
-        update ${tableName}
-        <trim prefix="SET" suffixOverrides=",">
-            #foreach($column in $columns)
-                #if($logicDelete&&$logicField==$column.columnName)#else
-                #if($column.columnName != $primaryKey.columnName)
-                    <trim prefix="$column.columnName = case" suffix="end,">
-                        <foreach collection="list" index="index" item="records">
-                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
-                        </foreach>
-                    </trim>
-                #end#end
-            #end
-        </trim>
-        where ${primaryKey.columnName} in
-        <foreach collection="list" item="records" open="(" close=")" separator=", ">
-            #{records.${primaryKey.attrNameFirstToLow}}
-        </foreach>
-    </update>
-
-    <update id="updateBatchSelective" parameterType="java.util.List">
-        update ${tableName}
-        <trim prefix="SET" suffixOverrides=",">
-            #foreach($column in $columns)
-                #if($logicDelete&&$logicField==$column.columnName)#else
-                #if($column.columnName != $primaryKey.columnName)
-                    <trim prefix="$column.columnName = case" suffix="end,">
-                        <foreach collection="list" index="index" item="records">
-                            <if test="records.$column.attrNameFirstToLow != null #if($column.columnJavaType == 'String' ) and records.$column.attrNameFirstToLow != '' #end " >
-                            when ${primaryKey.columnName} = #{records.${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}} then #{records.$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
-                            </if>
-                        </foreach>
-                    </trim>
-                #end#end
-            #end
-        </trim>
-        where ${primaryKey.columnName} in
-        <foreach collection="list" item="records" open="(" close=")" separator=", ">
-            #{records.${primaryKey.attrNameFirstToLow}}
-        </foreach>
-    </update>
-#if($logicDelete)
-    <update id="deleteBySelective" parameterType="java.lang.${primaryKey.columnJavaType}">
-        update ${tableName}
-        set $logicField = 1
-        where 1=1
-        #foreach($column in $columns)
-            #if($column.queryType=='like')
-                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
-                </if>
-            #elseif($column.queryType=='between')
-                <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
-                <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
-            #elseif($column.queryType=='not null')
-                and $column.columnName not null
-            #elseif($logicDelete&&$logicField==$column.columnName)
-            #else
-                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
-                </if>
-            #end
+#elseif($method.methodName=='deleteById')
+    #if($logicDelete)
+        <update id="deleteById" parameterType="java.lang.${primaryKey.columnJavaType}">
+            update ${tableName} set $logicField = 1
+            where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
+        </update>
+        #else
+            <delete id="deleteById" parameterType="java.lang.${primaryKey.columnJavaType}">
+                delete
+                from ${tableName} where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
+            </delete>
         #end
-    </update>
-    <update id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}">
-        update ${tableName} set $logicField = 1
-        where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
-    </update>
-    <update id="deleteByPrimaryKeys" parameterType="java.util.List">
-       update ${tableName} set $logicField = 1
-       where ${primaryKey.columnName} in
-        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
-            #{ids}
-        </foreach>
-    </update>
-#else
-    <delete id="deleteBySelective" parameterType="java.lang.${primaryKey.columnJavaType}">
-        delete
-        from ${tableName} where 1=1
-        #foreach($column in $columns)
-            #if($column.queryType=='like')
-                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
-                </if>
-            #elseif($column.queryType=='between')
-                <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
-                <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
-            #elseif($column.queryType=='not null')
-                and $column.columnName not null
-            #elseif($logicDelete&&$logicField==$column.columnName)
-            #else
-                <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
-                    and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
-                </if>
+#elseif($method.methodName=='deleteListByParam')
+    #if($logicDelete)
+        <update id="deleteByParam" parameterType="java.lang.${primaryKey.columnJavaType}">
+            update ${tableName}
+            set $logicField = 1
+            where 1=1
+            #foreach($column in $columns)
+                #if($column.queryType=='like')
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                        and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
+                    </if>
+                #elseif($column.queryType=='between')
+                    <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                    <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+                #elseif($column.queryType=='not null')
+                    and $column.columnName not null
+                #elseif($logicDelete&&$logicField==$column.columnName)
+                #else
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                        and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
+                    </if>
+                #end
             #end
-        #end
-    </delete>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.${primaryKey.columnJavaType}">
-        delete
-        from ${tableName} where ${primaryKey.columnName} = #{${primaryKey.attrNameFirstToLow},jdbcType=${primaryKey.columnJdbcType}}
-    </delete>
-    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
-        delete from ${tableName} where ${primaryKey.columnName} in
-        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
-            #{ids}
-        </foreach>
-    </delete>
+        </update>
+    #else
+        <delete id="deleteByParam" parameterType="java.lang.${primaryKey.columnJavaType}">
+            delete
+            from ${tableName} where 1=1
+            #foreach($column in $columns)
+                #if($column.queryType=='like')
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                        and $column.columnName like CONCAT('%',#{$column.attrNameFirstToLow},'%' )
+                    </if>
+                #elseif($column.queryType=='between')
+                    <if test="beginTime!= null and beginTime != ''">AND $column.columnName <![CDATA[>=]]> #{beginTime}</if>
+                    <if test="afterTime!= null and afterTime != ''">AND $column.columnName <![CDATA[<=]]>#{afterTIme}</if>
+                #elseif($column.queryType=='not null')
+                    and $column.columnName not null
+                #elseif($logicDelete&&$logicField==$column.columnName)
+                #else
+                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType =='String' ) and $column.attrNameFirstToLow.trim() != '' #end">
+                        and $column.columnName $column.queryType #{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType}
+                    </if>
+                #end
+            #end
+        </delete>
+    #end
+#elseif($method.methodName=='deleteListByIds')
+    #if($logicDelete)
+        <update id="deleteByIds" parameterType="java.util.List">
+            update ${tableName} set $logicField = 1
+            where ${primaryKey.columnName} in
+            <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+                #{ids}
+            </foreach>
+        </update>
+        #else
+            <delete id="deleteByIds" parameterType="java.util.List">
+                delete from ${tableName} where ${primaryKey.columnName} in
+                <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+                    #{ids}
+                </foreach>
+            </delete>
+    #end
+
+#end
 #end
 
 

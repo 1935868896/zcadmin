@@ -26,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements ${className}Service {
 
     private final ${className}Mapper ${classname}Mapper;
-
+#foreach($method in $codeMethodConfigs)
+#if($method.methodName=='getObjectById')
     /**
      * 查询${tableComment}信息
      *
@@ -34,11 +35,11 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}信息
      */
     @Override
-    public ${className} selectByPrimaryKey(${primaryKey.columnJavaType} id) {
-        return ${classname}Mapper.selectByPrimaryKey(id);
+    public ${className} selectObjectById(${primaryKey.columnJavaType} id) {
+        return ${classname}Mapper.selectObjectById(id);
     }
 
-
+#elseif($method.methodName=='getListByParam')
     /**
      * 根据条件,查询${tableComment}列表
      *
@@ -46,10 +47,10 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}集合
      */
     @Override
-    public List<${className}> selectListBySelective(${className} record) {
-        return ${classname}Mapper.selectListBySelective(record);
+    public List<${className}> selectListByParam(${className} record) {
+        return ${classname}Mapper.selectListByParam(record);
     }
-
+#elseif($method.methodName=='getOneByParam')
     /**
      * 根据条件,查询第一个${tableComment}对象(一般用于条件可以确定唯一数据)
      *
@@ -57,10 +58,10 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}
      */
     @Override
-    public ${className} selectOneBySelective(${className} record) {
-        return ${classname}Mapper.selectOneBySelective(record);
+    public ${className} selectOneByParam(${className} record) {
+        return ${classname}Mapper.selectOneByParam(record);
     }
-
+#elseif($method.methodName=='getPageByParam')
     /**
      * 根据条件,分页查询${tableComment}列表
      *
@@ -69,10 +70,10 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}集合
      */
     @Override
-    public IPage<${className}> selectPageBySelective(${className} record, Page page) {
-        return ${classname}Mapper.selectPageBySelective(record, page);
+    public IPage<${className}> selectPageByParam(${className} record, Page page) {
+        return ${classname}Mapper.selectPageByParam(record, page);
     }
-
+#elseif($method.methodName=='getListByIds')
     /**
      * 根据主键集合,批量查询${tableComment}列表
      *
@@ -80,14 +81,14 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return ${tableComment}集合
      */
     @Override
-    public List<${className}> selectByPrimaryKeys(List<${primaryKey.columnJavaType}> ids) {
+    public List<${className}> selectListByIds(List<${primaryKey.columnJavaType}> ids) {
         if (ids == null || ids.size() <= 0) {
             return null;
         }
-        return ${classname}Mapper.selectByPrimaryKeys(ids);
+        return ${classname}Mapper.selectListByIds(ids);
     }
 
-
+#elseif($method.methodName=='getCountByParam')
     /**
      * 查询符合条件的语句数量
      *
@@ -95,10 +96,10 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 查询结果数量
      */
     @Override
-    public int selectCountBySelective(${className} record) {
-        return ${classname}Mapper.selectCountBySelective(record);
+    public int selectCountByParam(${className} record) {
+        return ${classname}Mapper.selectCountByParam(record);
     }
-
+#elseif($method.methodName=='insertOne')
     /**
      * 插入单条数据
      *
@@ -106,8 +107,8 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 插入数量
      */
     @Override
-    public int insert(${className} record) {
-        return ${classname}Mapper.insert(record);
+    public int insertOne(${className} record) {
+        return ${classname}Mapper.insertOne(record);
     }
 
     /**
@@ -120,7 +121,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     public int insertSelective(${className} record) {
         return ${classname}Mapper.insertSelective(record);
     }
-
+#elseif($method.methodName=='insertBatch')
     /**
      * 批量插入多条数据
      *
@@ -141,7 +142,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
         return result;
     }
-
+#elseif($method.methodName=='updateById')
     /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -149,10 +150,10 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int update(${className} record) {
-        return ${classname}Mapper.update(record);
+    public int updateById(${className} record) {
+        return ${classname}Mapper.updateById(record);
     }
-
+#elseif($method.methodName=='updateByParam')
     /**
      * 修改单条数据,仅修改存在数值的属性
      *
@@ -160,24 +161,11 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int updateSelective(${className} record) {
-        return ${classname}Mapper.updateSelective(record);
+    public int updateByParam(${className} record) {
+        return ${classname}Mapper.updateByParam(record);
     }
 
-
-    /**
-    * 根据条件修改某些参数,仅修改存在数值的属性
-    *
-    * @param  params  需要修改的信息
-    * @param  record  根据的条件信息
-    * @return 修改数量
-    */
-    @Override
-    public int updateParamsBySelective(${className} params,${className} record) {
-        return ${classname}Mapper.updateParamsBySelective(params, record);
-    }
-
-
+#elseif($method.methodName=='updateBatch')
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -198,6 +186,19 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
         return result;
     }
+#elseif($method.methodName=='updateBatchByParam')
+    /**
+    * 根据条件修改某些参数,仅修改存在数值的属性
+    *
+    * @param  params  需要修改的信息
+    * @param  record  根据的条件信息
+    * @return 修改数量
+    */
+    @Override
+    public int updateParamsByParam(${className} params,${className} record) {
+        return ${classname}Mapper.updateParamsByParam(params, record);
+    }
+
 
     /**
      * 修改多条数据,仅修改存在数值的属性
@@ -207,7 +208,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      */
     @Override
     @Transactional
-    public int updateBatchBySelective(List<${className}> recordList) {
+    public int updateBatchByParam(List<${className}> recordList) {
         int result = 0;
         if (recordList == null || recordList.size() <= 0) {
             return result;
@@ -219,18 +220,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
         return result;
     }
-
-    /**
-    * 根据条件删除数据
-    *
-    * @param record  删除的条件
-    * @return 删除数量
-    */
-    public int deleteBySelective(${className} record){
-        return ${classname}Mapper.deleteBySelective(record);
-    }
-
-
+#elseif($method.methodName=='deleteById')
     /**
      * 根据主键删除数据
      *
@@ -238,10 +228,22 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKey(${primaryKey.columnJavaType} id) {
-        return ${classname}Mapper.deleteByPrimaryKey(id);
+    public int deleteById(${primaryKey.columnJavaType} id) {
+        return ${classname}Mapper.deleteById(id);
     }
 
+#elseif($method.methodName=='deleteListByParam')
+    /**
+    * 根据条件删除数据
+    *
+    * @param record  删除的条件
+    * @return 删除数量
+    */
+    public int deleteListByParam(${className} record){
+        return ${classname}Mapper.deleteListByParam(record);
+    }
+
+#elseif($method.methodName=='deleteListByIds')
     /**
      * 根据主键集合删除数据
      *
@@ -249,11 +251,12 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteByPrimaryKeys(List<${primaryKey.columnJavaType}> ids) {
+    public int deleteListByIds(List<${primaryKey.columnJavaType}> ids) {
         if (ids == null || ids.size() <= 0) {
             return 0;
         }
-        return ${classname}Mapper.deleteByPrimaryKeys(ids);
+        return ${classname}Mapper.deleteListByIds(ids);
     }
-
+#end
+#end
 }
