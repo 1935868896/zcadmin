@@ -6,14 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zc.generator.domain.TableInfo;
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.entity.CodeMethodConfig;
 import com.zc.generator.mapper.CodeColumnConfigMapper;
 import com.zc.generator.mapper.CodeGenConfigMapper;
+import com.zc.generator.mapper.CodeMethodConfigMapper;
 import com.zc.generator.mapper.GenMapper;
 import com.zc.generator.service.IGenService;
 import com.zc.generator.util.GenUtils;
 import com.zc.generator.util.VelocityInitializer;
 import com.zc.generator.vo.GenConfigVO;
 import com.zc.utils.CharsetKit;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -21,6 +24,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,15 +42,12 @@ import java.util.zip.ZipOutputStream;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class GenServiceImpl implements IGenService {
-
-    @Autowired
-    GenMapper genMapper;
-    @Autowired
-    CodeGenConfigMapper codeGenConfigMapper;
-    @Autowired
-    CodeColumnConfigMapper columnConfigMapper;
-
+    private final GenMapper genMapper;
+    private final CodeGenConfigMapper codeGenConfigMapper;
+    private final CodeColumnConfigMapper columnConfigMapper;
+    private final CodeMethodConfigMapper codeMethodConfigMapper;
 
     /**
      * 查询ry数据库表信息
@@ -130,23 +131,25 @@ public class GenServiceImpl implements IGenService {
     private void generatorCode(ZipOutputStream zip, String tableName) {
         //
         CodeGenConfig codeGenConfig = codeGenConfigMapper.selectOneBySelective(CodeGenConfig.builder().tableName(tableName).build());
-        List<CodeColumnConfig> codeColumnConfigs =new ArrayList<>();
+        List<CodeColumnConfig> codeColumnConfigs = new ArrayList<>();
+        List<CodeMethodConfig> codeMethodConfigs=new ArrayList<>();
         /**
          * 获取 表配置 和列配置对象 如果不存在的话就
          */
-        if (codeGenConfig ==null){
-            initGenConfig(codeGenConfig,codeColumnConfigs,tableName);
-        }else {
+        if (codeGenConfig == null) {
+            initGenConfig(codeGenConfig, codeColumnConfigs, codeMethodConfigs,tableName);
+        } else {
             codeColumnConfigs = columnConfigMapper.selectListBySelective(CodeColumnConfig.builder().tableName(tableName).build());
+            codeMethodConfigs=codeMethodConfigMapper.selectListBySelective(CodeMethodConfig.builder().tableName(tableName).build());
         }
-
 
         GenUtils.handleGenConfig(codeGenConfig);
         codeGenConfig.setCodeColumnConfigList(codeColumnConfigs);
-        CodeColumnConfig primayConfig=new CodeColumnConfig();
+        codeGenConfig.setCodeMethodConfigList(codeMethodConfigs);
+        CodeColumnConfig primayConfig = new CodeColumnConfig();
         for (CodeColumnConfig config : codeColumnConfigs) {
-            if ("PRI".equals(config.getKeyType())){
-                primayConfig=config;
+            if ("PRI".equals(config.getKeyType())) {
+                primayConfig = config;
             }
         }
         codeGenConfig.setPrimaryKey(primayConfig);
@@ -174,25 +177,30 @@ public class GenServiceImpl implements IGenService {
     }
 
 
-
     @Override
     public void syncColumnConfig(String tableName) {
 
         columnConfigMapper.deleteByTableName(tableName);
-
         List<CodeColumnConfig> codeColumnConfigs = genMapper.selectTableColumnsByName(tableName);
         GenUtils.initColumsConfig(codeColumnConfigs);
         columnConfigMapper.insertBatch(codeColumnConfigs);
     }
 
-    public GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName){
-        codeGenConfig =genMapper.selectTableByName(tableName);
+    //对表配置进行初始化
+    @Transactional
+    public GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, List<CodeMethodConfig> codeMethodConfigs,String tableName) {
+        codeGenConfig = genMapper.selectTableByName(tableName);
         GenUtils.initGenConfig(codeGenConfig);
         codeGenConfigMapper.insert(codeGenConfig);
 
         codeColumnConfigs = genMapper.selectTableColumnsByName(tableName);
         GenUtils.initColumsConfig(codeColumnConfigs);
         columnConfigMapper.insertBatch(codeColumnConfigs);
-        return GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).build();
+
+        GenUtils.initMethodConfig(codeMethodConfigs,tableName);
+        codeMethodConfigMapper.insertBatch(codeMethodConfigs);
+
+
+        return GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).codeMethodConfigs(codeMethodConfigs).build();
     }
 }

@@ -66,6 +66,8 @@ public class CodeGenConfig extends BaseEntity {
 
     List<CodeColumnConfig> codeColumnConfigList;
 
+    List<CodeMethodConfig> codeMethodConfigList;
+
     CodeColumnConfig primaryKey;
 
 

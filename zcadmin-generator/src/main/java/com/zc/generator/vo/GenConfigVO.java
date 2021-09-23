@@ -2,6 +2,7 @@ package com.zc.generator.vo;
 
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.entity.CodeMethodConfig;
 import com.zc.generator.service.CodeGenConfigService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,5 @@ import java.util.List;
 public class GenConfigVO {
     private List<CodeColumnConfig> columnConfigList;
     private CodeGenConfig codeGenConfig;
+    private List<CodeMethodConfig> codeMethodConfigs;
 }

@@ -7,6 +7,7 @@ import com.zc.generator.domain.GenBaseInfo;
 import com.zc.generator.domain.TableInfo;
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.entity.CodeMethodConfig;
 import com.zc.generator.vo.GenConfigVO;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
@@ -46,7 +47,7 @@ public interface IGenService {
      */
     byte[] generatorCode(String[] tableNames);
 
-    GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, String tableName);
+    GenConfigVO initGenConfig(CodeGenConfig codeGenConfig, List<CodeColumnConfig> codeColumnConfigs, List<CodeMethodConfig> codeMethodConfigs, String tableName);
 
     void syncColumnConfig(String tableName);
     }

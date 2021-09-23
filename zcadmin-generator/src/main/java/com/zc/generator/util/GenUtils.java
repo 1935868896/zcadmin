@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.entity.CodeMethodConfig;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -33,6 +34,25 @@ public class GenUtils {
      */
     private static final String MYBATIS_PATH = "main/resources/mapper" ;
 
+    private static final List<String> methodList=
+            Arrays.asList(
+                    "getObjectById:根据主键获取对象"
+                    ,"getListByParam:根据参数获取对象集合"
+                    ,"getOneByParam:根据参数获取单条数据"
+                    ,"getListByIds:根据主键集合获取对象集合"
+                    ,"getPageByParam:根据参数获取分页对象集合"
+                    ,"getCountByParam:根据参数获取相符对象数量"
+                    ,"insertOne:插入单条数据"
+                    ,"insertBatch:批量插入数据"
+                    ,"updateById:修改单条数据"
+                    ,"updateByParam:修改单条数据,仅修改携带的非空的参数"
+                    ,"updateBatch:批量修改数据"
+                    ,"updateBatchByParam:批量修改数据,仅修改部分列数据"
+                    ,"deleteById:根据主键删除数据"
+                    ,"deleteListByParam:根据参数删除数据"
+                    ,"deleteListByIds:根据主键参数批量删除数据"
+            );
+
     /**
      * html空间路径
      */
@@ -43,8 +63,7 @@ public class GenUtils {
      */
     private static Map<String, String> javaTypeMap = new HashMap<>();
 
-
-
+    //初始化表的行信息
     public static void initColumsConfig(List<CodeColumnConfig> columns) {
         // 列信息
         for (CodeColumnConfig column : columns) {
@@ -75,16 +94,30 @@ public class GenUtils {
                 column.setSearchShow(true);
             }
 
-
-
-
             column.setQueryType("=");
             column.setNotNull(false);
             column.setRemark(column.getColumnComment());
 
         }
     }
+    //初始化表的方法信息
+    public static void initMethodConfig(List<CodeMethodConfig> codeMethodConfigs,String tableName){
+        for (String s : methodList) {
+            String[] split = s.split(":");
+            CodeMethodConfig codeMethodConfig=
+                    CodeMethodConfig.builder()
+                            .tableName(tableName)
+                            .methodName(split[0])
+                            .description(split[1])
+                            .anonymous(true)
+                            .logRecord(true)
+                            .build();
+            codeMethodConfigs.add(codeMethodConfig);
+        }
+    }
 
+
+//初始化表的基础信息
     public static void initGenConfig(CodeGenConfig codeGenConfig) {
         codeGenConfig.setAuthor("zhangc");
         String packageName="com.zc.modules.quartz";
@@ -145,6 +178,7 @@ public class GenUtils {
         velocityContext.put("datetime" , DateUtil.today());
         velocityContext.put("vueTableName" , table.getVueTableName());
         velocityContext.put("vueModuleName" , table.getVueModuleName());
+        velocityContext.put("codeMethodConfigs",table.getCodeMethodConfigList());
         if (table.getLogicDelete()&& !StringUtils.isNotBlank(table.getLogicField())){
             log.error("代码生成过程中,显示需要逻辑删除但是没有提供逻辑删除的相应字段");
             velocityContext.put("logicDelete",false);

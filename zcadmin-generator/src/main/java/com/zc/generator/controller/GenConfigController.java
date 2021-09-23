@@ -6,6 +6,8 @@ import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
+import com.zc.generator.entity.CodeMethodConfig;
+import com.zc.generator.mapper.CodeMethodConfigMapper;
 import com.zc.generator.service.CodeColumnConfigService;
 import com.zc.generator.service.CodeGenConfigService;
 import com.zc.generator.service.IGenService;
@@ -31,6 +33,7 @@ public class GenConfigController {
     private final CodeColumnConfigService codeColumnConfigService;
     private final CodeGenConfigService codeGenConfigService;
     private final IGenService genService;
+    private final CodeMethodConfigMapper codeMethodConfigMapper;
 
 
     @ApiOperationSupport(order = 1)
@@ -43,15 +46,18 @@ public class GenConfigController {
 
         CodeGenConfig codeGenConfig = codeGenConfigService.selectOneBySelective(CodeGenConfig.builder().tableName(tableName).build());
         List<CodeColumnConfig> codeColumnConfigs = new ArrayList<>();
+        List<CodeMethodConfig> codeMethodConfigs=new ArrayList<>();
         /**
          * 获取 表配置 和列配置对象 如果不存在的话就初始化赋值创建
          */
         GenConfigVO result;
         if (codeGenConfig == null) {
-            result = genService.initGenConfig(codeGenConfig, codeColumnConfigs, tableName);
+            result = genService.initGenConfig(codeGenConfig, codeColumnConfigs,codeMethodConfigs, tableName);
         } else {
             codeColumnConfigs = codeColumnConfigService.selectListBySelective(CodeColumnConfig.builder().tableName(tableName).build());
-            result = GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).build();
+            codeMethodConfigs=codeMethodConfigMapper.selectListBySelective(CodeMethodConfig.builder().tableName(tableName).build());
+
+            result = GenConfigVO.builder().codeGenConfig(codeGenConfig).columnConfigList(codeColumnConfigs).codeMethodConfigs(codeMethodConfigs).build();
         }
 
         return ResultResponse.success(result);

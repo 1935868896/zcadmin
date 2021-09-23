@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.generator.mapper.CodeMethodConfigMapper">
+    <resultMap type="CodeMethodConfig" id="BaseResultMap">
+        <result property="id" jdbcType="INTEGER" column="id"/>
+        <result property="tableName" jdbcType="VARCHAR" column="table_name"/>
+        <result property="methodName" jdbcType="VARCHAR" column="method_name"/>
+        <result property="description" jdbcType="VARCHAR" column="description"/>
+        <result property="anonymous" jdbcType="BIT" column="anonymous"/>
+        <result property="logRecord" jdbcType="BIT" column="log_record"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,table_name,method_name,description,anonymous,log_record
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_method_config
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_method_config
+        where 1=1
+        <if test="id != null ">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+            and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="anonymous != null ">
+            and anonymous = #{anonymous,jdbcType=BIT}
+        </if>
+        <if test="logRecord != null ">
+            and log_record = #{logRecord,jdbcType=BIT}
+        </if>
+    </select>
+
+    <select id="selectOneBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_method_config
+        where 1=1
+        <if test="id != null ">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+            and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="anonymous != null ">
+            and anonymous = #{anonymous,jdbcType=BIT}
+        </if>
+        <if test="logRecord != null ">
+            and log_record = #{logRecord,jdbcType=BIT}
+        </if>
+        limit 1
+    </select>
+
+
+    <select id="selectPageBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_method_config
+        where 1=1
+        <if test="record.id != null ">
+            and id = #{record.id,jdbcType=INTEGER}
+        </if>
+        <if test="record.tableName != null  and record.tableName != '' ">
+            and table_name = #{record.tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.methodName != null  and record.methodName != '' ">
+            and method_name = #{record.methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.description != null  and record.description != '' ">
+            and description = #{record.description,jdbcType=VARCHAR}
+        </if>
+        <if test="record.anonymous != null ">
+            and anonymous = #{record.anonymous,jdbcType=BIT}
+        </if>
+        <if test="record.logRecord != null ">
+            and log_record = #{record.logRecord,jdbcType=BIT}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKeys" parameterType="java.util.List"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from code_method_config
+        where id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectCountBySelective" resultType="java.lang.Integer">
+        select
+        count(1)
+        from code_method_config
+        where 1=1
+        <if test="id != null ">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+            and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="anonymous != null ">
+            and anonymous = #{anonymous,jdbcType=BIT}
+        </if>
+        <if test="logRecord != null ">
+            and log_record = #{logRecord,jdbcType=BIT}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="CodeMethodConfig" >
+        insert into code_method_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id, table_name, method_name, description, anonymous, log_record,</trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=INTEGER},         #{tableName,jdbcType=VARCHAR},         #{methodName,jdbcType=VARCHAR},         #{description,jdbcType=VARCHAR},         #{anonymous,jdbcType=BIT},         #{logRecord,jdbcType=BIT},        </trim>
+    </insert>
+
+    <insert id="insertSelective" parameterType="CodeMethodConfig">
+        insert into code_method_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id,</if>
+            <if test="tableName != null  and tableName != ''  ">table_name,</if>
+            <if test="methodName != null  and methodName != ''  ">method_name,</if>
+            <if test="description != null  and description != ''  ">description,</if>
+            <if test="anonymous != null  ">anonymous,</if>
+            <if test="logRecord != null  ">log_record,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id,jdbcType=INTEGER},</if>
+            <if test="tableName != null  and tableName != ''  ">#{tableName,jdbcType=VARCHAR},</if>
+            <if test="methodName != null  and methodName != ''  ">#{methodName,jdbcType=VARCHAR},</if>
+            <if test="description != null  and description != ''  ">#{description,jdbcType=VARCHAR},</if>
+            <if test="anonymous != null  ">#{anonymous,jdbcType=BIT},</if>
+            <if test="logRecord != null  ">#{logRecord,jdbcType=BIT},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List" >
+        insert into  code_method_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,table_name,method_name,description,anonymous,log_record,        </trim>
+        values
+        <foreach collection="recordList" item="record" index="index" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{record.id,jdbcType=INTEGER},                #{record.tableName,jdbcType=VARCHAR},                #{record.methodName,jdbcType=VARCHAR},                #{record.description,jdbcType=VARCHAR},                #{record.anonymous,jdbcType=BIT},                #{record.logRecord,jdbcType=BIT},            </trim>
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="CodeMethodConfig">
+        update code_method_config
+        <trim prefix="SET" suffixOverrides=",">
+            id =#{id,jdbcType=INTEGER}, table_name =#{tableName,jdbcType=VARCHAR}, method_name =#{methodName,jdbcType=VARCHAR}, description =#{description,jdbcType=VARCHAR}, anonymous =#{anonymous,jdbcType=BIT}, log_record =#{logRecord,jdbcType=BIT},        </trim>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateSelective" parameterType="CodeMethodConfig">
+        update code_method_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tableName != null  and tableName != ''  ">table_name = #{tableName,jdbcType=VARCHAR},</if>
+            <if test="methodName != null  and methodName != ''  ">method_name = #{methodName,jdbcType=VARCHAR},</if>
+            <if test="description != null  and description != ''  ">description = #{description,jdbcType=VARCHAR},</if>
+            <if test="anonymous != null  ">anonymous = #{anonymous,jdbcType=BIT},</if>
+            <if test="logRecord != null  ">log_record = #{logRecord,jdbcType=BIT},</if>
+        </trim>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateParamsBySelective" parameterType="CodeMethodConfig">
+        update code_method_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="params.tableName != null  and params.tableName != ''  ">table_name = #{params.tableName,jdbcType=VARCHAR},</if>
+            <if test="params.methodName != null  and params.methodName != ''  ">method_name = #{params.methodName,jdbcType=VARCHAR},</if>
+            <if test="params.description != null  and params.description != ''  ">description = #{params.description,jdbcType=VARCHAR},</if>
+            <if test="params.anonymous != null  ">anonymous = #{params.anonymous,jdbcType=BIT},</if>
+            <if test="params.logRecord != null  ">log_record = #{params.logRecord,jdbcType=BIT},</if>
+        </trim>
+        where 1=1
+        <if test="record.id != null ">
+            and id = #{record.id,jdbcType=INTEGER}
+        </if>
+        <if test="record.tableName != null  and record.tableName != '' ">
+            and table_name = #{record.tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.methodName != null  and record.methodName != '' ">
+            and method_name = #{record.methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="record.description != null  and record.description != '' ">
+            and description = #{record.description,jdbcType=VARCHAR}
+        </if>
+        <if test="record.anonymous != null ">
+            and anonymous = #{record.anonymous,jdbcType=BIT}
+        </if>
+        <if test="record.logRecord != null ">
+            and log_record = #{record.logRecord,jdbcType=BIT}
+        </if>
+
+
+    </update>
+
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update code_method_config
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="table_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.tableName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="method_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.methodName,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="description = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.description,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="anonymous = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.anonymous,jdbcType=BIT}
+                </foreach>
+            </trim>
+            <trim prefix="log_record = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.logRecord,jdbcType=BIT}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.id}
+        </foreach>
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        update code_method_config
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="table_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.tableName != null  and records.tableName != ''  " >
+                        when id = #{records.id,jdbcType=INTEGER} then #{records.tableName,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="method_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.methodName != null  and records.methodName != ''  " >
+                        when id = #{records.id,jdbcType=INTEGER} then #{records.methodName,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="description = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.description != null  and records.description != ''  " >
+                        when id = #{records.id,jdbcType=INTEGER} then #{records.description,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="anonymous = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.anonymous != null  " >
+                        when id = #{records.id,jdbcType=INTEGER} then #{records.anonymous,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="log_record = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    <if test="records.logRecord != null  " >
+                        when id = #{records.id,jdbcType=INTEGER} then #{records.logRecord,jdbcType=BIT}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" item="records" open="(" close=")" separator=", ">
+            #{records.id}
+        </foreach>
+    </update>
+    <delete id="deleteBySelective" parameterType="java.lang.Integer">
+        delete
+        from code_method_config where 1=1
+        <if test="id != null ">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="tableName != null  and tableName != '' ">
+            and table_name = #{tableName,jdbcType=VARCHAR}
+        </if>
+        <if test="methodName != null  and methodName != '' ">
+            and method_name = #{methodName,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="anonymous != null ">
+            and anonymous = #{anonymous,jdbcType=BIT}
+        </if>
+        <if test="logRecord != null ">
+            and log_record = #{logRecord,jdbcType=BIT}
+        </if>
+    </delete>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from code_method_config where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+        delete from code_method_config where id in
+        <foreach collection="list" item="ids" index="index" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+</mapper>
