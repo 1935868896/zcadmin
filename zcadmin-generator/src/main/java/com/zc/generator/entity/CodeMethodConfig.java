@@ -41,4 +41,7 @@ public class CodeMethodConfig extends BaseEntity{
     @ApiModelProperty(value="是否需要日志",name="logRecord")
     private Boolean logRecord;
 
+    @ApiModelProperty(value = "是否自动生成",name="isGenerator")
+    private  Boolean isGenerator;
+
 }

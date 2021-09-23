@@ -32,6 +32,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -134,7 +135,7 @@ public class GenServiceImpl implements IGenService {
         List<CodeColumnConfig> codeColumnConfigs = new ArrayList<>();
         List<CodeMethodConfig> codeMethodConfigs=new ArrayList<>();
         /**
-         * 获取 表配置 和列配置对象 如果不存在的话就
+         * 获取 表配置 和列配置对象 如果不存在的话就初始化创建
          */
         if (codeGenConfig == null) {
             initGenConfig(codeGenConfig, codeColumnConfigs, codeMethodConfigs,tableName);
@@ -145,6 +146,10 @@ public class GenServiceImpl implements IGenService {
 
         GenUtils.handleGenConfig(codeGenConfig);
         codeGenConfig.setCodeColumnConfigList(codeColumnConfigs);
+
+        // 这里对codeMethodConfig进行过滤,排除掉不需要代码生成的方法
+        codeMethodConfigs=codeMethodConfigs.stream().filter(v->v.getIsGenerator()).collect(Collectors.toList());
+
         codeGenConfig.setCodeMethodConfigList(codeMethodConfigs);
         CodeColumnConfig primayConfig = new CodeColumnConfig();
         for (CodeColumnConfig config : codeColumnConfigs) {

@@ -10,9 +10,10 @@
         <result property="description" jdbcType="VARCHAR" column="description"/>
         <result property="anonymous" jdbcType="BIT" column="anonymous"/>
         <result property="logRecord" jdbcType="BIT" column="log_record"/>
+        <result property="isGenerator" jdbcType="BIT" column="is_generator"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,table_name,method_name,description,anonymous,log_record
+        id,table_name,method_name,description,anonymous,log_record,is_generator
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -134,13 +135,17 @@
         </if>
     </select>
 
-    <insert id="insert" parameterType="CodeMethodConfig" >
+    <insert id="insert" parameterType="CodeMethodConfig">
         insert into code_method_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            id, table_name, method_name, description, anonymous, log_record,</trim>
+            id, table_name, method_name, description, anonymous, log_record,is_generator
+        </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            #{id,jdbcType=INTEGER},         #{tableName,jdbcType=VARCHAR},         #{methodName,jdbcType=VARCHAR},         #{description,jdbcType=VARCHAR},         #{anonymous,jdbcType=BIT},         #{logRecord,jdbcType=BIT},        </trim>
+            #{id,jdbcType=INTEGER}, #{tableName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR}, #{anonymous,jdbcType=BIT}, #{logRecord,jdbcType=BIT},
+            #{isGenerator,jdbcType=BIT},
+        </trim>
     </insert>
 
     <insert id="insertSelective" parameterType="CodeMethodConfig">
@@ -152,6 +157,7 @@
             <if test="description != null  and description != ''  ">description,</if>
             <if test="anonymous != null  ">anonymous,</if>
             <if test="logRecord != null  ">log_record,</if>
+            <if test="isGenerator != null  ">is_generator,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  ">#{id,jdbcType=INTEGER},</if>
@@ -160,25 +166,34 @@
             <if test="description != null  and description != ''  ">#{description,jdbcType=VARCHAR},</if>
             <if test="anonymous != null  ">#{anonymous,jdbcType=BIT},</if>
             <if test="logRecord != null  ">#{logRecord,jdbcType=BIT},</if>
+            <if test="isGenerator != null  ">is_generator,</if>
+
         </trim>
     </insert>
 
 
-    <insert id="insertBatch" parameterType="java.util.List" >
-        insert into  code_method_config
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into code_method_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            id,table_name,method_name,description,anonymous,log_record,        </trim>
+            id,table_name,method_name,description,anonymous,log_record, is_generator
+        </trim>
         values
         <foreach collection="recordList" item="record" index="index" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{record.id,jdbcType=INTEGER},                #{record.tableName,jdbcType=VARCHAR},                #{record.methodName,jdbcType=VARCHAR},                #{record.description,jdbcType=VARCHAR},                #{record.anonymous,jdbcType=BIT},                #{record.logRecord,jdbcType=BIT},            </trim>
+                #{record.id,jdbcType=INTEGER}, #{record.tableName,jdbcType=VARCHAR},
+                #{record.methodName,jdbcType=VARCHAR}, #{record.description,jdbcType=VARCHAR},
+                #{record.anonymous,jdbcType=BIT}, #{record.logRecord,jdbcType=BIT}, #{record.isGenerator,jdbcType=BIT},
+            </trim>
         </foreach>
     </insert>
 
     <update id="update" parameterType="CodeMethodConfig">
         update code_method_config
         <trim prefix="SET" suffixOverrides=",">
-            id =#{id,jdbcType=INTEGER}, table_name =#{tableName,jdbcType=VARCHAR}, method_name =#{methodName,jdbcType=VARCHAR}, description =#{description,jdbcType=VARCHAR}, anonymous =#{anonymous,jdbcType=BIT}, log_record =#{logRecord,jdbcType=BIT},        </trim>
+            id =#{id,jdbcType=INTEGER}, table_name =#{tableName,jdbcType=VARCHAR}, method_name
+            =#{methodName,jdbcType=VARCHAR}, description =#{description,jdbcType=VARCHAR}, anonymous
+            =#{anonymous,jdbcType=BIT}, log_record =#{logRecord,jdbcType=BIT},
+        </trim>
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -197,9 +212,15 @@
     <update id="updateParamsBySelective" parameterType="CodeMethodConfig">
         update code_method_config
         <trim prefix="SET" suffixOverrides=",">
-            <if test="params.tableName != null  and params.tableName != ''  ">table_name = #{params.tableName,jdbcType=VARCHAR},</if>
-            <if test="params.methodName != null  and params.methodName != ''  ">method_name = #{params.methodName,jdbcType=VARCHAR},</if>
-            <if test="params.description != null  and params.description != ''  ">description = #{params.description,jdbcType=VARCHAR},</if>
+            <if test="params.tableName != null  and params.tableName != ''  ">table_name =
+                #{params.tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="params.methodName != null  and params.methodName != ''  ">method_name =
+                #{params.methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="params.description != null  and params.description != ''  ">description =
+                #{params.description,jdbcType=VARCHAR},
+            </if>
             <if test="params.anonymous != null  ">anonymous = #{params.anonymous,jdbcType=BIT},</if>
             <if test="params.logRecord != null  ">log_record = #{params.logRecord,jdbcType=BIT},</if>
         </trim>
@@ -255,6 +276,11 @@
                     when id = #{records.id,jdbcType=INTEGER} then #{records.logRecord,jdbcType=BIT}
                 </foreach>
             </trim>
+            <trim prefix="is_generator = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when id = #{records.id,jdbcType=INTEGER} then #{records.isGenerator,jdbcType=BIT}
+                </foreach>
+            </trim>
         </trim>
         where id in
         <foreach collection="list" item="records" open="(" close=")" separator=", ">
@@ -267,35 +293,35 @@
         <trim prefix="SET" suffixOverrides=",">
             <trim prefix="table_name = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
-                    <if test="records.tableName != null  and records.tableName != ''  " >
+                    <if test="records.tableName != null  and records.tableName != ''  ">
                         when id = #{records.id,jdbcType=INTEGER} then #{records.tableName,jdbcType=VARCHAR}
                     </if>
                 </foreach>
             </trim>
             <trim prefix="method_name = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
-                    <if test="records.methodName != null  and records.methodName != ''  " >
+                    <if test="records.methodName != null  and records.methodName != ''  ">
                         when id = #{records.id,jdbcType=INTEGER} then #{records.methodName,jdbcType=VARCHAR}
                     </if>
                 </foreach>
             </trim>
             <trim prefix="description = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
-                    <if test="records.description != null  and records.description != ''  " >
+                    <if test="records.description != null  and records.description != ''  ">
                         when id = #{records.id,jdbcType=INTEGER} then #{records.description,jdbcType=VARCHAR}
                     </if>
                 </foreach>
             </trim>
             <trim prefix="anonymous = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
-                    <if test="records.anonymous != null  " >
+                    <if test="records.anonymous != null  ">
                         when id = #{records.id,jdbcType=INTEGER} then #{records.anonymous,jdbcType=BIT}
                     </if>
                 </foreach>
             </trim>
             <trim prefix="log_record = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
-                    <if test="records.logRecord != null  " >
+                    <if test="records.logRecord != null  ">
                         when id = #{records.id,jdbcType=INTEGER} then #{records.logRecord,jdbcType=BIT}
                     </if>
                 </foreach>
@@ -327,10 +353,14 @@
         <if test="logRecord != null ">
             and log_record = #{logRecord,jdbcType=BIT}
         </if>
+        <if test="isGenerator != null ">
+            and is_generator = #{isGenerator,jdbcType=BIT}
+        </if>
     </delete>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
-        from code_method_config where id = #{id,jdbcType=INTEGER}
+        from code_method_config
+        where id = #{id,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
         delete from code_method_config where id in

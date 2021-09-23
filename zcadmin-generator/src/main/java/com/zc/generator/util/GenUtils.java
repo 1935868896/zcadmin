@@ -109,8 +109,9 @@ public class GenUtils {
                             .tableName(tableName)
                             .methodName(split[0])
                             .description(split[1])
-                            .anonymous(true)
+                            .anonymous(false)
                             .logRecord(true)
+                            .isGenerator(true)
                             .build();
             codeMethodConfigs.add(codeMethodConfig);
         }

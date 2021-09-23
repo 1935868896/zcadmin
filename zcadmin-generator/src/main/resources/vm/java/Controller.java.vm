@@ -13,7 +13,18 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 ##此处引用自己编写的jar包
 import com.zc.annotation.Log;
 import com.zc.entity.ResultResponse;
+#foreach($method in $codeMethodConfigs)
+#if($method.anonymous)
+import com.zc.annoation.Anonymous;
+#break
+#end
+#end
+#foreach($method in $codeMethodConfigs)
+#if(!$method.anonymous)
 import org.springframework.security.access.prepost.PreAuthorize;
+#break
+#end
+#end
 import com.zc.exception.BadRequestException;
 
 ##此处引用实体类
@@ -50,7 +61,6 @@ public class ${className}Controller {
     private final ${className}Service ${classname}Service;
 
 #foreach($method in $codeMethodConfigs)
-
 #if($method.methodName=='getObjectById')
     @ApiOperationSupport(order = 1)
     @GetMapping("/id")
@@ -59,6 +69,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getObjectById(${primaryKey.columnJavaType} id) {
@@ -68,8 +80,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-#if($method.methodName=='getListByParam')
+#elseif($method.methodName=='getListByParam')
     @ApiOperationSupport(order = 2)
     @GetMapping
     @ApiOperation("根据条件查询得到对象集合")
@@ -77,6 +88,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getListByParam(${className} record) {
@@ -86,8 +99,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-#if($method.methodName=='getOneByParam')
+#elseif($method.methodName=='getOneByParam')
     @ApiOperationSupport(order = 3)
     @GetMapping("/single")
     @ApiOperation("根据条件查询得到单个对象")
@@ -95,6 +107,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getOneByParam(${className} record) {
@@ -104,8 +118,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-#if($method.methodName=='getListByIds')
+#elseif($method.methodName=='getListByIds')
     @ApiOperationSupport(order = 4)
     @GetMapping("/ids")
     @ApiOperation("根据id集合获得目标数据集合")
@@ -113,6 +126,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getListByIds(@RequestParam(value = "ids", required = false) List<${primaryKey.columnJavaType}> ids) {
@@ -122,9 +137,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='getPageByParam')
+#elseif($method.methodName=='getPageByParam')
     @ApiOperationSupport(order = 5)
     @ApiOperation("分页获得目标数据集合")
     @GetMapping("page")
@@ -132,15 +145,15 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getPageByParam(${className} record, Page page) {
         IPage<${className}> recordIPage = ${classname}Service.selectPageByParam(record, page);
         return ResultResponse.success(recordIPage);
     }
-#end
-
-#if($method.methodName=='getCountByParam')
+#elseif($method.methodName=='getCountByParam')
     @ApiOperationSupport(order = 6)
     @Log("${tableComment}信息管理:根据条件查询符合数据的数量")
     @GetMapping("count")
@@ -148,15 +161,15 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse getCountByParam(${className} record) {
         int result = ${classname}Service.selectCountByParam(record);
         return ResultResponse.success(result);
     }
-#end
-
-#if($method.methodName=='insertOne')
+#elseif($method.methodName=='insertOne')
     @ApiOperationSupport(order = 7)
     @ApiOperation("插入单条数据")
     @PostMapping
@@ -164,6 +177,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse insertOne(@RequestBody ${className} record) {
@@ -183,9 +198,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='insertBatch')
+#elseif($method.methodName=='insertBatch')
     @ApiOperationSupport(order = 8)
     @ApiOperation("批量插入数据")
     @PostMapping("batch")
@@ -193,6 +206,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse insertBatch(@RequestBody List<${className}> records) {
@@ -219,9 +234,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='updateById')
+#elseif($method.methodName=='updateById')
     @ApiOperationSupport(order = 9)
     @ApiOperation("修改数据")
     @PutMapping
@@ -229,6 +242,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse updateById(@RequestBody ${className} record) {
@@ -248,9 +263,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='updateByParam')
+#elseif($method.methodName=='updateByParam')
     @ApiOperationSupport(order = 10)
     @ApiOperation("修改数据,仅修改不为null的数据")
     @PutMapping("/selective")
@@ -258,6 +271,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse updateByParam(@RequestBody ${className} record) {
@@ -277,9 +292,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='updateBatch')
+#elseif($method.methodName=='updateBatch')
     @ApiOperationSupport(order = 11)
     @ApiOperation("批量修改数据")
     @PutMapping("batch")
@@ -287,6 +300,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse updateBatch(@RequestBody List<${className}> records) {
@@ -313,9 +328,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='updateBatchByParam')
+#elseif($method.methodName=='updateBatchByParam')
     //如果某批数据中,有一个数据属性存在值,其他数据的属性不存在值,那么最终修改结果为其他数据的该属性将设为null值
     @ApiOperationSupport(order = 12)
     @ApiOperation("批量修改数据,仅修改部分属性")
@@ -324,6 +337,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse updateBatchByParam(@RequestBody List<${className}> records) {
@@ -351,9 +366,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='deleteById')
+#elseif($method.methodName=='deleteById')
     @ApiOperationSupport(order = 13)
     @ApiOperation("根据主键删除数据")
     @DeleteMapping()
@@ -361,6 +374,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse deleteById(${primaryKey.columnJavaType} id) {
@@ -370,9 +385,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-#if($method.methodName=='deleteListByParam')
+#elseif($method.methodName=='deleteListByParam')
     @ApiOperationSupport(order = 14)
     @ApiOperation("根据条件删除数据")
     @DeleteMapping("bySelective")
@@ -380,6 +393,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse deleteListByParam(@RequestBody ${className} record) {
@@ -389,11 +404,7 @@ public class ${className}Controller {
         }
         return ResultResponse.error();
     }
-#end
-
-
-
-#if($method.methodName=='deleteListByIds')
+#elseif($method.methodName=='deleteListByIds')
     @ApiOperationSupport(order = 15)
     @ApiOperation("根据主键集合批量删除数据")
     @DeleteMapping("ids")
@@ -401,6 +412,8 @@ public class ${className}Controller {
     @Log("${tableComment}信息管理:$method.description")
     #end
     #if($method.anonymous)
+    @Anonymous
+    #else
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse deleteListByIds(@RequestBody List<${primaryKey.columnJavaType}> ids) {
