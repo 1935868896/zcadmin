@@ -34,14 +34,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<MenuVO> selectMenuVO() {
         List<Menu> menus = menuMapper.selectListBySelective(new Menu());
         List<MenuVO> menuVOS=new ArrayList<>();
-        for (Menu menu : menus) {
-            if (menu.getPid()==null){
-                MenuVO menuVO=new MenuVO();
-                BeanUtils.copyProperties(menu,menuVO);
-                menuVO.setChildren(new ArrayList<>());
-                menuVOS.add(menuVO);
-            }
-        }
+        MenuVO primaryMenu=new MenuVO();
+        primaryMenu.setMenuId(0L);
+        primaryMenu.setTitle("顶级类目");
+        primaryMenu.setChildren(new ArrayList<>());
+        menuVOS.add(primaryMenu);
+//        for (Menu menu : menus) {
+//            if (menu.getPid()==null){
+//                MenuVO menuVO=new MenuVO();
+//                BeanUtils.copyProperties(menu,menuVO);
+//                menuVO.setChildren(new ArrayList<>());
+//                menuVOS.add(menuVO);
+//            }
+//        }
         for (MenuVO menuVO : menuVOS) {
             setChild(menus,menuVO);
         }
@@ -51,15 +56,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     public void setChild(List<Menu> menus,MenuVO menuVO){
         for (Menu menu : menus) {
-            if (menuVO!=null&&menu.getPid()==menuVO.getMenuId()){
+            if (menuVO!=null&&menu.getPid().equals(menuVO.getMenuId())){
                 List<MenuVO> child = menuVO.getChildren();
 
                 MenuVO build = new MenuVO();
-                build.setChildren(new ArrayList<>());
                 BeanUtils.copyProperties(menu,build);
+
+                build.setChildren(new ArrayList<>());
+                setChild(menus,build);
                 child.add(build);
 
-                setChild(menus,build);
             }
         }
     }
