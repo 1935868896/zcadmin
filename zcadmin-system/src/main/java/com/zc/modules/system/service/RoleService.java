@@ -4,6 +4,7 @@ import com.zc.modules.system.entity.Role;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zc.modules.system.vo.RolesMenusVO;
 
 import java.util.List;
 
@@ -113,6 +114,12 @@ public interface RoleService extends IService<Role> {
     *  @return 修改数量
     */
     int updateParamsBySelective(Role params,Role record);
+
+
+
+
+
+    void updateRoleMenus(RolesMenusVO rolesMenusVO);
 
 
     /**

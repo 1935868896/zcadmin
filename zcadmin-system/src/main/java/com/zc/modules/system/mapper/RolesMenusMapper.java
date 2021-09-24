@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 角色菜单关联 数据层
@@ -15,6 +16,19 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RolesMenusMapper extends BaseMapper<RolesMenus> {
+
+
+    //根据菜单,权限,获取拥有该菜单(权限的用户)
+    @Select("select su.username from sys_roles_menus as srm left join sys_users_roles as sur\n" +
+            "on srm.role_id=sur.role_id left join sys_user as su on sur.user_id=su.user_id\n" +
+            "where srm.menu_id=#{id}")
+    List<String> selectUsernameByMenuId(Long id);
+
+    // 根据角色查询 拥有该角色的用户
+    @Select("SELECT su.username  FROM sys_users_roles AS sur\n" +
+            "LEFT JOIN sys_user AS su ON su.user_id = sur.user_id \n" +
+            "WHERE sur.role_id =#{id}")
+    List<String> selectUsernameByRoleId(Long id);
 
     /**
      * 查询角色菜单关联信息

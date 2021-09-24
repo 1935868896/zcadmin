@@ -1,7 +1,15 @@
 package com.zc.modules.system.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.zc.entity.ResultResponse;
+import com.zc.exception.BadRequestException;
+import com.zc.modules.system.entity.RolesMenus;
+import com.zc.modules.system.mapper.RolesMenusMapper;
+import com.zc.modules.system.service.RolesMenusService;
+import com.zc.modules.system.vo.RolesMenusVO;
+import com.zc.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     private final RoleMapper roleMapper;
+    private final RolesMenusService rolesMenusService;
+    private final RolesMenusMapper rolesMenusMapper;
 
     /**
      * 查询角色信息
@@ -177,6 +187,36 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return roleMapper.updateParamsBySelective(params, record);
     }
 
+    @Override
+    public void updateRoleMenus(RolesMenusVO rolesMenusVO) {
+
+        Long roleId=rolesMenusVO.getRoleId();
+        List<Long> menuIds= rolesMenusVO.getMenuIds();
+        //1.删除
+        rolesMenusService.deleteBySelective(RolesMenus.builder().roleId(roleId).build());
+        //2.新增
+        List<RolesMenus> list=new ArrayList<>();
+        if (menuIds!=null&&menuIds.size()>0){
+            for (Long menuId : menuIds) {
+                RolesMenus build = RolesMenus.builder().roleId(roleId).menuId(menuId).build();
+                list.add(build);
+            }
+            rolesMenusService.insertBatch(list);
+        }
+        //3.去除缓存
+        delRedisUserInfo(roleId);
+
+
+    }
+
+
+    private void delRedisUserInfo(Long roleId){
+        List<String> usernames = rolesMenusMapper.selectUsernameByRoleId(roleId);
+        for (String username : usernames) {
+            RedisUtil.KeyOps.delete("userDetails:"+username);
+        }
+    }
+
 
     /**
      * 修改多条数据,若部分属性为null,则将数据库中的数据也修改为null
@@ -239,6 +279,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public int deleteByPrimaryKey(Long id) {
+
+        //去除缓存
+        delRedisUserInfo(id);
         return roleMapper.deleteByPrimaryKey(id);
     }
 

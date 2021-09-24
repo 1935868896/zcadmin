@@ -58,22 +58,8 @@ public class RoleController {
     @Log("角色菜单关联信息管理:修改角色拥有的菜单权限")
     @PreAuthorize("@el.check('rolesMenus:updateBatch')")
     public ResultResponse updateBatch(@RequestBody RolesMenusVO rolesMenusVO) {
-        Long roleId=rolesMenusVO.getRoleId();
-        List<Long> menuIds= rolesMenusVO.getMenuIds();
-        //1.删除
-        rolesMenusService.deleteBySelective(RolesMenus.builder().roleId(roleId).build());
-        //2.新增
-        List<RolesMenus> list=new ArrayList<>();
-        if (menuIds!=null&&menuIds.size()>0){
-            for (Long menuId : menuIds) {
-                RolesMenus build = RolesMenus.builder().roleId(roleId).menuId(menuId).build();
-                list.add(build);
-            }
-            rolesMenusService.insertBatch(list);
-            return ResultResponse.success();
-
-        }
-        return ResultResponse.error();
+        roleService.updateRoleMenus(rolesMenusVO);
+        return ResultResponse.success();
     }
 
 

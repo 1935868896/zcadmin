@@ -3,7 +3,9 @@ package com.zc.modules.system.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zc.modules.system.mapper.RolesMenusMapper;
 import com.zc.modules.system.vo.MenuVO;
+import com.zc.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     private final MenuMapper menuMapper;
+    private final RolesMenusMapper rolesMenusMapper;
 
     @Override
     public List<MenuVO> selectMenuVO() {
@@ -39,14 +42,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         primaryMenu.setTitle("顶级类目");
         primaryMenu.setChildren(new ArrayList<>());
         menuVOS.add(primaryMenu);
-//        for (Menu menu : menus) {
-//            if (menu.getPid()==null){
-//                MenuVO menuVO=new MenuVO();
-//                BeanUtils.copyProperties(menu,menuVO);
-//                menuVO.setChildren(new ArrayList<>());
-//                menuVOS.add(menuVO);
-//            }
-//        }
         for (MenuVO menuVO : menuVOS) {
             setChild(menus,menuVO);
         }
@@ -195,6 +190,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public int update(Menu record) {
+        //删除redis的缓存信息
+        deleteRedisUserInfo(record.getMenuId());
         return menuMapper.update(record);
     }
 
@@ -236,6 +233,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if (recordList == null || recordList.size() <= 0) {
             return result;
         }
+
         List<List<Menu>> list = SqlListHandleUtils.splitList(recordList, 50);
         for (List<Menu> records : list) {
             int count = menuMapper.updateBatch(records);
@@ -284,6 +282,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public int deleteByPrimaryKey(Long id) {
+        //删除redis的缓存信息
+        deleteRedisUserInfo(id);
         return menuMapper.deleteByPrimaryKey(id);
     }
 
@@ -301,4 +301,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return menuMapper.deleteByPrimaryKeys(ids);
     }
 
+
+    private void deleteRedisUserInfo(Long menuId){
+        List<String> usernames = rolesMenusMapper.selectUsernameByMenuId(menuId);
+        for (String username : usernames) {
+            RedisUtil.KeyOps.delete("userDetails:"+username);
+        }
+    }
 }

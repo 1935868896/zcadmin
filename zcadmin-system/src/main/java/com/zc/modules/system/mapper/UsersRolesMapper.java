@@ -16,6 +16,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UsersRolesMapper extends BaseMapper<UsersRoles> {
 
+
+
     /**
      * 查询用户角色关联信息
      *
