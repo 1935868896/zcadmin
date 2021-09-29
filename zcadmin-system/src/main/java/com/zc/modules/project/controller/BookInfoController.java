@@ -90,10 +90,10 @@ public class BookInfoController {
 
     @ApiOperationSupport(order = 5)
     @ApiOperation("分页获得目标数据集合")
-    @GetMapping("page")
+    @PostMapping("page")
     @Log("图书信息管理:分页获得目标数据集合")
     @PreAuthorize("@el.check('bookInfo:getPageByParam')")
-    public ResultResponse getPageByParam(BookInfo record, Page page) {
+    public ResultResponse getPageByParam(BookInfo record, @RequestBody Page page) {
         IPage<BookInfo> recordIPage = bookInfoService.selectPageBySelective(record, page);
         return ResultResponse.success(recordIPage);
     }

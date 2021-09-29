@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 // 分页查
-export function fetchList(query) {
+export function fetchList(query,data) {
   return request({
     url: '/${moduleName}/${classname}/page',
-    method: 'get',
-    params: query
+    method: 'post',
+    params: query,
+    data
   })
 }
 // 根据主键查询
