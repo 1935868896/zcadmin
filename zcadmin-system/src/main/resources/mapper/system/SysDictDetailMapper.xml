@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.system.mapper.SysDictDetailMapper">
+    <resultMap type="SysDictDetail" id="BaseResultMap">
+            <result property="detailId" jdbcType="BIGINT" column="detail_id"/>
+            <result property="dictId" jdbcType="BIGINT" column="dict_id"/>
+            <result property="label" jdbcType="VARCHAR" column="label"/>
+            <result property="value" jdbcType="VARCHAR" column="value"/>
+            <result property="dictSort" jdbcType="INTEGER" column="dict_sort"/>
+            <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+            <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+detail_id,dict_id,label,value,dict_sort,create_by,update_by,create_time,update_time
+    </sql>
+        <select id="selectListByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dict_detail
+        where 1=1
+        <if test="detailId != null ">
+            and detail_id = #{detailId,jdbcType=BIGINT}
+        </if>
+        <if test="dictId != null ">
+            and dict_id = #{dictId,jdbcType=BIGINT}
+        </if>
+        <if test="label != null  and label != '' ">
+            and label = #{label,jdbcType=VARCHAR}
+        </if>
+        <if test="value != null  and value != '' ">
+            and value = #{value,jdbcType=VARCHAR}
+        </if>
+        <if test="dictSort != null ">
+            and dict_sort = #{dictSort,jdbcType=INTEGER}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+    <select id="selectPageByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dict_detail
+        where 1=1
+                <if test="record.detailId != null ">
+                    and detail_id = #{record.detailId,jdbcType=BIGINT}
+                </if>
+                <if test="record.dictId != null ">
+                    and dict_id = #{record.dictId,jdbcType=BIGINT}
+                </if>
+                <if test="record.label != null  and record.label != '' ">
+                    and label = #{record.label,jdbcType=VARCHAR}
+                </if>
+                <if test="record.value != null  and record.value != '' ">
+                    and value = #{record.value,jdbcType=VARCHAR}
+                </if>
+                <if test="record.dictSort != null ">
+                    and dict_sort = #{record.dictSort,jdbcType=INTEGER}
+                </if>
+                <if test="record.createBy != null  and record.createBy != '' ">
+                    and create_by = #{record.createBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.updateBy != null  and record.updateBy != '' ">
+                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
+                </if>
+                <if test="record.createTime != null ">
+                    and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="record.updateTime != null ">
+                    and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+                </if>
+    </select>
+    <insert id="insertOne" parameterType="SysDictDetail"             useGeneratedKeys="true" keyProperty="detailId">
+        insert into sys_dict_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+ detail_id, dict_id, label, value, dict_sort, create_by, update_by, create_time, update_time,</trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+         #{detailId,jdbcType=BIGINT},         #{dictId,jdbcType=BIGINT},         #{label,jdbcType=VARCHAR},         #{value,jdbcType=VARCHAR},         #{dictSort,jdbcType=INTEGER},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP},        </trim>
+    </insert>
+
+
+    <update id="updateById" parameterType="SysDictDetail">
+        update sys_dict_detail
+        <trim prefix="SET" suffixOverrides=",">
+ detail_id =#{detailId,jdbcType=BIGINT}, dict_id =#{dictId,jdbcType=BIGINT}, label =#{label,jdbcType=VARCHAR}, value =#{value,jdbcType=VARCHAR}, dict_sort =#{dictSort,jdbcType=INTEGER}, create_by =#{createBy,jdbcType=VARCHAR}, update_by =#{updateBy,jdbcType=VARCHAR}, create_time =#{createTime,jdbcType=TIMESTAMP}, update_time =#{updateTime,jdbcType=TIMESTAMP},        </trim>
+        where detail_id = #{detailId,jdbcType=BIGINT}
+    </update>
+            <delete id="deleteById" parameterType="java.lang.Long">
+                delete
+                from sys_dict_detail where detail_id = #{detailId,jdbcType=BIGINT}
+            </delete>
+
+
+</mapper>
