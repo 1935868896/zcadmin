@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
+import java.util.List;
+
 
 /**
  * 代码生成字段存储表 code_column_config
@@ -76,6 +78,9 @@ public class CodeColumnConfig extends BaseEntity{
     @ApiModelProperty(value="前端查询是否保留",name="searchShow")
     private Boolean searchShow;
 
+    @ApiModelProperty(value = "关联字典")
+    private String dictName;
+
     @TableField(exist = false)
     private String dataType;
 
@@ -84,5 +89,8 @@ public class CodeColumnConfig extends BaseEntity{
 
     @TableField(exist = false)
     private String columnKey;
+
+    @TableField(exist = false)
+    private List<CodeSysDictDetail> dictDetailList;
 
 }

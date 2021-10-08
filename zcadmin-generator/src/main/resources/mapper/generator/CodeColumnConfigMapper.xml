@@ -21,9 +21,11 @@
         <result property="attrNameFirstToUpper" jdbcType="VARCHAR" column="attr_name_first_to_upper"/>
         <result property="attrNameFirstToLow" jdbcType="VARCHAR" column="attr_name_first_to_low"/>
         <result property="searchShow" jdbcType="BIT" column="search_show"/>
+        <result property="dictName" jdbcType="VARCHAR" column="dict_name"/>
+
     </resultMap>
     <sql id="Base_Column_List">
-        column_id,table_name,column_name,column_type,extra,form_show,form_type,key_type,list_show,not_null,query_type,remark,column_java_type,column_jdbc_type,attr_name_first_to_upper,attr_name_first_to_low,search_show
+        column_id,table_name,column_name,column_type,extra,form_show,form_type,key_type,list_show,not_null,query_type,remark,column_java_type,column_jdbc_type,attr_name_first_to_upper,attr_name_first_to_low,search_show,dict_name
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -88,6 +90,9 @@
         <if test="searchShow != null ">
             and search_show = #{searchShow,jdbcType=BIT}
         </if>
+        <if test="dictName != null  and dictName != '' ">
+            and dict_name = #{dictName,jdbcType=VARCHAR}
+        </if>
     </select>
 
     <select id="selectPageBySelective" resultMap="BaseResultMap">
@@ -145,6 +150,9 @@
         </if>
         <if test="record.searchShow != null ">
             and search_show = #{record.searchShow,jdbcType=BIT}
+        </if>
+        <if test="record.dictName != null  and record.dictName != '' ">
+            and dict_name = #{record.dictName,jdbcType=VARCHAR}
         </if>
     </select>
 
@@ -215,6 +223,9 @@
         <if test="searchShow != null ">
             and search_show = #{searchShow,jdbcType=BIT}
         </if>
+        <if test="dictName != null  and dictName != '' ">
+            and dict_name = #{dictName,jdbcType=VARCHAR}
+        </if>
     </select>
 
     <insert id="insert" parameterType="CodeColumnConfig"             useGeneratedKeys="true" keyProperty="columnId">
@@ -235,10 +246,11 @@
             column_jdbc_type,
             attr_name_first_to_upper,
             attr_name_first_to_low,
-            search_show
+            search_show,
+            dict_name
         )
         values
-        (         #{columnId,jdbcType=BIGINT},         #{tableName,jdbcType=VARCHAR},         #{columnName,jdbcType=VARCHAR},         #{columnType,jdbcType=VARCHAR},         #{extra,jdbcType=VARCHAR},         #{formShow,jdbcType=BIT},         #{formType,jdbcType=VARCHAR},         #{keyType,jdbcType=VARCHAR},         #{listShow,jdbcType=BIT},         #{notNull,jdbcType=BIT},         #{queryType,jdbcType=VARCHAR},         #{remark,jdbcType=VARCHAR},         #{columnJavaType,jdbcType=VARCHAR},         #{columnJdbcType,jdbcType=VARCHAR},         #{attrNameFirstToUpper,jdbcType=VARCHAR},         #{attrNameFirstToLow,jdbcType=VARCHAR},         #{searchShow,jdbcType=BIT})
+        (         #{columnId,jdbcType=BIGINT},         #{tableName,jdbcType=VARCHAR},         #{columnName,jdbcType=VARCHAR},         #{columnType,jdbcType=VARCHAR},         #{extra,jdbcType=VARCHAR},         #{formShow,jdbcType=BIT},         #{formType,jdbcType=VARCHAR},         #{keyType,jdbcType=VARCHAR},         #{listShow,jdbcType=BIT},         #{notNull,jdbcType=BIT},         #{queryType,jdbcType=VARCHAR},         #{remark,jdbcType=VARCHAR},         #{columnJavaType,jdbcType=VARCHAR},         #{columnJdbcType,jdbcType=VARCHAR},         #{attrNameFirstToUpper,jdbcType=VARCHAR},         #{attrNameFirstToLow,jdbcType=VARCHAR},         #{searchShow,jdbcType=BIT},#{dictName,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertSelective" parameterType="CodeColumnConfig"            useGeneratedKeys="true" keyProperty="columnId">
@@ -260,6 +272,8 @@
             <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">attr_name_first_to_upper,</if>
             <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">attr_name_first_to_low,</if>
             <if test="searchShow != null  ">search_show,</if>
+            <if test="dictName != null  and dictName != ''  ">dict_name,</if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="tableName != null  and tableName != ''  ">#{tableName,jdbcType=VARCHAR},</if>
@@ -278,6 +292,8 @@
             <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">#{attrNameFirstToUpper,jdbcType=VARCHAR},</if>
             <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">#{attrNameFirstToLow,jdbcType=VARCHAR},</if>
             <if test="searchShow != null  ">#{searchShow,jdbcType=BIT},</if>
+            <if test="dictName != null  and dictName != ''  ">#{dict_name,jdbcType=VARCHAR},</if>
+
         </trim>
     </insert>
 
@@ -300,7 +316,8 @@
         column_jdbc_type,
         attr_name_first_to_upper,
         attr_name_first_to_low,
-        search_show
+        search_show,
+        dict_name
         )
         values
         <foreach collection="recordList" item="record" index="index" separator=",">
@@ -321,7 +338,9 @@
             #{record.columnJdbcType,jdbcType=VARCHAR},
             #{record.attrNameFirstToUpper,jdbcType=VARCHAR},
             #{record.attrNameFirstToLow,jdbcType=VARCHAR},
-            #{record.searchShow,jdbcType=BIT}
+            #{record.searchShow,jdbcType=BIT},
+            #{record.dictName,jdbcType=VARCHAR}
+
             )
         </foreach>
     </insert>
@@ -344,7 +363,9 @@
                                       column_jdbc_type =#{columnJdbcType,jdbcType=VARCHAR} ,
                                       attr_name_first_to_upper =#{attrNameFirstToUpper,jdbcType=VARCHAR} ,
                                       attr_name_first_to_low =#{attrNameFirstToLow,jdbcType=VARCHAR} ,
-                                      search_show =#{searchShow,jdbcType=BIT}
+                                      search_show =#{searchShow,jdbcType=BIT},
+            dict_name =#{dictName,jdbcType=VARCHAR}
+
         where column_id = #{columnId,jdbcType=BIGINT}
     </update>
 
@@ -367,6 +388,8 @@
             <if test="attrNameFirstToUpper != null  and attrNameFirstToUpper != ''  ">attr_name_first_to_upper = #{attrNameFirstToUpper,jdbcType=VARCHAR},</if>
             <if test="attrNameFirstToLow != null  and attrNameFirstToLow != ''  ">attr_name_first_to_low = #{attrNameFirstToLow,jdbcType=VARCHAR},</if>
             <if test="searchShow != null  ">search_show = #{searchShow,jdbcType=BIT},</if>
+            <if test="dictName != null  and dictName != ''  ">dict_name = #{dictName,jdbcType=VARCHAR},</if>
+
         </trim>
         where column_id = #{columnId,jdbcType=BIGINT}
     </update>
@@ -449,6 +472,11 @@
             <trim prefix="attr_name_first_to_low = case" suffix="end,">
                 <foreach collection="list" index="index" item="records">
                     when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.attrNameFirstToLow,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="dict_name = case" suffix="end,">
+                <foreach collection="list" index="index" item="records">
+                    when column_id = #{records.columnId,jdbcType=BIGINT} then #{records.dictName,jdbcType=VARCHAR}
                 </foreach>
             </trim>
             <trim prefix="search_show = case" suffix="end,">

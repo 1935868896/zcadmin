@@ -1,10 +1,12 @@
 package com.zc.modules.system.controller;
-    import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -23,7 +25,7 @@ import cn.hutool.core.date.DateTime;
  * 数据字典 信息操作处理
  *
  * @author zhangc
- * @date 2021-09-30
+ * @date 2021-10-08
  */
 
 @RestController
@@ -45,6 +47,20 @@ public class SysDictController {
         }
         return ResultResponse.error();
     }
+
+    @ApiOperationSupport(order = 2)
+    @GetMapping
+    @ApiOperation("根据条件查询得到对象集合")
+    @Log("数据字典信息管理:根据参数获取对象集合")
+    @PreAuthorize("@el.check('sysDict:getListByParam')")
+    public ResultResponse getListByParam(SysDict record) {
+        List<SysDict> result = sysDictService.selectListByParam(record);
+        if (result != null && result.size() > 0) {
+            return ResultResponse.success(result);
+        }
+        return ResultResponse.error();
+    }
+
     @ApiOperationSupport(order = 3)
     @GetMapping("/single")
     @ApiOperation("根据条件查询得到单个对象")
@@ -57,12 +73,13 @@ public class SysDictController {
         }
         return ResultResponse.error();
     }
+
     @ApiOperationSupport(order = 6)
     @ApiOperation("分页获得目标数据集合")
     @PostMapping("page")
     @Log("数据字典信息管理:根据参数获取分页对象集合")
     @PreAuthorize("@el.check('sysDict:getPageByParam')")
-    public ResultResponse getPageByParam(SysDict record,@RequestBody Page page) {
+    public ResultResponse getPageByParam(SysDict record, @RequestBody Page page) {
         IPage<SysDict> recordIPage = sysDictService.selectPageByParam(record, page);
         return ResultResponse.success(recordIPage);
     }
@@ -73,7 +90,7 @@ public class SysDictController {
     @Log("数据字典信息管理:插入单条数据")
     @PreAuthorize("@el.check('sysDict:insertOne')")
     public ResultResponse insertOne(@RequestBody SysDict record) {
-        if (record==null){
+        if (record == null) {
             throw new BadRequestException("插入数据为空");
         }
         record.setCreateBy(SecurityUtils.getCurrentUsername());
@@ -84,13 +101,14 @@ public class SysDictController {
         }
         return ResultResponse.error();
     }
+
     @ApiOperationSupport(order = 9)
     @ApiOperation("修改数据")
     @PutMapping
     @Log("数据字典信息管理:修改单条数据")
     @PreAuthorize("@el.check('sysDict:updateById')")
     public ResultResponse updateById(@RequestBody SysDict record) {
-        if (record==null){
+        if (record == null) {
             throw new BadRequestException("修改数据为空");
         }
         record.setUpdateBy(SecurityUtils.getCurrentUsername());
@@ -100,14 +118,15 @@ public class SysDictController {
         }
         return ResultResponse.error();
     }
+
     @ApiOperationSupport(order = 13)
     @ApiOperation("根据主键删除数据")
     @DeleteMapping()
     @Log("数据字典信息管理:根据主键删除数据")
     @PreAuthorize("@el.check('sysDict:deleteById')")
     public ResultResponse deleteById(Long id) {
-        int result = sysDictService.deleteById(id);
-        if (result > 0) {
+
+        if (sysDictService.deleteById(id)) {
             return ResultResponse.success();
         }
         return ResultResponse.error();

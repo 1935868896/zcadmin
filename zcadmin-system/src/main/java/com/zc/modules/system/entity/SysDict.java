@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 数据字典表 sys_dict
  *
  * @author zhangc
- * @date 2021-09-30
+ * @date 2021-10-08
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

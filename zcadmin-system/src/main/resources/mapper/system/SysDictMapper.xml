@@ -4,49 +4,76 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zc.modules.system.mapper.SysDictMapper">
     <resultMap type="SysDict" id="BaseResultMap">
-            <result property="dictId" jdbcType="BIGINT" column="dict_id"/>
-            <result property="name" jdbcType="VARCHAR" column="name"/>
-            <result property="description" jdbcType="VARCHAR" column="description"/>
-            <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
-            <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
-            <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
-            <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+        <result property="dictId" jdbcType="BIGINT" column="dict_id"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+        <result property="description" jdbcType="VARCHAR" column="description"/>
+        <result property="createBy" jdbcType="VARCHAR" column="create_by"/>
+        <result property="updateBy" jdbcType="VARCHAR" column="update_by"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
     </resultMap>
-            <sql id="Base_Column_List">
-dict_id,name,description,create_by,update_by,create_time,update_time
+    <sql id="Base_Column_List">
+        dict_id,name,description,create_by,update_by,create_time,update_time
     </sql>
-        <select id="selectObjectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectObjectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_dict
         where dict_id = #{dictId,jdbcType=BIGINT}
-</select>
+    </select>
+    <select id="selectListByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dict
+        where 1=1
+        <if test="dictId != null ">
+            and dict_id = #{dictId,jdbcType=BIGINT}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
     <select id="selectOneByParam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_dict
         where 1=1
-                <if test="dictId != null ">
-                    and dict_id = #{dictId,jdbcType=BIGINT}
-                </if>
-                <if test="name != null  and name != '' ">
-                    and name = #{name,jdbcType=VARCHAR}
-                </if>
-                <if test="description != null  and description != '' ">
-                    and description = #{description,jdbcType=VARCHAR}
-                </if>
-                <if test="createBy != null  and createBy != '' ">
-                    and create_by = #{createBy,jdbcType=VARCHAR}
-                </if>
-                <if test="updateBy != null  and updateBy != '' ">
-                    and update_by = #{updateBy,jdbcType=VARCHAR}
-                </if>
-                <if test="createTime != null ">
-                    and create_time = #{createTime,jdbcType=TIMESTAMP}
-                </if>
-                <if test="updateTime != null ">
-                    and update_time = #{updateTime,jdbcType=TIMESTAMP}
-                </if>
+        <if test="dictId != null ">
+            and dict_id = #{dictId,jdbcType=BIGINT}
+        </if>
+        <if test="name != null  and name != '' ">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null  and description != '' ">
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="createBy != null  and createBy != '' ">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="updateBy != null  and updateBy != '' ">
+            and update_by = #{updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null ">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null ">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
         limit 1
     </select>
 
@@ -55,67 +82,57 @@ dict_id,name,description,create_by,update_by,create_time,update_time
         <include refid="Base_Column_List"/>
         from sys_dict
         where 1=1
-                <if test="record.dictId != null ">
-                    and dict_id = #{record.dictId,jdbcType=BIGINT}
-                </if>
-                <if test="record.name != null  and record.name != '' ">
-                    and name = #{record.name,jdbcType=VARCHAR}
-                </if>
-                <if test="record.description != null  and record.description != '' ">
-                    and description = #{record.description,jdbcType=VARCHAR}
-                </if>
-                <if test="record.createBy != null  and record.createBy != '' ">
-                    and create_by = #{record.createBy,jdbcType=VARCHAR}
-                </if>
-                <if test="record.updateBy != null  and record.updateBy != '' ">
-                    and update_by = #{record.updateBy,jdbcType=VARCHAR}
-                </if>
-                <if test="record.createTime != null ">
-                    and create_time = #{record.createTime,jdbcType=TIMESTAMP}
-                </if>
-                <if test="record.updateTime != null ">
-                    and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-                </if>
+        <if test="record.dictId != null ">
+            and dict_id = #{record.dictId,jdbcType=BIGINT}
+        </if>
+        <if test="record.name != null  and record.name != '' ">
+            and name = #{record.name,jdbcType=VARCHAR}
+        </if>
+        <if test="record.description != null  and record.description != '' ">
+            and description = #{record.description,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createBy != null  and record.createBy != '' ">
+            and create_by = #{record.createBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.updateBy != null  and record.updateBy != '' ">
+            and update_by = #{record.updateBy,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createTime != null ">
+            and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="record.updateTime != null ">
+            and update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        </if>
     </select>
-    <insert id="insertOne" parameterType="SysDict"             useGeneratedKeys="true" keyProperty="dictId">
+    <insert id="insertOne" parameterType="SysDict" useGeneratedKeys="true" keyProperty="dictId">
         insert into sys_dict
-    <trim prefix="(" suffix=")" suffixOverrides=",">
- dict_id, name, description, create_by, update_by, create_time, update_time,</trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            dict_id, name, description, create_by, update_by, create_time, update_time,
+        </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-         #{dictId,jdbcType=BIGINT},         #{name,jdbcType=VARCHAR},         #{description,jdbcType=VARCHAR},         #{createBy,jdbcType=VARCHAR},         #{updateBy,jdbcType=VARCHAR},         #{createTime,jdbcType=TIMESTAMP},         #{updateTime,jdbcType=TIMESTAMP},        </trim>
+            #{dictId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+            #{createBy,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+            #{updateTime,jdbcType=TIMESTAMP},
+        </trim>
     </insert>
 
-    <insert id="insertSelective" parameterType="SysDict"            useGeneratedKeys="true" keyProperty="dictId">
-        insert into sys_dict
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-                    <if test="name != null  and name != ''  ">name,</if>
-                    <if test="description != null  and description != ''  ">description,</if>
-                    <if test="createBy != null  and createBy != ''  ">create_by,</if>
-                    <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
-                    <if test="createTime != null  ">create_time,</if>
-                    <if test="updateTime != null  ">update_time,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-                    <if test="name != null  and name != ''  ">#{name,jdbcType=VARCHAR},</if>
-                    <if test="description != null  and description != ''  ">#{description,jdbcType=VARCHAR},</if>
-                    <if test="createBy != null  and createBy != ''  ">#{createBy,jdbcType=VARCHAR},</if>
-                    <if test="updateBy != null  and updateBy != ''  ">#{updateBy,jdbcType=VARCHAR},</if>
-                    <if test="createTime != null  ">#{createTime,jdbcType=TIMESTAMP},</if>
-                    <if test="updateTime != null  ">#{updateTime,jdbcType=TIMESTAMP},</if>
-        </trim>
-    </insert>
 
     <update id="updateById" parameterType="SysDict">
         update sys_dict
         <trim prefix="SET" suffixOverrides=",">
- dict_id =#{dictId,jdbcType=BIGINT}, name =#{name,jdbcType=VARCHAR}, description =#{description,jdbcType=VARCHAR}, create_by =#{createBy,jdbcType=VARCHAR}, update_by =#{updateBy,jdbcType=VARCHAR}, create_time =#{createTime,jdbcType=TIMESTAMP}, update_time =#{updateTime,jdbcType=TIMESTAMP},        </trim>
+            dict_id =#{dictId,jdbcType=BIGINT}, name =#{name,jdbcType=VARCHAR}, description
+            =#{description,jdbcType=VARCHAR}, create_by =#{createBy,jdbcType=VARCHAR}, update_by
+            =#{updateBy,jdbcType=VARCHAR}, create_time =#{createTime,jdbcType=TIMESTAMP}, update_time
+            =#{updateTime,jdbcType=TIMESTAMP},
+        </trim>
         where dict_id = #{dictId,jdbcType=BIGINT}
     </update>
-            <delete id="deleteById" parameterType="java.lang.Long">
-                delete
-                from sys_dict where dict_id = #{dictId,jdbcType=BIGINT}
-            </delete>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete
+        from sys_dict
+        where dict_id = #{dictId,jdbcType=BIGINT}
+    </delete>
 
 
 </mapper>

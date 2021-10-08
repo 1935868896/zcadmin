@@ -11,7 +11,7 @@ import java.util.List;
  * 数据字典 服务层
  *
  * @author zhangc
- * @date 2021-09-30
+ * @date 2021-10-08
  */
 public interface SysDictService extends IService<SysDict> {
     /**
@@ -22,6 +22,13 @@ public interface SysDictService extends IService<SysDict> {
      */
         SysDict selectObjectById(Long id);
 
+    /**
+     * 根据条件,查询数据字典列表
+     *
+     * @param record 数据字典信息
+     * @return 数据字典集合
+     */
+    List<SysDict> selectListByParam(SysDict record);
     /**
      * 根据条件,查询第一个数据字典对象(一般用于条件可以确定唯一数据)
      *
@@ -47,7 +54,6 @@ public interface SysDictService extends IService<SysDict> {
     int insertOne(SysDict record);
 
 
-
     /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *
@@ -62,5 +68,5 @@ public interface SysDictService extends IService<SysDict> {
      * @param id 数据字典 主键
      * @return 删除数量
      */
-    int deleteById(Long id);
+    boolean deleteById(Long id);
 }

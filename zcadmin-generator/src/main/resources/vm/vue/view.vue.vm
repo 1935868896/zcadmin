@@ -158,9 +158,21 @@
                         #elseif($column.formType=='radio')
                             <el-form-item label="${column.remark}">
                                 <el-radio-group v-model="temp.${column.attrNameFirstToLow}" style="width: 200px">
-                                    <el-radio :label="true">是</el-radio>
-                                    <el-radio :label="false">否</el-radio>
+                            #foreach($dictDetail in ${column.dictDetailList})
+                                    <el-radio :label="${dictDetail.value}">${dictDetail.label}</el-radio>
+                            #end
                                 </el-radio-group>
+                            </el-form-item>
+                        #elseif($column.formType=='select')
+                            <el-form-item label="${column.remark}">
+                                <el-select v-model="temp.${column.attrNameFirstToLow}" placeholder="请选择" style="width: 200px">
+                                    <el-option
+                                            v-for="item in ${column.attrNameFirstToLow}-options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.detailId">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         #elseif($column.formType=='text-area')
                             <el-form-item label="${column.remark}">
@@ -230,6 +242,23 @@
                 rules: {
 
                 },
+#foreach($column in $columns)
+#if(${column.formShow})
+#if($column.keyType != "PRI")
+#if($column.formType=='select')
+                ${column.attrNameFirstToLow}-options: [
+    #foreach($dictDetail in ${column.dictDetailList})
+        {
+            value: '${dictDetail.value}',
+            label: '${dictDetail.label}'
+        },
+    #end
+                ],
+#end
+#end
+#end
+#end
+
             }
         },
         created() {

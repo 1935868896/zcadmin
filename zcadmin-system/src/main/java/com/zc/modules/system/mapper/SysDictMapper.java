@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 数据字典 数据层
  *
  * @author zhangc
- * @date 2021-09-30
+ * @date 2021-10-08
  */
 @Mapper
 public interface SysDictMapper extends BaseMapper<SysDict> {
@@ -23,6 +23,15 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
      * @return 数据字典信息
      */
     SysDict selectObjectById(Long id);
+
+
+    /**
+     * 根据条件,查询数据字典列表
+     *
+     * @param record 数据字典信息
+     * @return 数据字典集合
+     */
+    List<SysDict> selectListByParam(SysDict record);
 
     /**
      * 根据条件,查询第一个数据字典对象(一般用于条件可以确定唯一数据)
@@ -48,13 +57,6 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
      */
     int insertOne(SysDict record);
 
-    /**
-     * 条件插入单条数据
-     *
-     * @param record 数据字典 信息
-     * @return 插入数量
-     */
-    int insertSelective(SysDict record);
         /**
      * 修改单条数据,若部分属性为null,则将数据库中的数据也修改为null
      *

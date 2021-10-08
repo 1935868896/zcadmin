@@ -7,10 +7,8 @@ import com.zc.generator.domain.TableInfo;
 import com.zc.generator.entity.CodeColumnConfig;
 import com.zc.generator.entity.CodeGenConfig;
 import com.zc.generator.entity.CodeMethodConfig;
-import com.zc.generator.mapper.CodeColumnConfigMapper;
-import com.zc.generator.mapper.CodeGenConfigMapper;
-import com.zc.generator.mapper.CodeMethodConfigMapper;
-import com.zc.generator.mapper.GenMapper;
+import com.zc.generator.entity.CodeSysDictDetail;
+import com.zc.generator.mapper.*;
 import com.zc.generator.service.IGenService;
 import com.zc.generator.util.GenUtils;
 import com.zc.generator.util.VelocityInitializer;
@@ -19,6 +17,7 @@ import com.zc.utils.CharsetKit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -49,6 +48,7 @@ public class GenServiceImpl implements IGenService {
     private final CodeGenConfigMapper codeGenConfigMapper;
     private final CodeColumnConfigMapper columnConfigMapper;
     private final CodeMethodConfigMapper codeMethodConfigMapper;
+    private final CodeSysDictMapper codeSysDictMapper;
 
     /**
      * 查询ry数据库表信息
@@ -156,6 +156,9 @@ public class GenServiceImpl implements IGenService {
             if ("PRI".equals(config.getKeyType())) {
                 primayConfig = config;
             }
+            if (StringUtils.isNotEmpty(config.getDictName())){
+            config.setDictDetailList(codeSysDictMapper.selectDictDetail(config.getDictName()));
+        }
         }
         codeGenConfig.setPrimaryKey(primayConfig);
 
