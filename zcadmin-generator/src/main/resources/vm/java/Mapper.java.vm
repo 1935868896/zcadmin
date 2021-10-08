@@ -80,13 +80,6 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      */
     int insertOne(${className} record);
 
-    /**
-     * 条件插入单条数据
-     *
-     * @param record ${tableComment} 信息
-     * @return 插入数量
-     */
-    int insertSelective(${className} record);
 #elseif($method.methodName=='insertBatch')
      /**
       * 批量插入多条数据

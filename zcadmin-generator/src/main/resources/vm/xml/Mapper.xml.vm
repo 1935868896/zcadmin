@@ -166,28 +166,6 @@
         </trim>
     </insert>
 
-    <insert id="insertSelective" parameterType="${className}"#if($primaryKey.extra == 'auto_increment')
-            useGeneratedKeys="true" keyProperty="$primaryKey.attrNameFirstToLow"#end>
-        insert into ${tableName}
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-            #if($logicDelete&&$logicField==$column.columnName)#else
-                #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
-                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
-                        'String' ) and $column.attrNameFirstToLow != '' #end ">$column.columnName,</if>
-                #end#end
-            #end
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            #foreach($column in $columns)
-                #if($logicDelete&&$logicField==$column.columnName)#else
-                #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
-                    <if test="$column.attrNameFirstToLow != null #if($column.columnJavaType ==
-                        'String' ) and $column.attrNameFirstToLow != '' #end ">#{$column.attrNameFirstToLow,jdbcType=$column.columnJdbcType},</if>
-                #end#end
-            #end
-        </trim>
-    </insert>
 
 #elseif($method.methodName=='insertBatch')
     <insert id="insertBatch" parameterType="java.util.List" #if($primaryKey.extra == 'auto_increment')

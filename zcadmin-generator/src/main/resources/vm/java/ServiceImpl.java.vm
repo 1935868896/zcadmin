@@ -111,16 +111,6 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         return ${classname}Mapper.insertOne(record);
     }
 
-    /**
-     * 条件插入单条数据
-     *
-     * @param record ${tableComment} 信息
-     * @return 插入数量
-     */
-    @Override
-    public int insertSelective(${className} record) {
-        return ${classname}Mapper.insertSelective(record);
-    }
 #elseif($method.methodName=='insertBatch')
     /**
      * 批量插入多条数据
@@ -150,8 +140,8 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 修改数量
      */
     @Override
-    public int updateById(${className} record) {
-        return ${classname}Mapper.updateById(record);
+    public boolean updateById(${className} record) {
+        return ${classname}Mapper.updateById(record)>0;
     }
 #elseif($method.methodName=='updateByParam')
     /**
@@ -228,8 +218,8 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
      * @return 删除数量
      */
     @Override
-    public int deleteById(${primaryKey.columnJavaType} id) {
-        return ${classname}Mapper.deleteById(id);
+    public boolean deleteById(${primaryKey.columnJavaType} id) {
+        return ${classname}Mapper.deleteById(id)>0;
     }
 
 #elseif($method.methodName=='deleteListByParam')

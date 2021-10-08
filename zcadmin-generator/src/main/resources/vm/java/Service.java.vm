@@ -76,13 +76,6 @@ public interface ${className}Service extends IService<${className}> {
      */
     int insertOne(${className} record);
 
-    /**
-     * 条件插入单条数据
-     *
-     * @param record ${tableComment} 信息
-     * @return 插入数量
-     */
-    int insertParam(${className} record);
 
 #elseif($method.methodName=='insertBatch')
     /**
@@ -99,7 +92,7 @@ public interface ${className}Service extends IService<${className}> {
      * @param record ${tableComment} 信息
      * @return 修改数量
      */
-    int updateById(${className} record);
+    boolean updateById(${className} record);
 
 #elseif($method.methodName=='updateByParam')
     /**
@@ -143,7 +136,7 @@ public interface ${className}Service extends IService<${className}> {
      * @param id ${tableComment} 主键
      * @return 删除数量
      */
-    int deleteById(${primaryKey.columnJavaType} id);
+    boolean deleteById(${primaryKey.columnJavaType} id);
 #elseif($method.methodName=='deleteListByParam')
     /**
      * 根据条件删除数据

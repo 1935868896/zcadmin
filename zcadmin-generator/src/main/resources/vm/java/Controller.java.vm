@@ -258,8 +258,7 @@ public class ${className}Controller {
         record.setUpdateTime(new DateTime());
         #end
 #end
-        int result = ${classname}Service.updateById(record);
-        if (result > 0) {
+        if (${classname}Service.updateById(record)) {
             return ResultResponse.success();
         }
         return ResultResponse.error();
@@ -380,8 +379,8 @@ public class ${className}Controller {
     @PreAuthorize("@el.check('${classname}:$method.methodName')")
     #end
     public ResultResponse deleteById(${primaryKey.columnJavaType} id) {
-        int result = ${classname}Service.deleteById(id);
-        if (result > 0) {
+
+        if (${classname}Service.deleteById(id)) {
             return ResultResponse.success();
         }
         return ResultResponse.error();
