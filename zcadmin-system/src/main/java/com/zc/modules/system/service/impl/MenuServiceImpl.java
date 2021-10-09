@@ -1,8 +1,11 @@
 package com.zc.modules.system.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.zc.modules.system.entity.SysMenu;
 import com.zc.modules.system.mapper.RolesMenusMapper;
 import com.zc.modules.system.vo.MenuVO;
 import com.zc.utils.RedisUtil;
@@ -48,7 +51,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return menuVOS;
     }
 
-
     public void setChild(List<Menu> menus,MenuVO menuVO){
         for (Menu menu : menus) {
             if (menuVO!=null&&menu.getPid().equals(menuVO.getMenuId())){
@@ -63,6 +65,50 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
             }
         }
+    }
+
+
+    public List<SysMenu> selectSysMenu(){
+        List<Menu> menus = menuMapper.selectListBySelective(new Menu());
+        List<SysMenu> sysMenuList=new ArrayList<>();
+        for (Menu menu : menus) {
+            if (menu.getPid()==0l){
+                SysMenu sysMenu=new SysMenu();
+                Map map=new HashMap();
+                map.put("title",menu.getTitle());
+                map.put("icon",menu.getIcon());
+                sysMenu.setMeta(map);
+                BeanUtils.copyProperties(menu,sysMenu);
+                setSysMenuChild(sysMenu,menus);
+                sysMenuList.add(sysMenu);
+
+            }
+
+        }
+        return sysMenuList;
+    }
+
+    public void setSysMenuChild(SysMenu sysMenu,List<Menu> menus){
+        for (Menu menu : menus) {
+            if (sysMenu!=null&&menu.getPid()==sysMenu.getMenuId()){
+                List<SysMenu> childList=sysMenu.getChildren();
+                if (childList==null){
+                    childList=new ArrayList<>();
+                }
+                SysMenu tmp=new SysMenu();
+                Map map=new HashMap();
+                map.put("title",menu.getTitle());
+                map.put("icon",menu.getIcon());
+                tmp.setMeta(map);
+                BeanUtils.copyProperties(menu,tmp);
+                setSysMenuChild(tmp,menus);
+                childList.add(tmp);
+                sysMenu.setChildren(childList);
+
+            }
+
+        }
+
     }
 
 

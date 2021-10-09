@@ -1,5 +1,6 @@
 package com.zc.modules.system.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,10 @@ public class SysMenu {
     private Map<String,String> meta;
     private String redirect;
     private List<SysMenu> children;
+
+    private Long menuId;
+    private Long pid;
+
 
 
 }
