@@ -306,10 +306,7 @@
                 fetchList(this.paramQuery, this.pageQuery).then((response) => {
                     this.dataList = response.data.records
                     this.total = response.data.total
-                    // Just to simulate the time of the request
-                    setTimeout(() => {
-                        this.listLoading = false
-                    }, 1.5 * 1000)
+                    this.listLoading = false
                 })
             },
             handleFilter() {
@@ -337,7 +334,7 @@
                 this.$data1$data2
                 if (valid) {
                 create(this.temp).then(() => {
-                this.list.unshift(this.temp)
+                this.getList()
                 this.dialogFormVisible = false
                 this.$notify({
                 title: 'Success',
@@ -362,8 +359,7 @@
                 if (valid) {
                 const tempData = Object.assign({}, this.temp)
                 update(tempData).then(() => {
-                const index = this.list.findIndex((v) => v.id === this.temp.${primaryKey.attrNameFirstToLow})
-                this.list.splice(index, 1, this.temp)
+                this.getList()
                 this.dialogFormVisible = false
                 this.$notify({
                 title: 'Success',
@@ -383,7 +379,7 @@
                 })
                         .then(() => {
                             deleteData(row.${primaryKey.attrNameFirstToLow}).then((res) => {
-                                this.list.splice(index, 1)
+                                this.getList()
                                 this.$message({
                                     type: 'info',
                                     message: '已成功删除'
