@@ -172,7 +172,7 @@
     </insert>
 
 
-    <insert id="insertBatch" parameterType="java.util.List">
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         insert into code_method_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,table_name,method_name,description,anonymous,log_record, is_generator
