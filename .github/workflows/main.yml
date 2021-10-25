@@ -35,7 +35,8 @@ jobs:
           script: |
             cd ${{ secrets.TARGET }}
             ls
-            ./start.sh
+            ./boot.sh zcadmin-system-0.0.1-SNAPSHOT.jar
+
 
 
 
