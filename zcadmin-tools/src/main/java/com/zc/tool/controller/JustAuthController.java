@@ -53,11 +53,7 @@ public class JustAuthController {
         response.sendRedirect(authRequest.authorize(AuthStateUtils.createState()));
     }
 
-    @GetMapping("/gitee/callback")
-    public Object giteeLogin(AuthCallback callback) {
-        AuthRequest authRequest = getGiteeAuthRequest();
-        return authRequest.login(callback);
-    }
+
 
 
 

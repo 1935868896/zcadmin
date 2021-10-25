@@ -49,9 +49,9 @@ public class OssController {
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
         String dir = request.getParameter("pathPre"); // 用户上传文件时指定的前缀。
         String fileName=request.getParameter("fileName");
-//        https://zc-go-fit.oss-cn-beijing.aliyuncs.com/test1630381920935panda.jpg
 
         log.info("文件上传:{}",host+"/"+dir+"/"+fileName);
+
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, accessKey);
         try {

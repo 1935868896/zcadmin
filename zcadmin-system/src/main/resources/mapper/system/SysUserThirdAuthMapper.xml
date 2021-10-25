@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.modules.system.mapper.SysUserThirdAuthMapper">
+    <resultMap type="SysUserThirdAuth" id="BaseResultMap">
+            <result property="authId" jdbcType="BIGINT" column="auth_id"/>
+            <result property="userId" jdbcType="BIGINT" column="user_id"/>
+            <result property="openid" jdbcType="VARCHAR" column="openid"/>
+            <result property="accessToken" jdbcType="VARCHAR" column="access_token"/>
+            <result property="loginType" jdbcType="INTEGER" column="login_type"/>
+            <result property="authDesc" jdbcType="VARCHAR" column="auth_desc"/>
+    </resultMap>
+            <sql id="Base_Column_List">
+auth_id,user_id,openid,access_token,login_type,auth_desc
+    </sql>
+        <select id="selectOneByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_third_auth
+        where 1=1
+                <if test="authId != null ">
+                    and auth_id = #{authId,jdbcType=BIGINT}
+                </if>
+                <if test="userId != null ">
+                    and user_id = #{userId,jdbcType=BIGINT}
+                </if>
+                <if test="openid != null  and openid != '' ">
+                    and openid = #{openid,jdbcType=VARCHAR}
+                </if>
+                <if test="accessToken != null  and accessToken != '' ">
+                    and access_token = #{accessToken,jdbcType=VARCHAR}
+                </if>
+                <if test="loginType != null ">
+                    and login_type = #{loginType,jdbcType=INTEGER}
+                </if>
+                <if test="authDesc != null  and authDesc != '' ">
+                    and auth_desc = #{authDesc,jdbcType=VARCHAR}
+                </if>
+        limit 1
+    </select>
+
+    <insert id="insertOne" parameterType="SysUserThirdAuth"             useGeneratedKeys="true" keyProperty="authId">
+        insert into sys_user_third_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+ auth_id, user_id, openid, access_token, login_type, auth_desc,</trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+         #{authId,jdbcType=BIGINT},         #{userId,jdbcType=BIGINT},         #{openid,jdbcType=VARCHAR},         #{accessToken,jdbcType=VARCHAR},         #{loginType,jdbcType=INTEGER},         #{authDesc,jdbcType=VARCHAR},        </trim>
+    </insert>
+
+
+    <update id="updateById" parameterType="SysUserThirdAuth">
+        update sys_user_third_auth
+        <trim prefix="SET" suffixOverrides=",">
+ auth_id =#{authId,jdbcType=BIGINT}, user_id =#{userId,jdbcType=BIGINT}, openid =#{openid,jdbcType=VARCHAR}, access_token =#{accessToken,jdbcType=VARCHAR}, login_type =#{loginType,jdbcType=INTEGER}, auth_desc =#{authDesc,jdbcType=VARCHAR},        </trim>
+        where auth_id = #{authId,jdbcType=BIGINT}
+    </update>
+            <delete id="deleteById" parameterType="java.lang.Long">
+                delete
+                from sys_user_third_auth where auth_id = #{authId,jdbcType=BIGINT}
+            </delete>
+
+
+</mapper>

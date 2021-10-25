@@ -56,10 +56,15 @@ public class LoginController {
     @Autowired
     OnlineUserService onlineUserService;
 
+    public static ThreadLocal<String> verifyType = new ThreadLocal();
+
     @Log("登录")
     @PostMapping("/system/login")
     public ResultResponse login(@RequestBody User user, HttpServletRequest request) {
         //第一步 验证 验证码是否正确
+        if (user.getVerifyCode()!=null){
+            verifyType.set(user.getVerifyType());
+        }
         if (!"phoneVerify".equals(user.getVerifyType()) && !"thirdVerify".equals(user.getVerifyType())) {
 //            request.setAttribute("verifyType","password");
             String uuid = user.getUuid();

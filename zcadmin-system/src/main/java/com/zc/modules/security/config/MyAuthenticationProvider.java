@@ -1,5 +1,6 @@
 package com.zc.modules.security.config;
 
+import com.zc.modules.security.controller.LoginController;
 import com.zc.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -27,7 +28,8 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String code = req.getParameter("code");
         String phone = req.getParameter("phone");
-        String verifyType = req.getParameter("verifyType");
+        String verifyType =LoginController.verifyType.get();
+        LoginController.verifyType.remove();
         if ("phoneVerify".equals(verifyType)){
             //手机验证: 手机号和验证码登录
             String store_verifyCode = RedisUtil.StringOps.get("sms:login:" + phone);
