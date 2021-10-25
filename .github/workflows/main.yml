@@ -33,9 +33,9 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
-            kill -9 $(ps -ef|grep zcadmin-system-0.0.1-SNAPSHOT.jar |awk '{print $2}')
             cd ${{ secrets.TARGET }}
             ls
+            kill -9 $(ps -ef|grep zcadmin-system-0.0.1-SNAPSHOT.jar |awk '{print $2}')|sed '2d'
             nohup java -jar -Xms256m -Xmx256m zcadmin-system-0.0.1-SNAPSHOT.jar &
 
 
