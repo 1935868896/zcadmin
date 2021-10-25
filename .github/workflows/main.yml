@@ -16,7 +16,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Deploy01
+      - name: Deploy02
         uses: easingthemes/ssh-deploy@v2.2.11
         env:
           SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
