@@ -36,8 +36,6 @@ jobs:
             cd ${{ secrets.TARGET }}
             ls
             ./start.sh zcadmin-system-0.0.1-SNAPSHOT.jar start
-            ps -ef|grep java
-
 
 
 
