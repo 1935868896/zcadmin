@@ -7,24 +7,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 8
-        uses: actions/setup-java@v2
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-      - name: Build with Maven
-        run: mvn clean install
-
-      - name: Deploy02
-        uses: easingthemes/ssh-deploy@v2.2.11
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
-          ARGS: "-rltgoDzvO --delete"
-          SOURCE: "zcadmin-system/target/zcadmin-system-0.0.1-SNAPSHOT.jar"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ secrets.TARGET }}
 
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
