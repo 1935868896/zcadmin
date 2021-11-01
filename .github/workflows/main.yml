@@ -15,6 +15,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.ACCESS_TOKEN }}
           script: |
+            source /etc/profile
             cd ${{ secrets.TARGET }}
             java
             java -jar -Xms256m -Xmx256m zcadmin-system-0.0.1-SNAPSHOT.jar > Log.log 2>&1
